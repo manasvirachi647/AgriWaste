@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.database import Base, engine
 import app.models  # Ensures all models are registered in SQLAlchemy metadata
-from app.routers import auth, listings
+from app.routers import auth, listings, requirements
 
 
 @asynccontextmanager
@@ -54,3 +54,4 @@ def health():
 # Include Routers
 app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(listings.router, prefix=settings.API_V1_STR)
+app.include_router(requirements.router, prefix=settings.API_V1_STR)

@@ -1,13 +1,13 @@
 # AgriWaste Exchange
 
-**Agricultural Residue Monetization & Aggregation Platform**  
-*Phase 1 & 2 Implementation (Weeks 1 & 2)*
+**Agricultural Residue Monetization & Industrial Aggregation Platform**  
+*Implementation Status: Phases 1 to 4 Complete (Weeks 1, 2, 3 & 4)*
 
 ---
 
 ## 🌾 Project Overview
 
-AgriWaste Exchange is an Android mobile application and FastAPI backend system that connects farmers possessing surplus agricultural residue (such as rice husk, wheat straw, cotton stalks, sugarcane bagasse) with industrial biomass buyers and logistics aggregators.
+AgriWaste Exchange is an Android mobile application and FastAPI backend system that connects farmers who have surplus crop residue (such as rice husk, wheat straw, cotton stalks, sugarcane bagasse) with industrial biomass buyers and logistics aggregators.
 
 ---
 
@@ -20,57 +20,68 @@ AgriWaste/
 ├── backend/
 │   ├── app/
 │   │   ├── core/
-│   │   │   ├── config.py         # Application settings & environment vars
-│   │   │   └── security.py       # Bcrypt hashing & PyJWT token generator
-│   │   ├── database.py           # SQLAlchemy database engine & SessionLocal
-│   │   ├── main.py               # FastAPI entry point & CORS configuration
-│   │   ├── models/               # Relational Database Models
-│   │   │   ├── user.py           # User, FarmerProfile, BuyerProfile, AggregatorProfile
-│   │   │   ├── listing.py        # WasteListing (Farmer crop residue)
-│   │   │   ├── requirement.py    # BuyerRequirement (Industrial biomass demands)
-│   │   │   ├── match.py          # Match (Matching score engine records)
-│   │   │   ├── order.py          # Order & OrderItem (Multi-farmer allocation)
-│   │   │   ├── transport.py      # TransportJob (Logistics & pickups)
-│   │   │   └── issue.py          # IssueReport (Disputes & resolutions)
-│   │   ├── schemas/              # Pydantic Schemas
-│   │   │   ├── auth.py           # Register, Login, Token payloads
-│   │   │   ├── user.py           # User & Profile responses
-│   │   │   └── listing.py        # Residue listing inputs & outputs
+│   │   │   ├── config.py             # Application settings & environment vars
+│   │   │   └── security.py           # Bcrypt hashing & PyJWT token generator
+│   │   ├── database.py               # SQLAlchemy database engine & SessionLocal
+│   │   ├── main.py                   # FastAPI entry point & CORS configuration
+│   │   ├── models/                   # Relational Database Models
+│   │   │   ├── user.py               # User, FarmerProfile, BuyerProfile, AggregatorProfile
+│   │   │   ├── listing.py            # WasteListing (Farmer crop residue)
+│   │   │   ├── requirement.py        # BuyerRequirement (Industrial biomass demands)
+│   │   │   ├── match.py              # Match (Matching score engine records)
+│   │   │   ├── order.py              # Order & OrderItem (Multi-farmer allocation)
+│   │   │   ├── transport.py          # TransportJob (Logistics & pickups)
+│   │   │   └── issue.py              # IssueReport (Disputes & resolutions)
+│   │   ├── schemas/                  # Pydantic Schemas
+│   │   │   ├── auth.py               # Register, Login, Token payloads
+│   │   │   ├── user.py               # User & Profile responses
+│   │   │   ├── listing.py            # Residue listing inputs & outputs
+│   │   │   └── requirement.py        # Buyer requirement inputs & outputs
 │   │   └── routers/
-│   │       ├── deps.py           # JWT Authentication & RBAC Dependencies
-│   │       ├── auth.py           # POST /auth/register, POST /auth/login, GET /auth/me
-│   │       └── listings.py       # POST /listings, GET /listings, GET /listings/my
+│   │       ├── deps.py               # JWT Authentication & RBAC Dependencies
+│   │       ├── auth.py               # POST /auth/register, POST /auth/login, GET /auth/me
+│   │       ├── listings.py           # Farmer listings & discovery endpoints
+│   │       └── requirements.py       # Buyer requirements & supplier matching
 │   ├── tests/
-│   │   └── test_auth_and_db.py   # Automated 10-step verification test suite
+│   │   ├── test_auth_and_db.py       # Phase 1 & 2 verification suite
+│   │   └── test_farmer_and_buyer.py  # Phase 3 & 4 verification suite
 │   ├── requirements.txt
 │   ├── .env.example
 │   └── .env
 └── mobile/
     ├── app/
-    │   ├── _layout.tsx           # Expo Router Root Navigation Stack
-    │   ├── index.tsx             # Welcome / Onboarding Screen
+    │   ├── _layout.tsx               # Expo Router Navigation Stack
+    │   ├── index.tsx                 # Welcome / Onboarding Screen
     │   ├── (auth)/
-    │   │   ├── select-role.tsx   # Role Picker (Farmer, Buyer, Aggregator, Admin)
-    │   │   ├── register.tsx      # Registration screen with dynamic role fields
-    │   │   └── login.tsx         # Sign In screen with fast-fill demo credentials
+    │   │   ├── select-role.tsx       # Role Picker (Farmer, Buyer, Aggregator, Admin)
+    │   │   ├── register.tsx          # Dynamic registration screen
+    │   │   └── login.tsx             # Sign In screen with fast-fill demo logins
     │   ├── (farmer)/
-    │   │   └── dashboard.tsx     # Farmer Dashboard & Residue Management
+    │   │   ├── dashboard.tsx         # Farmer Dashboard
+    │   │   └── listings/
+    │   │       ├── index.tsx         # Browse & filter all my residue listings
+    │   │       ├── add.tsx           # Add crop residue listing form
+    │   │       └── [id].tsx          # Listing details & matching buyer demands
     │   ├── (buyer)/
-    │   │   └── dashboard.tsx     # Buyer Marketplace Feed & Demands
+    │   │   ├── dashboard.tsx         # Buyer Procurement Dashboard
+    │   │   └── requirements/
+    │   │       ├── index.tsx         # Browse & filter all published requirements
+    │   │       ├── add.tsx           # Publish biomass requirement form
+    │   │       └── [id].tsx          # Requirement details & matching suppliers
     │   ├── (aggregator)/
-    │   │   └── dashboard.tsx     # Transporter Logistics & Pickup routes
+    │   │   └── dashboard.tsx         # Transporter Dashboard
     │   └── (admin)/
-    │       └── dashboard.tsx     # Platform Overview & Moderation Portal
+    │       └── dashboard.tsx         # Platform Overview & Moderation Portal
     ├── components/
-    │   ├── Button.tsx            # Styled touchable button with loading state
-    │   ├── Card.tsx              # Elevated surface container
-    │   ├── Header.tsx            # Navigation header with role badges
-    │   └── Input.tsx             # Text inputs with label & error handling
+    │   ├── Button.tsx                # Reusable action button
+    │   ├── Card.tsx                  # Elevated card container
+    │   ├── Header.tsx                # Screen navigation header with role badges
+    │   └── Input.tsx                 # Form input field with validation hints
     ├── constants/
-    │   └── colors.ts             # Agri-tech theme color palette
+    │   └── colors.ts                 # Agriculture & green tech color palette
     ├── services/
-    │   ├── api.ts                # Axios client with automated Bearer auth
-    │   └── auth.ts               # Token management & authentication service
+    │   ├── api.ts                    # Axios client with automated Bearer auth
+    │   └── auth.ts                   # Token storage & auth methods
     ├── package.json
     ├── app.json
     └── tsconfig.json
@@ -78,52 +89,33 @@ AgriWaste/
 
 ---
 
-## 🚀 Running the Week 1 & 2 Application
+## 🚀 Running the Project
 
-### 1. Backend (FastAPI + SQLAlchemy)
+### 1. Backend Server (FastAPI)
 
-1. Navigate to the backend directory:
+1. Open your terminal in the backend directory:
    ```powershell
    cd backend
    ```
-2. Run the automated test suite to verify all auth, database, and role permissions:
+2. Run the Phase 3 & 4 test suite:
    ```powershell
-   python -u tests/test_auth_and_db.py
+   python -u tests/test_farmer_and_buyer.py
    ```
-3. Start the FastAPI development server:
+3. Start the server with live reload:
    ```powershell
    python -m uvicorn app.main:app --reload
    ```
-4. Open the interactive Swagger API documentation in your browser:
-   - **Interactive API Docs:** `http://127.0.0.1:8000/docs`
-   - **Health Check:** `http://127.0.0.1:8000/health`
-
-### 2. Mobile App (React Native + Expo)
-
-1. Navigate to the mobile directory:
-   ```powershell
-   cd mobile
-   ```
-2. Install packages (when Node.js is installed):
-   ```powershell
-   npm install
-   ```
-3. Start the Expo development server:
-   ```powershell
-   npx expo start
-   ```
-4. Scan the generated QR code using the **Expo Go** app on your Android phone.
+4. Access interactive documentation:
+   - **Swagger UI:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+   - **Health Check:** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
 
 ---
 
-## ✅ Milestones Delivered (Weeks 1 & 2)
+## ✅ Milestones Delivered (Phases 1 - 4)
 
-| Feature | Description | Status |
-|---|---|---|
-| **Architecture & Database Design** | Relational schema with 10 tables covering users, role profiles, waste listings, buyer requirements, multi-farmer orders, transport jobs, and disputes. | Complete |
-| **Bcrypt Password Security** | Secure password hashing on registration with bcrypt. | Complete |
-| **JWT Authentication** | Signed JSON Web Tokens issued on login and registration with expiry and payload encryption. | Complete |
-| **Role-Based Access Control** | Dedicated roles (`farmer`, `buyer`, `aggregator`, `admin`) with backend permission enforcement. | Complete |
-| **Residue Listings API** | Farmer residue listing creation and filtered retrieval by crop material and location. | Complete |
-| **Mobile App Navigation & Screens** | Welcome screen, Role Selection, Registration, Login with demo accounts, and 4 dedicated Role Dashboards. | Complete |
-| **Verification Test Suite** | 10-step automated backend test confirming database creation, authentication, role isolation, and listing flows. | Passed (100%) |
+| Phase / Week | Core Focus | Deliverables | Status |
+|---|---|---|---|
+| **Week 1** | Setup & Database | Relational database schema across 10 tables, FastAPI project setup, SQLite/PostgreSQL engine, CORS configuration. | Complete |
+| **Week 2** | Auth & Security | Bcrypt password hashing, signed JWT token generation, role verification (`farmer`, `buyer`, `aggregator`, `admin`), login/registration mobile screens. | Complete |
+| **Week 3** | Farmer Module | Crop residue listing creation (`POST /listings`), stock management, storage & moisture inputs, soil health advisory, farmer listing details, and discovery of matching buyer demands. | Complete |
+| **Week 4** | Buyer Module | Industrial requirement publishing (`POST /requirements`), procurement progress tracking, plant delivery specifications, target price ranges, and discovery of matching farmer suppliers. | Complete |

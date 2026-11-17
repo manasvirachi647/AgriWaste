@@ -99,10 +99,7 @@ export default function FarmerDashboard() {
         {/* Action Button */}
         <Button
           title="+ Add Crop Residue Listing"
-          onPress={() => {
-            // Future week 3 screen
-            alert("Week 3 Feature: Add Listing form connecting to POST /listings");
-          }}
+          onPress={() => router.push("/(farmer)/listings/add")}
           variant="primary"
           style={styles.addBtn}
         />
@@ -110,7 +107,9 @@ export default function FarmerDashboard() {
         {/* My Listings Section */}
         <View style={styles.sectionHeaderRow}>
           <Text style={styles.sectionTitle}>My Agricultural Residue</Text>
-          <Text style={styles.countText}>{listings.length} items</Text>
+          <TouchableOpacity onPress={() => router.push("/(farmer)/listings/index")}>
+            <Text style={styles.viewAllText}>View All ({listings.length}) →</Text>
+          </TouchableOpacity>
         </View>
 
         {listings.length === 0 ? (
@@ -123,19 +122,26 @@ export default function FarmerDashboard() {
           </Card>
         ) : (
           listings.map((item) => (
-            <Card key={item.id} style={styles.listingCard}>
-              <View style={styles.listingTop}>
-                <Text style={styles.listingMaterial}>{item.material_name}</Text>
-                <View style={styles.statusBadge}>
-                  <Text style={styles.statusText}>{item.status.toUpperCase()}</Text>
+            <TouchableOpacity
+              key={item.id}
+              activeOpacity={0.8}
+              onPress={() => router.push(`/(farmer)/listings/${item.id}`)}
+            >
+              <Card style={styles.listingCard}>
+                <View style={styles.listingTop}>
+                  <Text style={styles.listingMaterial}>{item.material_name}</Text>
+                  <View style={styles.statusBadge}>
+                    <Text style={styles.statusText}>{item.status.toUpperCase()}</Text>
+                  </View>
                 </View>
-              </View>
 
-              <Text style={styles.listingDetails}>
-                Quantity: <Text style={styles.bold}>{item.available_quantity} {item.unit}</Text> • Price: <Text style={styles.bold}>₹{item.price_per_unit}/{item.unit}</Text>
-              </Text>
-              <Text style={styles.listingLocation}>📍 {item.location_name}</Text>
-            </Card>
+                <Text style={styles.listingDetails}>
+                  Quantity: <Text style={styles.bold}>{item.available_quantity} {item.unit}</Text> • Rate: <Text style={styles.bold}>₹{item.price_per_unit}/{item.unit}</Text>
+                </Text>
+                <Text style={styles.listingLocation}>📍 {item.location_name}</Text>
+                <Text style={styles.tapPrompt}>Tap to view details & matching buyers →</Text>
+              </Card>
+            </TouchableOpacity>
           ))
         )}
 
@@ -222,6 +228,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: Colors.textSecondary,
   },
+  viewAllText: {
+    fontSize: 13,
+    color: Colors.primary,
+    fontWeight: "700",
+  },
   listingCard: {
     marginVertical: 6,
   },
@@ -259,6 +270,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: Colors.textMuted,
     marginTop: 4,
+  },
+  tapPrompt: {
+    fontSize: 11,
+    color: Colors.primary,
+    fontWeight: "600",
+    marginTop: 8,
   },
   emptyCard: {
     alignItems: "center",

@@ -6,7 +6,9 @@ from sqlalchemy import desc
 from app.database import get_db
 from app.models.user import User, UserRole
 from app.models.listing import WasteListing, ListingStatus
+from app.models.requirement import BuyerRequirement, RequirementStatus
 from app.schemas.listing import WasteListingCreate, WasteListingUpdate, WasteListingResponse
+from app.schemas.requirement import BuyerRequirementResponse
 from app.routers.deps import get_current_user, require_role
 
 router = APIRouter(prefix="/listings", tags=["Farmer Listings"])
@@ -125,3 +127,22 @@ def delete_listing(
     db.delete(listing)
     db.commit()
     return None
+
+
+@router.get("/{listing_id}/matching-requirements", response_model=List[BuyerRequirementResponse])
+def get_matching_requirements_for_listing(
+    listing_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Find open buyer requirements seeking the crop material offered in this listing."""
+    listing = db.query(WasteListing).filter(WasteListing.id == listing_id).first()
+    if not listing:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Listing not found")
+
+    query = db.query(BuyerRequirement).filter(
+        BuyerRequirement.status == RequirementStatus.OPEN,
+        BuyerRequirement.material_name.ilike(f"%{listing.material_name}%")
+    )
+
+    return query.order_by(desc(BuyerRequirement.required_quantity)).all()
