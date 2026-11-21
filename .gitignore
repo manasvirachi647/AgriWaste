@@ -43,3 +43,11 @@ npm-debug.*
 
 # Logs
 *.log
+
+# Android / Capacitor build artifacts
+.gradle/
+capacitor_app/android/.gradle/
+capacitor_app/android/build/
+capacitor_app/android/app/build/
+capacitor_app/node_modules/
+capacitor_app/android/local.properties

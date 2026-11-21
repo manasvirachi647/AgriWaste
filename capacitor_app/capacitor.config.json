@@ -1,0 +1,9 @@
+{
+  "appId": "com.agriwaste.exchange",
+  "appName": "AgriWaste Exchange",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  }
+}

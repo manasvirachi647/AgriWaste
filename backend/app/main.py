@@ -5,7 +5,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.database import Base, engine
 import app.models  # Ensures all models are registered in SQLAlchemy metadata
-from app.routers import auth, listings, requirements
+from app.routers import (
+    auth,
+    listings,
+    requirements,
+    matches,
+    orders,
+    transport,
+    issues,
+    admin,
+)
 
 
 @asynccontextmanager
@@ -18,11 +27,11 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="Backend API for AgriWaste Exchange - Connecting farmers with industrial residue buyers.",
+    description="AgriWaste Exchange API - Complete Biomass Monetization & Rural Aggregation Platform",
     lifespan=lifespan,
 )
 
-# Enable CORS for mobile development (allows Expo development servers on LAN)
+# Enable CORS for mobile & web apps
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -39,6 +48,11 @@ def home():
         "status": "online",
         "documentation": "/docs",
         "version": settings.VERSION,
+        "modules": [
+            "auth", "farmer_listings", "buyer_requirements",
+            "smart_matching", "multi_farmer_orders", "transporter_logistics",
+            "dispute_management", "admin_portal"
+        ]
     }
 
 
@@ -51,7 +65,12 @@ def health():
     }
 
 
-# Include Routers
+# Include All Routers for Weeks 1 to 8
 app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(listings.router, prefix=settings.API_V1_STR)
 app.include_router(requirements.router, prefix=settings.API_V1_STR)
+app.include_router(matches.router, prefix=settings.API_V1_STR)
+app.include_router(orders.router, prefix=settings.API_V1_STR)
+app.include_router(transport.router, prefix=settings.API_V1_STR)
+app.include_router(issues.router, prefix=settings.API_V1_STR)
+app.include_router(admin.router, prefix=settings.API_V1_STR)
