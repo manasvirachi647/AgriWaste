@@ -106,55 +106,21 @@
           </p>
         </div>
 
-        <!-- 1-CLICK DEMO ACCOUNTS (RBAC SWITCHER) -->
-        <div class="bg-gradient-to-br from-agri-50 to-harvest-50 p-3.5 rounded-2xl border border-agri-200 shadow-xs">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold text-slate-900">⚡ 1-Click Role-Based Demo Login</span>
-            <span class="text-[10px] bg-white px-2 py-0.5 rounded-full font-semibold text-agri-700 border border-agri-200">Instant Access</span>
-          </div>
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <button onclick="quickLogin('farmer')" class="p-2.5 bg-white rounded-xl border border-agri-300 font-semibold text-slate-800 text-left hover:border-agri-600 flex items-center gap-2 shadow-xs transition active:scale-95">
-              <span class="text-lg">👨‍🌾</span>
-              <div>
-                <div class="font-bold text-agri-800">Farmer Demo</div>
-                <div class="text-[10px] text-slate-500">Ramesh Patel • Sanand</div>
-              </div>
-            </button>
-            <button onclick="quickLogin('buyer')" class="p-2.5 bg-white rounded-xl border border-harvest-300 font-semibold text-slate-800 text-left hover:border-harvest-600 flex items-center gap-2 shadow-xs transition active:scale-95">
-              <span class="text-lg">🏭</span>
-              <div>
-                <div class="font-bold text-harvest-700">Buyer Demo</div>
-                <div class="text-[10px] text-slate-500">Gujarat BioPower Ltd</div>
-              </div>
-            </button>
-            <button onclick="quickLogin('aggregator')" class="p-2.5 bg-white rounded-xl border border-blue-300 font-semibold text-slate-800 text-left hover:border-blue-600 flex items-center gap-2 shadow-xs transition active:scale-95">
-              <span class="text-lg">🚛</span>
-              <div>
-                <div class="font-bold text-blue-700">Transporter Demo</div>
-                <div class="text-[10px] text-slate-500">Kisan Fleet Logistics</div>
-              </div>
-            </button>
-            <button onclick="quickLogin('admin')" class="p-2.5 bg-white rounded-xl border border-purple-300 font-semibold text-slate-800 text-left hover:border-purple-600 flex items-center gap-2 shadow-xs transition active:scale-95">
-              <span class="text-lg">🛡️</span>
-              <div>
-                <div class="font-bold text-purple-700">Admin Portal</div>
-                <div class="text-[10px] text-slate-500">Platform Moderator</div>
-              </div>
-            </button>
-          </div>
-        </div>
-
         <!-- AUTH TABS -->
         <div class="flex border-b border-slate-200 text-xs font-semibold">
           <button id="btn-tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-center tab-active border-b-2">Sign In</button>
           <button id="btn-tab-register" onclick="switchAuthTab('register')" class="flex-1 py-2 text-center text-slate-500 hover:text-slate-800">Create Account</button>
         </div>
 
+        <!-- NOTIFICATION BANNERS -->
+        <div id="login-error-msg" class="hidden p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl font-medium"></div>
+        <div id="auth-success-msg" class="hidden p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl font-medium"></div>
+
         <!-- SIGN IN FORM -->
         <form id="form-login" onsubmit="handleManualLogin(event)" class="space-y-3">
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Username or Email</label>
-            <input type="text" id="login-username" required placeholder="e.g. ramesh_farmer or email" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white" />
+            <input type="text" id="login-username" required placeholder="Enter username or email" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white" />
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
@@ -545,10 +511,18 @@
 
   <!-- APPLICATION JAVASCRIPT LOGIC -->
   <script>
-    // In-memory / localStorage reactive state with complete sample data
+    // Pre-seeded verified demo accounts for all 4 roles
+    const defaultUsers = [
+      { id: 1, username: "ramesh123", email: "ramesh@example.com", phone: "9876543210", password: "password123", name: "Ramesh Patel", role: "farmer", location: "Sanand, Ahmedabad" },
+      { id: 2, username: "gujarat_bio", email: "buyer@biopower.com", phone: "9876543211", password: "password123", name: "Vikram Mehta (Gujarat BioPower)", role: "buyer", location: "Sanand GIDC" },
+      { id: 3, username: "kisan_trans", email: "trans@kisanfleet.com", phone: "9876543212", password: "password123", name: "Harpreet Singh (Kisan Fleet)", role: "aggregator", location: "Ahmedabad District" },
+      { id: 4, username: "admin", email: "admin@agriwaste.com", phone: "9876543213", password: "adminpassword", name: "System Administrator", role: "admin", location: "Headquarters" }
+    ];
+
     let currentUser = null;
 
     let store = {
+      users: defaultUsers,
       listings: [
         { id: 1, farmer_id: 1, farmer_name: "Ramesh Patel", material_name: "Rice Husk", available_quantity: 2.0, estimated_quantity: 2.0, unit: "tonnes", price_per_unit: 2400, location_name: "Sanand, Ahmedabad", storage_type: "Dry covered shed", moisture_condition: "Dry (< 12%)", status: "available" },
         { id: 2, farmer_id: 2, farmer_name: "Suresh Chaudhary", material_name: "Rice Husk", available_quantity: 3.0, estimated_quantity: 3.0, unit: "tonnes", price_per_unit: 2350, location_name: "Bavla, Ahmedabad", storage_type: "Baled & stacked", moisture_condition: "Medium (14%)", status: "available" },
@@ -571,55 +545,133 @@
     // Load from localStorage if present
     const saved = localStorage.getItem("agriwaste_store");
     if (saved) {
-      try { store = JSON.parse(saved); } catch(e){}
+      try { 
+        const parsed = JSON.parse(saved); 
+        store = { ...store, ...parsed };
+        if (!store.users || !store.users.length) {
+          store.users = [...defaultUsers];
+        }
+      } catch(e){}
     }
     function persist() {
       localStorage.setItem("agriwaste_store", JSON.stringify(store));
     }
 
-    // RBAC Demo Switcher
-    function quickLogin(role) {
-      if (role === 'farmer') {
-        currentUser = { id: 1, username: 'farmer_a', name: 'Ramesh Patel', role: 'farmer', location: 'Sanand, Ahmedabad' };
-      } else if (role === 'buyer') {
-        currentUser = { id: 4, username: 'gujarat_biomass', name: 'Vikram Mehta (Gujarat BioPower)', role: 'buyer', location: 'Sanand GIDC' };
-      } else if (role === 'aggregator') {
-        currentUser = { id: 5, username: 'kisan_trucks', name: 'Harpreet Singh (Kisan Fleet)', role: 'aggregator', location: 'Ahmedabad District' };
-      } else if (role === 'admin') {
-        currentUser = { id: 99, username: 'platform_admin', name: 'System Administrator', role: 'admin', location: 'Headquarters' };
-      }
-      renderAuthenticatedState();
-    }
-
+    // REAL AUTHENTICATION: LOGIN WITH CREDENTIAL & PASSWORD CHECK
     function handleManualLogin(e) {
       e.preventDefault();
-      const u = document.getElementById("login-username").value.trim().toLowerCase();
-      if (u.includes('buyer') || u.includes('bio') || u.includes('power')) {
-        quickLogin('buyer');
-      } else if (u.includes('truck') || u.includes('trans') || u.includes('agg')) {
-        quickLogin('aggregator');
-      } else if (u.includes('admin')) {
-        quickLogin('admin');
-      } else {
-        quickLogin('farmer');
+      const errorEl = document.getElementById("login-error-msg");
+      const successEl = document.getElementById("auth-success-msg");
+      errorEl.classList.add("hidden");
+      successEl.classList.add("hidden");
+
+      const inputUser = document.getElementById("login-username").value.trim().toLowerCase();
+      const inputPass = document.getElementById("login-password").value;
+
+      if (!store.users) {
+        store.users = [...defaultUsers];
       }
+
+      // Search user by username, email, or phone
+      const matchedUser = store.users.find(u => 
+        (u.username && u.username.toLowerCase() === inputUser) ||
+        (u.email && u.email.toLowerCase() === inputUser) ||
+        (u.phone && u.phone.trim() === inputUser)
+      );
+
+      if (!matchedUser) {
+        errorEl.innerHTML = `⚠️ <b>User Not Found!</b> No registered account was found matching "<i>${inputUser}</i>". Please check your details or create a new account below.`;
+        errorEl.classList.remove("hidden");
+        return;
+      }
+
+      // Exact password verification
+      if (matchedUser.password !== inputPass) {
+        errorEl.innerHTML = `❌ <b>Incorrect Password!</b> The password you entered for user <b>${matchedUser.name}</b> (${matchedUser.username}) is incorrect. Please try again.`;
+        errorEl.classList.remove("hidden");
+        return;
+      }
+
+      // Password matches: sign in
+      currentUser = matchedUser;
+      document.getElementById("login-password").value = "";
+      renderAuthenticatedState();
     }
 
+    // REAL AUTHENTICATION: ACCOUNT REGISTRATION WITH SECURE PASSWORD
     function handleManualRegister(e) {
       e.preventDefault();
+      const errorEl = document.getElementById("login-error-msg");
+      const successEl = document.getElementById("auth-success-msg");
+      errorEl.classList.add("hidden");
+      successEl.classList.add("hidden");
+
       const role = document.getElementById("reg-role").value;
-      const name = document.getElementById("reg-name").value;
-      const village = document.getElementById("reg-village").value || "Sanand";
-      currentUser = { id: Date.now(), username: document.getElementById("reg-username").value, name: name, role: role, location: village };
+      const name = document.getElementById("reg-name").value.trim();
+      const username = document.getElementById("reg-username").value.trim().toLowerCase();
+      const phone = document.getElementById("reg-phone").value.trim();
+      const email = document.getElementById("reg-email").value.trim().toLowerCase();
+      const password = document.getElementById("reg-password").value;
+
+      if (!store.users) {
+        store.users = [...defaultUsers];
+      }
+
+      // Duplicate check
+      const existing = store.users.find(u => 
+        (u.username && u.username.toLowerCase() === username) ||
+        (u.email && u.email.toLowerCase() === email)
+      );
+
+      if (existing) {
+        alert(`An account already exists with username "${username}" or email "${email}". Please choose a different username or log in.`);
+        return;
+      }
+
+      let location = "Sanand, Gujarat";
+      if (role === 'farmer') {
+        const v = document.getElementById("reg-village").value.trim();
+        const d = document.getElementById("reg-district").value.trim();
+        location = v ? (d ? `${v}, ${d}` : v) : "Sanand, Ahmedabad";
+      } else if (role === 'buyer') {
+        const c = document.getElementById("reg-company").value.trim();
+        const ind = document.getElementById("reg-industry").value.trim();
+        location = c ? `${c} (${ind || 'Bio-Plant'})` : "Sanand GIDC";
+      } else if (role === 'aggregator') {
+        const v = document.getElementById("reg-vehicle").value.trim();
+        location = v ? `Fleet: ${v}` : "Regional Logistics";
+      }
+
+      const newUser = {
+        id: Date.now(),
+        name: name,
+        username: username,
+        phone: phone || "9876543210",
+        email: email,
+        password: password,
+        role: role,
+        location: location
+      };
+
+      store.users.push(newUser);
+      persist();
+
+      // Sign in automatically to the new account
+      currentUser = newUser;
       renderAuthenticatedState();
+      alert(`🎉 Account successfully created! Welcome, ${newUser.name}. Your role is ${newUser.role.toUpperCase()}.`);
     }
 
     function handleLogout() {
       currentUser = null;
       document.getElementById("top-bar").classList.add("hidden");
       document.getElementById("bottom-nav").classList.add("hidden");
+      document.getElementById("login-password").value = "";
+      const errorEl = document.getElementById("login-error-msg");
+      if (errorEl) errorEl.classList.add("hidden");
       hideAllViews();
       document.getElementById("view-auth").classList.remove("hidden");
+      switchAuthTab('login');
     }
 
     function hideAllViews() {
@@ -1007,6 +1059,10 @@
     }
 
     function switchAuthTab(tab) {
+      const err = document.getElementById("login-error-msg");
+      const succ = document.getElementById("auth-success-msg");
+      if (err) err.classList.add("hidden");
+      if (succ) succ.classList.add("hidden");
       if (tab === 'login') {
         document.getElementById("form-login").classList.remove("hidden");
         document.getElementById("form-register").classList.add("hidden");
