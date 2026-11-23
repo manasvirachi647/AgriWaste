@@ -344,48 +344,80 @@
         <form id="buyer-tab-add" onsubmit="handleCreateRequirement(event)" class="space-y-3 hidden">
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Required Biomass *</label>
-            <input type="text" id="req-material" required placeholder="e.g. Rice Husk or Wheat Straw" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
+            <input type="text" id="req-material" list="biomass-types" required placeholder="Select or type e.g. Rice Husk, Wheat Straw" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
+            <datalist id="biomass-types">
+              <option value="Rice Husk">
+              <option value="Wheat Straw">
+              <option value="Sugarcane Bagasse">
+              <option value="Cotton Stalks">
+              <option value="Mustard Stalks">
+              <option value="Maize Stalks">
+            </datalist>
           </div>
 
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Quantity Needed (Tonnes) *</label>
-              <input type="number" step="0.1" id="req-qty" required placeholder="e.g. 20.0" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
+              <input type="number" step="0.1" id="req-qty" required placeholder="e.g. 10.0" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Max Budget (₹/Tonne)</label>
-              <input type="number" id="req-price-max" placeholder="e.g. 2500" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Max Budget (₹/Tonne) *</label>
+              <input type="number" id="req-price-max" required placeholder="e.g. 2400" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Required Quality / Moisture *</label>
+              <select id="req-moisture" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white font-medium">
+                <option value="Dry (< 12%)">Dry (&lt; 12% Moisture)</option>
+                <option value="Medium (14%)">Medium (12% - 16% Moisture)</option>
+                <option value="Any">Any Moisture Condition</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Storage Condition</label>
+              <select id="req-storage" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white font-medium">
+                <option value="Dry covered shed">Dry covered shed</option>
+                <option value="Baled & stacked">Baled & stacked</option>
+                <option value="Any">Any Storage Form</option>
+              </select>
             </div>
           </div>
 
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Plant / Delivery Address *</label>
-            <input type="text" id="req-location" required placeholder="Plant GIDC, Sanand, Ahmedabad" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Quality Standards (Optional)</label>
-            <textarea id="req-specs" rows="2" placeholder="Max 14% moisture, baled form preferred..." class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white"></textarea>
+            <input type="text" id="req-location" required placeholder="e.g. Sanand GIDC Biofuel Plant, Ahmedabad" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
           </div>
 
           <button type="submit" class="w-full py-2.5 bg-harvest-600 hover:bg-harvest-700 text-white font-bold rounded-xl text-xs shadow-sm transition active:scale-95">
-            Publish Industrial Biomass Demand
+            Publish Demand & Calculate Smart Matches
           </button>
         </form>
 
         <!-- BUYER TAB C: SMART MATCH & MULTI-FARMER ORDER ALLOCATION (WEEK 5) -->
         <div id="buyer-tab-match" class="space-y-3 hidden">
-          <div class="bg-emerald-50 border border-emerald-300 p-2.5 rounded-xl text-xs">
-            <span class="font-bold text-emerald-900 block">✨ Multi-Farmer Aggregation Engine</span>
-            <span class="text-emerald-800 text-[11px]">Select contributions from multiple nearby farmers to fulfill your bulk demand in one coordinated order.</span>
+          <!-- Active Demand Selector Header -->
+          <div id="buyer-match-demand-header" class="hidden bg-slate-900 text-white p-3 rounded-2xl shadow-sm space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-slate-400 font-medium">Matching against your demand:</span>
+              <span id="match-demand-count-badge" class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full font-semibold">1 Active Demand</span>
+            </div>
+            <select id="buyer-demand-select" onchange="renderSmartMatchingList()" class="w-full px-2.5 py-1.5 bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold text-white focus:outline-none focus:border-agri-500">
+              <!-- Dynamically populated -->
+            </select>
+            <div id="buyer-demand-active-specs" class="text-[11px] text-slate-300 pt-1 border-t border-slate-800 flex flex-wrap gap-2">
+              <!-- Specs details -->
+            </div>
           </div>
 
+          <!-- Empty State (when 0 demands) or Matching List -->
           <div id="buyer-match-list" class="space-y-2">
-            <!-- Dynamically populated with checkboxes -->
+            <!-- Dynamically populated -->
           </div>
 
           <!-- Allocation summary box -->
-          <div class="p-3 bg-white rounded-xl border border-slate-300 shadow-xs space-y-2">
+          <div id="buyer-alloc-box" class="p-3 bg-white rounded-xl border border-slate-300 shadow-xs space-y-2">
             <div class="flex justify-between text-xs font-semibold">
               <span class="text-slate-600">Combined Allocation:</span>
               <span id="alloc-total-qty" class="text-agri-700 font-extrabold">0.0 Tonnes</span>
@@ -826,64 +858,274 @@
 
       const container = document.getElementById("buyer-demands-container");
       container.innerHTML = "";
-      myReqs.forEach(r => {
-        const remaining = Math.max(0, r.required_quantity - r.fulfilled_quantity);
-        const pct = Math.min(100, Math.round((r.fulfilled_quantity / r.required_quantity) * 100));
-        container.innerHTML += `
-          <div class="bg-white p-3 rounded-xl border border-slate-200 border-l-4 border-l-harvest-500 shadow-xs">
-            <div class="flex justify-between items-start">
-              <span class="font-bold text-xs text-slate-900">${r.material_name} Requirement</span>
-              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-harvest-100 text-harvest-700">${r.status.toUpperCase()}</span>
-            </div>
-            <div class="text-xs text-slate-700 mt-1">
-              Needed: <span class="font-bold">${r.required_quantity} ${r.unit}</span> • Max Budget: <span class="font-bold text-harvest-700">₹${r.target_price_max}/T</span>
-            </div>
-            <div class="text-[10px] text-slate-400 mt-0.5">📍 ${r.delivery_location}</div>
-            
-            <!-- Progress Bar -->
-            <div class="mt-2.5">
-              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                <div class="bg-harvest-500 h-2 rounded-full" style="width: ${pct}%"></div>
-              </div>
-              <div class="flex justify-between text-[10px] text-slate-500 mt-1 font-medium">
-                <span>Fulfilled: ${r.fulfilled_quantity} T (${pct}%)</span>
-                <span>Remaining: ${remaining} T</span>
-              </div>
-            </div>
 
-            <button onclick="switchBuyerTab('match')" class="mt-2 w-full py-1.5 bg-harvest-50 hover:bg-harvest-100 text-harvest-800 text-[11px] font-bold rounded-lg border border-harvest-200">
-              ⚡ View Matching Farmer Suppliers & Order →
+      if (myReqs.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 bg-white rounded-2xl border border-slate-200 text-center space-y-3 shadow-xs">
+            <div class="w-12 h-12 bg-harvest-100 text-harvest-700 rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-xs">
+              🌾
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900 text-sm">No Active Demands Posted</h4>
+              <p class="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
+                Post your raw material requirements specifying crop type, required tonnage, budget, and quality standards.
+              </p>
+            </div>
+            <button onclick="switchBuyerTab('add')" class="px-4 py-2 bg-harvest-600 hover:bg-harvest-700 text-white font-bold text-xs rounded-xl shadow-xs transition active:scale-95">
+              + Post Your First Demand
             </button>
           </div>
         `;
-      });
+      } else {
+        myReqs.forEach(r => {
+          const remaining = Math.max(0, r.required_quantity - r.fulfilled_quantity);
+          const pct = Math.min(100, Math.round((r.fulfilled_quantity / r.required_quantity) * 100));
+          container.innerHTML += `
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 border-l-4 border-l-harvest-500 shadow-xs space-y-2">
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="font-extrabold text-xs text-slate-900">${r.material_name} Requirement</span>
+                  <div class="text-[11px] text-slate-500">Target Budget: <span class="font-bold text-slate-800">≤ ₹${r.target_price_max}/T</span></div>
+                  <div class="text-[10px] text-slate-400">📍 Delivery: ${r.delivery_location}</div>
+                  <div class="text-[10px] text-slate-500 font-medium">Quality Spec: ${r.moisture || 'Dry (< 12%)'} • ${r.storage || 'Dry shed'}</div>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${r.status === 'open' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'} uppercase">
+                  ${r.status}
+                </span>
+              </div>
+
+              <div>
+                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div class="bg-harvest-500 h-2 rounded-full" style="width: ${pct}%"></div>
+                </div>
+                <div class="flex justify-between text-[10px] text-slate-500 mt-1 font-medium">
+                  <span>Fulfilled: ${r.fulfilled_quantity.toFixed(1)} T (${pct}%)</span>
+                  <span>Remaining: ${remaining.toFixed(1)} T</span>
+                </div>
+              </div>
+
+              <button onclick="selectDemandAndMatch(${r.id})" class="mt-2 w-full py-1.5 bg-harvest-50 hover:bg-harvest-100 text-harvest-800 text-[11px] font-bold rounded-lg border border-harvest-200 transition active:scale-95">
+                ⚡ Calculate Smart Matches for this Demand →
+              </button>
+            </div>
+          `;
+        });
+      }
 
       // Populate Matching List
       renderSmartMatchingList();
     }
 
+    function selectDemandAndMatch(demandId) {
+      switchBuyerTab('match');
+      const select = document.getElementById("buyer-demand-select");
+      if (select) {
+        select.value = demandId;
+      }
+      renderSmartMatchingList();
+    }
+
     function renderSmartMatchingList() {
       const listContainer = document.getElementById("buyer-match-list");
-      listContainer.innerHTML = "";
-      const available = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
+      const demandHeader = document.getElementById("buyer-match-demand-header");
+      const allocBox = document.getElementById("buyer-alloc-box");
+      const demandSelect = document.getElementById("buyer-demand-select");
+      const specsDiv = document.getElementById("buyer-demand-active-specs");
 
-      available.forEach(l => {
+      const myReqs = store.requirements.filter(r => r.buyer_id === currentUser.id && r.status !== 'fulfilled');
+
+      // 1. IF NO DEMANDS EXIST FOR THIS BUYER
+      if (myReqs.length === 0) {
+        if (demandHeader) demandHeader.classList.add("hidden");
+        if (allocBox) allocBox.classList.add("hidden");
+        listContainer.innerHTML = `
+          <div class="p-6 bg-white rounded-2xl border border-dashed border-slate-300 text-center space-y-3">
+            <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center text-2xl mx-auto">
+              📋
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900 text-sm">No Demands Posted Yet</h4>
+              <p class="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
+                Smart Match compares farmer listings against <b>your specific demand</b> (Crop Material, Quantity Needed, Max Budget &amp; Quality).
+              </p>
+            </div>
+            <p class="text-[11px] text-amber-800 bg-amber-50 p-2.5 rounded-xl font-medium">
+              You have not posted your demand yet. Please post your demand first so our algorithm can calculate match scores against available farmers.
+            </p>
+            <button onclick="switchBuyerTab('add')" class="px-5 py-2.5 bg-agri-700 hover:bg-agri-800 text-white font-bold text-xs rounded-xl shadow-xs transition active:scale-95">
+              + Post Your Demand Now
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      // 2. BUYER HAS AT LEAST 1 DEMAND
+      if (demandHeader) demandHeader.classList.remove("hidden");
+      if (allocBox) allocBox.classList.remove("hidden");
+
+      // Populate demand dropdown if options count differs
+      const currentSelectedId = demandSelect && demandSelect.value ? parseInt(demandSelect.value) : myReqs[0].id;
+      demandSelect.innerHTML = "";
+      myReqs.forEach(r => {
+        const opt = document.createElement("option");
+        opt.value = r.id;
+        opt.textContent = `${r.material_name} — ${r.required_quantity}T (Budget: ≤ ₹${r.target_price_max}/T)`;
+        if (r.id === currentSelectedId) opt.selected = true;
+        demandSelect.appendChild(opt);
+      });
+
+      const selectedDemand = myReqs.find(r => r.id === parseInt(demandSelect.value)) || myReqs[0];
+
+      // Update specs badge
+      specsDiv.innerHTML = `
+        <span class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Crop: <b>${selectedDemand.material_name}</b></span>
+        <span class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Need: <b>${(selectedDemand.required_quantity - selectedDemand.fulfilled_quantity).toFixed(1)} T</b></span>
+        <span class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Max Budget: <b>≤ ₹${selectedDemand.target_price_max}/T</b></span>
+        <span class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Quality: <b>${selectedDemand.moisture || 'Dry (< 12%)'}</b></span>
+      `;
+
+      // 3. RUN REAL MULTI-FACTOR MATCHING ALGORITHM FOR EACH FARMER LISTING
+      const available = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
+      const remainingNeed = Math.max(0.1, selectedDemand.required_quantity - selectedDemand.fulfilled_quantity);
+
+      const scoredListings = available.map(l => {
+        // Criterion 1: Material Match (35% weight)
+        const m1 = (l.material_name || "").toLowerCase().trim();
+        const m2 = (selectedDemand.material_name || "").toLowerCase().trim();
+        let materialScore = 0;
+        let materialMatch = false;
+        if (m1 === m2) {
+          materialScore = 35;
+          materialMatch = true;
+        } else if (m1.includes(m2) || m2.includes(m1)) {
+          materialScore = 20;
+          materialMatch = true;
+        } else {
+          materialScore = 0;
+          materialMatch = false;
+        }
+
+        // Criterion 2: Quantity Fulfillment (25% weight)
+        let qtyScore = 0;
+        if (l.available_quantity >= remainingNeed) {
+          qtyScore = 25;
+        } else {
+          qtyScore = Math.min(25, (l.available_quantity / remainingNeed) * 25);
+        }
+
+        // Criterion 3: Price Competitiveness (25% weight)
+        const maxPrice = selectedDemand.target_price_max || 2500;
+        let priceScore = 0;
+        let priceWithinBudget = (l.price_per_unit <= maxPrice);
+        if (priceWithinBudget) {
+          const savingsRatio = (maxPrice - l.price_per_unit) / maxPrice;
+          priceScore = Math.min(25, 20 + (savingsRatio * 15));
+        } else {
+          const overRatio = (l.price_per_unit - maxPrice) / maxPrice;
+          priceScore = Math.max(0, 15 - (overRatio * 40));
+        }
+
+        // Criterion 4: Quality & Moisture Match (10% weight)
+        let qualityScore = 10;
+        const moist = (l.moisture_condition || "").toLowerCase();
+        const reqMoist = (selectedDemand.moisture || "dry").toLowerCase();
+        if (reqMoist.includes("dry")) {
+          if (moist.includes("dry") || moist.includes("< 12%")) qualityScore = 10;
+          else if (moist.includes("medium") || moist.includes("14%")) qualityScore = 6;
+          else qualityScore = 2;
+        } else if (reqMoist.includes("medium")) {
+          if (moist.includes("medium") || moist.includes("dry")) qualityScore = 10;
+          else qualityScore = 5;
+        }
+
+        // Criterion 5: Proximity / Location (5% weight)
+        let locScore = 3;
+        const loc1 = (l.location_name || "").toLowerCase();
+        const loc2 = (selectedDemand.delivery_location || "").toLowerCase();
+        if (loc1 && loc2) {
+          const words1 = loc1.split(/[ ,]+/);
+          const words2 = loc2.split(/[ ,]+/);
+          const common = words1.filter(w => w.length > 3 && words2.includes(w));
+          if (common.length > 0) locScore = 5;
+          else locScore = 3.5;
+        }
+
+        let total = materialScore + qtyScore + priceScore + qualityScore + locScore;
+        // If material is completely different crop, cap at 15%
+        if (!materialMatch) {
+          total = Math.min(15, total);
+        }
+
+        const finalScore = Math.max(5, Math.min(98, Math.round(total)));
+
+        return {
+          listing: l,
+          score: finalScore,
+          materialMatch: materialMatch,
+          priceWithinBudget: priceWithinBudget,
+          qtyScore: Math.round(qtyScore),
+          priceScore: Math.round(priceScore)
+        };
+      });
+
+      // Sort by score descending (highest match first)
+      scoredListings.sort((a, b) => b.score - a.score);
+
+      listContainer.innerHTML = "";
+      scoredListings.forEach(item => {
+        const l = item.listing;
+        const sc = item.score;
+
+        let badgeClass = "bg-red-100 text-red-800 border-red-200";
+        let matchLabel = "Low Match";
+        if (sc >= 80) {
+          badgeClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
+          matchLabel = "High Match";
+        } else if (sc >= 55) {
+          badgeClass = "bg-amber-100 text-amber-800 border-amber-300";
+          matchLabel = "Medium Match";
+        }
+
         listContainer.innerHTML += `
-          <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-xs flex items-start gap-2.5">
+          <div class="p-3.5 bg-white rounded-2xl border ${sc >= 80 ? 'border-emerald-300 ring-1 ring-emerald-200' : 'border-slate-200'} shadow-xs flex items-start gap-3">
             <input type="checkbox" data-id="${l.id}" data-qty="${l.available_quantity}" data-price="${l.price_per_unit}" onchange="recalculateAllocation()" class="mt-1 w-4 h-4 text-agri-600 rounded" />
-            <div class="flex-1">
+            <div class="flex-1 space-y-1.5">
               <div class="flex justify-between items-start">
-                <span class="font-bold text-xs text-slate-900">${l.farmer_name} • ${l.material_name}</span>
-                <span class="text-xs font-extrabold text-agri-700">₹${l.price_per_unit}/T</span>
+                <div>
+                  <span class="font-bold text-xs text-slate-900">${l.farmer_name} • ${l.material_name}</span>
+                  <div class="text-[11px] text-slate-600">
+                    Available: <span class="font-bold text-slate-800">${l.available_quantity} ${l.unit}</span> (${((l.available_quantity / remainingNeed)*100).toFixed(0)}% of your need)
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-xs font-extrabold ${item.priceWithinBudget ? 'text-agri-700' : 'text-red-600'}">₹${l.price_per_unit}/T</span>
+                  <div class="text-[10px] ${item.priceWithinBudget ? 'text-emerald-700 font-semibold' : 'text-red-500'}">
+                    ${item.priceWithinBudget ? '≤ Budget ✓' : 'Above Budget ✗'}
+                  </div>
+                </div>
               </div>
-              <div class="text-[11px] text-slate-600 mt-0.5">
-                Supply: <span class="font-bold text-slate-800">${l.available_quantity} ${l.unit}</span> • ${l.storage_type}
+
+              <!-- Real Match Score & Breakdown Pills -->
+              <div class="flex flex-wrap items-center gap-1.5 pt-1 border-t border-slate-100 text-[10px]">
+                <span class="font-bold px-2 py-0.5 rounded-full border ${badgeClass}">
+                  🎯 ${sc}% ${matchLabel}
+                </span>
+                <span class="px-1.5 py-0.5 ${item.materialMatch ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-600 border border-red-200'} rounded font-medium">
+                  🌾 ${item.materialMatch ? 'Material Matches' : 'Different Crop'}
+                </span>
+                <span class="px-1.5 py-0.5 bg-slate-50 text-slate-600 rounded border border-slate-200 font-medium">
+                  💧 ${l.moisture_condition || 'Dry (< 12%)'}
+                </span>
+                <span class="px-1.5 py-0.5 bg-slate-50 text-slate-500 rounded font-medium">
+                  📍 ${l.location_name}
+                </span>
               </div>
-              <div class="text-[10px] text-slate-400 mt-0.5">📍 ${l.location_name} • Match Score: 85%</div>
             </div>
           </div>
         `;
       });
+
       recalculateAllocation();
     }
 
@@ -921,10 +1163,14 @@
       });
 
       // Update requirement fulfillment
-      if (store.requirements.length > 0) {
-        store.requirements[0].fulfilled_quantity += combinedQty;
-        if (store.requirements[0].fulfilled_quantity >= store.requirements[0].required_quantity) {
-          store.requirements[0].status = "fulfilled";
+      const demandSelect = document.getElementById("buyer-demand-select");
+      const activeDemandId = demandSelect && demandSelect.value ? parseInt(demandSelect.value) : null;
+      const targetReq = store.requirements.find(r => r.id === activeDemandId);
+
+      if (targetReq) {
+        targetReq.fulfilled_quantity += combinedQty;
+        if (targetReq.fulfilled_quantity >= targetReq.required_quantity) {
+          targetReq.status = "fulfilled";
         }
       }
 
@@ -941,7 +1187,7 @@
       store.transportJobs.unshift({
         id: Date.now(),
         order_id: 1,
-        route: `Pickup from ${checked.length} farms ➔ Dropoff: Sanand GIDC Biofuel Plant`,
+        route: `Pickup from ${checked.length} farms ➔ Dropoff: ${targetReq ? targetReq.delivery_location : 'Sanand Plant'}`,
         total_qty: combinedQty,
         distance_km: 75.0,
         est_cost: 2625.0,
@@ -949,19 +1195,21 @@
       });
 
       persist();
-      alert(`🎉 Multi-Farmer Order Confirmed!\n\nSuccessfully combined ${combinedQty} tonnes from ${checked.length} farmers into 1 order.\nTotal Payout: ₹${combinedVal.toLocaleString()}\nA rural transport collection job has been automatically generated.`);
+      alert(`🎉 Multi-Farmer Order Confirmed!\n\nSuccessfully combined ${combinedQty.toFixed(1)} tonnes from ${checked.length} farmers into 1 order.\nTotal Value: ₹${combinedVal.toLocaleString()}\nA rural transport collection job has been automatically generated.`);
       switchBuyerTab('demands');
       renderBuyerModule();
     }
 
     function handleCreateRequirement(e) {
       e.preventDefault();
-      const mat = document.getElementById("req-material").value;
+      const mat = document.getElementById("req-material").value.trim();
       const qty = parseFloat(document.getElementById("req-qty").value);
-      const priceMax = parseFloat(document.getElementById("req-price-max").value) || 2500;
-      const loc = document.getElementById("req-location").value;
+      const priceMax = parseFloat(document.getElementById("req-price-max").value);
+      const moisture = document.getElementById("req-moisture").value;
+      const storage = document.getElementById("req-storage").value;
+      const loc = document.getElementById("req-location").value.trim();
 
-      store.requirements.unshift({
+      const newReq = {
         id: Date.now(),
         buyer_id: currentUser.id,
         buyer_name: currentUser.name,
@@ -970,13 +1218,21 @@
         fulfilled_quantity: 0.0,
         unit: "tonnes",
         target_price_max: priceMax,
+        moisture: moisture,
+        storage: storage,
         delivery_location: loc,
         status: "open"
-      });
+      };
+
+      store.requirements.unshift(newReq);
       persist();
-      alert(`Requirement published! ${qty} tonnes of ${mat} is now active.`);
-      switchBuyerTab('demands');
+
+      alert(`🎉 Demand Published!\n\n${qty} Tonnes of ${mat} (Max ₹${priceMax}/T) has been added to your demands.\n\nNow opening Smart Match to compare available farmers.`);
       renderBuyerModule();
+      switchBuyerTab('match');
+      const select = document.getElementById("buyer-demand-select");
+      if (select) select.value = newReq.id;
+      renderSmartMatchingList();
     }
 
     function switchBuyerTab(tab) {
