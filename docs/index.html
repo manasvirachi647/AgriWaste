@@ -489,20 +489,70 @@
           <!-- Dynamically populated -->
         </div>
       </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 6: LIVE AGRI-RESIDUE MARKETPLACE FEED -->
+      <!-- ========================================== -->
+      <section id="view-market" class="space-y-3 hidden">
+        <!-- Market Banner & Summary -->
+        <div class="bg-gradient-to-r from-agri-700 to-agri-800 text-white p-3.5 rounded-2xl shadow-sm space-y-2">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-[10px] font-bold tracking-wider text-agri-200 uppercase">Live Marketplace</span>
+              <h3 class="text-base font-extrabold text-white">Rural Agricultural Waste Exchange</h3>
+            </div>
+            <span class="text-2xl">🛒</span>
+          </div>
+          <p class="text-[11px] text-agri-100">
+            Real-time feed of all farmer residue listings, spot prices, and supplies available across Gujarat.
+          </p>
+          <div class="grid grid-cols-3 gap-2 pt-1 border-t border-agri-600/50 text-center text-[10px]">
+            <div class="bg-agri-900/40 p-1.5 rounded-lg">
+              <div class="text-agri-200">Total Supply</div>
+              <div id="market-stat-supply" class="font-bold text-xs text-white">0.0 T</div>
+            </div>
+            <div class="bg-agri-900/40 p-1.5 rounded-lg">
+              <div class="text-agri-200">Avg. Price</div>
+              <div id="market-stat-avg-price" class="font-bold text-xs text-white">₹0/T</div>
+            </div>
+            <div class="bg-agri-900/40 p-1.5 rounded-lg">
+              <div class="text-agri-200">Active Listings</div>
+              <div id="market-stat-count" class="font-bold text-xs text-white">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="space-y-2">
+          <input type="text" id="market-search-input" oninput="filterMarketListings()" placeholder="🔍 Search crop (e.g. Rice Husk, Wheat, Bagasse...)" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-agri-600 shadow-xs" />
+          <div class="flex gap-1.5 overflow-x-auto pb-1 text-[11px] font-semibold no-scrollbar">
+            <button onclick="setMarketFilter('all')" id="mf-all" class="market-filter-btn px-2.5 py-1 bg-agri-700 text-white rounded-lg shadow-xs whitespace-nowrap">All Residues</button>
+            <button onclick="setMarketFilter('Rice Husk')" id="mf-rice" class="market-filter-btn px-2.5 py-1 bg-white border border-slate-200 text-slate-700 rounded-lg whitespace-nowrap hover:bg-slate-50">Rice Husk</button>
+            <button onclick="setMarketFilter('Wheat Straw')" id="mf-wheat" class="market-filter-btn px-2.5 py-1 bg-white border border-slate-200 text-slate-700 rounded-lg whitespace-nowrap hover:bg-slate-50">Wheat Straw</button>
+            <button onclick="setMarketFilter('Bagasse')" id="mf-bagasse" class="market-filter-btn px-2.5 py-1 bg-white border border-slate-200 text-slate-700 rounded-lg whitespace-nowrap hover:bg-slate-50">Sugarcane</button>
+            <button onclick="setMarketFilter('Cotton')" id="mf-cotton" class="market-filter-btn px-2.5 py-1 bg-white border border-slate-200 text-slate-700 rounded-lg whitespace-nowrap hover:bg-slate-50">Cotton Stalks</button>
+          </div>
+        </div>
+
+        <!-- Live Listings Grid -->
+        <div id="market-listings-container" class="space-y-2.5 pb-6">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
     </main>
 
 
     <!-- BOTTOM NAVIGATION (ROLE-SPECIFIC) -->
     <nav id="bottom-nav" class="hidden bg-white border-t border-slate-200 px-6 py-2 flex justify-around items-center text-[10px] text-slate-500 font-semibold safe-bottom">
-      <button onclick="navigateRoleWorkspace()" class="flex flex-col items-center text-agri-700">
+      <button id="nav-btn-hub" onclick="navigateRoleWorkspace()" class="flex flex-col items-center text-agri-700 hover:text-agri-800 transition">
         <span class="text-base">🌾</span>
         <span>My Hub</span>
       </button>
-      <button onclick="openMarketFeed()" class="flex flex-col items-center hover:text-agri-700">
+      <button id="nav-btn-market" onclick="openMarketFeed()" class="flex flex-col items-center hover:text-agri-700 transition">
         <span class="text-base">🛒</span>
         <span>Market</span>
       </button>
-      <button onclick="openIssueModal()" class="flex flex-col items-center hover:text-agri-700">
+      <button id="nav-btn-support" onclick="openIssueModal()" class="flex flex-col items-center hover:text-agri-700 transition">
         <span class="text-base">⚠️</span>
         <span>Support</span>
       </button>
@@ -710,7 +760,7 @@
     }
 
     function hideAllViews() {
-      ['view-auth', 'view-farmer', 'view-buyer', 'view-aggregator', 'view-admin'].forEach(id => {
+      ['view-auth', 'view-farmer', 'view-buyer', 'view-aggregator', 'view-admin', 'view-market'].forEach(id => {
         document.getElementById(id).classList.add("hidden");
       });
     }
@@ -727,6 +777,7 @@
 
     function navigateRoleWorkspace() {
       hideAllViews();
+      updateNavHighlight('hub');
       if (currentUser.role === 'farmer') {
         document.getElementById("view-farmer").classList.remove("hidden");
         renderFarmerModule();
@@ -740,6 +791,142 @@
         document.getElementById("view-admin").classList.remove("hidden");
         renderAdminModule();
       }
+    }
+
+    // LIVE MARKETPLACE FEED LOGIC
+    let activeMarketCategory = 'all';
+
+    function openMarketFeed() {
+      hideAllViews();
+      document.getElementById("view-market").classList.remove("hidden");
+      updateNavHighlight('market');
+      renderMarketModule();
+    }
+
+    function updateNavHighlight(active) {
+      const navHub = document.getElementById("nav-btn-hub");
+      const navMarket = document.getElementById("nav-btn-market");
+      if (navHub && navMarket) {
+        if (active === 'market') {
+          navMarket.classList.add("text-agri-700", "font-bold");
+          navMarket.classList.remove("text-slate-500");
+          navHub.classList.add("text-slate-500");
+          navHub.classList.remove("text-agri-700", "font-bold");
+        } else {
+          navHub.classList.add("text-agri-700", "font-bold");
+          navHub.classList.remove("text-slate-500");
+          navMarket.classList.add("text-slate-500");
+          navMarket.classList.remove("text-agri-700", "font-bold");
+        }
+      }
+    }
+
+    function renderMarketModule() {
+      const available = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
+      const totalT = available.reduce((sum, l) => sum + (l.available_quantity || 0), 0);
+      const avgPrice = available.length > 0 ? Math.round(available.reduce((sum, l) => sum + l.price_per_unit, 0) / available.length) : 0;
+
+      document.getElementById("market-stat-supply").textContent = totalT.toFixed(1) + " T";
+      document.getElementById("market-stat-avg-price").textContent = "₹" + avgPrice.toLocaleString() + "/T";
+      document.getElementById("market-stat-count").textContent = available.length;
+
+      filterMarketListings();
+    }
+
+    function setMarketFilter(cat) {
+      activeMarketCategory = cat;
+      document.querySelectorAll(".market-filter-btn").forEach(b => {
+        b.className = "market-filter-btn px-2.5 py-1 bg-white border border-slate-200 text-slate-700 rounded-lg whitespace-nowrap hover:bg-slate-50";
+      });
+      const activeBtn = document.getElementById(
+        cat === 'all' ? 'mf-all' : 
+        cat === 'Rice Husk' ? 'mf-rice' : 
+        cat === 'Wheat Straw' ? 'mf-wheat' : 
+        cat === 'Bagasse' ? 'mf-bagasse' : 'mf-cotton'
+      );
+      if (activeBtn) {
+        activeBtn.className = "market-filter-btn px-2.5 py-1 bg-agri-700 text-white rounded-lg shadow-xs whitespace-nowrap";
+      }
+      filterMarketListings();
+    }
+
+    function filterMarketListings() {
+      const query = (document.getElementById("market-search-input").value || "").toLowerCase().trim();
+      const container = document.getElementById("market-listings-container");
+      container.innerHTML = "";
+
+      let items = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
+
+      if (activeMarketCategory !== 'all') {
+        items = items.filter(l => l.material_name.toLowerCase().includes(activeMarketCategory.toLowerCase()));
+      }
+
+      if (query) {
+        items = items.filter(l => 
+          l.material_name.toLowerCase().includes(query) ||
+          l.farmer_name.toLowerCase().includes(query) ||
+          l.location_name.toLowerCase().includes(query)
+        );
+      }
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 bg-white rounded-2xl border border-slate-200 text-center space-y-2 text-xs text-slate-500 shadow-xs">
+            <div class="text-2xl">🔍</div>
+            <div class="font-bold text-slate-700">No Residue Listings Found</div>
+            <div>Try clearing your search or selecting a different category.</div>
+          </div>
+        `;
+        return;
+      }
+
+      items.forEach(l => {
+        container.innerHTML += `
+          <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="font-bold text-xs text-slate-900">${l.farmer_name}</span>
+                <span class="text-[10px] text-slate-400 block">📍 ${l.location_name}</span>
+              </div>
+              <div class="text-right">
+                <span class="text-xs font-black text-agri-700">₹${l.price_per_unit}/T</span>
+                <span class="text-[10px] bg-agri-50 text-agri-800 font-bold px-1.5 py-0.5 rounded block border border-agri-200 mt-0.5">Available</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-xs bg-slate-50 p-2 rounded-xl">
+              <span class="text-base">🌾</span>
+              <div class="flex-1">
+                <div class="font-extrabold text-slate-800">${l.material_name}</div>
+                <div class="text-[10px] text-slate-500">Supply: <b>${l.available_quantity} ${l.unit}</b> • Form: <b>${l.storage_type}</b></div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-100">
+              <span>Moisture: <b class="text-slate-700">${l.moisture_condition || 'Dry (< 12%)'}</b></span>
+              ${currentUser && currentUser.role === 'buyer' ? `
+                <button onclick="orderFromMarketDirect(${l.id})" class="px-3 py-1 bg-agri-700 hover:bg-agri-800 text-white font-bold rounded-lg shadow-xs transition active:scale-95">
+                  ⚡ Order / Match
+                </button>
+              ` : `
+                <span class="text-slate-400 italic">Farmer Direct</span>
+              `}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function orderFromMarketDirect(listingId) {
+      navigateRoleWorkspace();
+      switchBuyerTab('match');
+      setTimeout(() => {
+        const cb = document.querySelector(`#buyer-match-list input[data-id='${listingId}']`);
+        if (cb) {
+          cb.checked = true;
+          recalculateAllocation();
+        }
+      }, 100);
     }
 
     // FARMER MODULE LOGIC
