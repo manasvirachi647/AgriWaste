@@ -53,7 +53,7 @@
       padding-top: env(safe-area-inset-top, 0px);
     }
     .safe-bottom {
-      padding-bottom: env(safe-area-inset-bottom, 16px);
+      padding-bottom: env(safe-area-inset-bottom, 20px);
     }
     .no-scrollbar::-webkit-scrollbar {
       display: none;
@@ -65,42 +65,42 @@
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
   <!-- MAIN APP CONTAINER -->
-  <div id="app" class="flex-1 flex flex-col w-full max-w-md mx-auto bg-white min-h-screen shadow-lg relative safe-top">
+  <div id="app" class="flex-1 flex flex-col w-full max-w-md mx-auto bg-slate-50 min-h-screen shadow-xl relative safe-top pb-16">
     
     <!-- TOP STATUS & APP BAR -->
-    <header id="top-bar" class="hidden bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-30 flex items-center justify-between">
+    <header id="top-bar" class="hidden bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 sticky top-0 z-30 flex items-center justify-between shadow-2xs">
       <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-lg bg-agri-100 flex items-center justify-center text-agri-700 font-bold text-lg">🌾</div>
+        <div class="w-8 h-8 rounded-xl bg-agri-100 flex items-center justify-center text-agri-700 font-black text-base shadow-xs">🌾</div>
         <div>
-          <h1 id="user-display-name" class="font-bold text-sm text-slate-900 leading-tight">AgriWaste User</h1>
-          <div class="flex items-center gap-1.5">
-            <span id="user-role-badge" class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-agri-100 text-agri-800 uppercase">Farmer</span>
-            <span id="user-location-badge" class="text-[10px] text-slate-500">📍 Sanand</span>
+          <h1 id="user-display-name" class="font-black text-sm text-slate-900 leading-tight">AgriWaste User</h1>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span id="user-role-badge" class="text-[9px] font-black px-1.5 py-0.2 rounded-full bg-agri-100 text-agri-800 uppercase tracking-wider">Farmer</span>
+            <span id="user-location-badge" class="text-[10px] text-slate-500 font-medium">📍 Sanand</span>
           </div>
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <button onclick="openIssueModal()" class="text-xs font-semibold px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700">
-          ⚠️ Report
+        <button onclick="openIssueModal()" title="Report Issue" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center text-sm transition">
+          ⚠️
         </button>
-        <button onclick="handleLogout()" class="text-xs font-semibold px-2 py-1 rounded border border-slate-200 hover:bg-slate-100 text-red-600">
-          Sign Out
+        <button onclick="navToTab('profile')" title="My Profile & Settings" class="w-8 h-8 rounded-xl bg-agri-50 border border-agri-200 text-agri-800 flex items-center justify-center text-sm font-bold transition">
+          👤
         </button>
       </div>
     </header>
 
     <!-- VIEWS CONTAINER -->
-    <main class="flex-1 overflow-y-auto no-scrollbar p-4">
+    <main class="flex-1 overflow-y-auto no-scrollbar p-4 space-y-4">
 
       <!-- ========================================== -->
-      <!-- VIEW 1: AUTHENTICATION / RBAC LOGIN PAGE   -->
+      <!-- VIEW 1: AUTHENTICATION / SIGN IN & SIGN UP -->
       <!-- ========================================== -->
       <section id="view-auth" class="space-y-4 pt-4">
         <div class="text-center py-4">
-          <div class="w-16 h-16 bg-agri-100 text-agri-700 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-sm mb-3">
+          <div class="w-16 h-16 bg-agri-100 text-agri-700 rounded-3xl flex items-center justify-center text-3xl mx-auto shadow-sm mb-3">
             🌾
           </div>
           <h2 class="text-2xl font-black text-slate-900 tracking-tight">AgriWaste Exchange</h2>
@@ -110,9 +110,9 @@
         </div>
 
         <!-- AUTH TABS -->
-        <div class="flex border-b border-slate-200 text-xs font-semibold">
-          <button id="btn-tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-center tab-active border-b-2">Sign In</button>
-          <button id="btn-tab-register" onclick="switchAuthTab('register')" class="flex-1 py-2 text-center text-slate-500 hover:text-slate-800">Create Account</button>
+        <div class="flex border-b border-slate-200 text-xs font-bold">
+          <button id="btn-tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2.5 text-center tab-active border-b-2">Sign In</button>
+          <button id="btn-tab-register" onclick="switchAuthTab('register')" class="flex-1 py-2.5 text-center text-slate-400 hover:text-slate-700">Create Account</button>
         </div>
 
         <!-- NOTIFICATION BANNERS -->
@@ -120,50 +120,50 @@
         <div id="auth-success-msg" class="hidden p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl font-medium"></div>
 
         <!-- SIGN IN FORM -->
-        <form id="form-login" onsubmit="handleManualLogin(event)" class="space-y-3">
+        <form id="form-login" onsubmit="handleManualLogin(event)" class="space-y-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Username or Email</label>
-            <input type="text" id="login-username" required placeholder="Enter username or email" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white" />
+            <label class="block text-xs font-bold text-slate-700 mb-1">Username, Email, or Mobile</label>
+            <input type="text" id="login-username" required placeholder="e.g. ramesh123 or ramesh@example.com" class="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white" />
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
-            <input type="password" id="login-password" required placeholder="Enter password" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white" />
+            <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+            <input type="password" id="login-password" required placeholder="Enter your password" class="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white" />
           </div>
-          <button type="submit" class="w-full py-2.5 bg-agri-700 hover:bg-agri-800 text-white font-bold rounded-xl text-xs shadow-sm transition active:scale-95">
-            Sign In to Account
+          <button type="submit" class="w-full py-3 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-xs shadow-sm transition active:scale-95">
+            Sign In to Dashboard
           </button>
         </form>
 
         <!-- REGISTER FORM -->
-        <form id="form-register" onsubmit="handleManualRegister(event)" class="space-y-3 hidden">
+        <form id="form-register" onsubmit="handleManualRegister(event)" class="space-y-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hidden">
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Select Your Role *</label>
-            <select id="reg-role" onchange="toggleRoleProfileInputs()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white font-medium">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Select Your Role *</label>
+            <select id="reg-role" onchange="toggleRoleProfileInputs()" class="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white font-bold text-slate-800">
               <option value="farmer">👨‍🌾 Farmer / Producer</option>
-              <option value="buyer">🏭 Industrial Buyer (Bio-energy / Mill)</option>
-              <option value="aggregator">🚛 Transporter / Aggregator</option>
+              <option value="buyer">🏭 Industrial Buyer (Biofuel / Mill)</option>
+              <option value="aggregator">🚛 Aggregator / Transporter</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Full Name *</label>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Full Name *</label>
             <input type="text" id="reg-name" required placeholder="e.g. Ramesh Patel" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
           </div>
           <div class="grid grid-cols-2 gap-2">
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Username *</label>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Username *</label>
               <input type="text" id="reg-username" required placeholder="ramesh123" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Mobile No.</label>
-              <input type="tel" id="reg-phone" placeholder="+91 9876543210" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
+              <label class="block text-xs font-bold text-slate-700 mb-1">Mobile No.</label>
+              <input type="tel" id="reg-phone" placeholder="9876543210" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
             </div>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Email Address *</label>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Email Address *</label>
             <input type="email" id="reg-email" required placeholder="ramesh@example.com" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Password (min 6 chars) *</label>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Password (min 6 chars) *</label>
             <input type="password" id="reg-password" required minlength="6" placeholder="Choose a secure password" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
           </div>
 
@@ -177,7 +177,7 @@
           <div id="role-extra-buyer" class="p-2.5 bg-harvest-50 border border-harvest-200 rounded-xl space-y-2 text-xs hidden">
             <span class="font-bold text-harvest-800 block">🏭 Industry Details</span>
             <input type="text" id="reg-company" placeholder="Company Name (e.g. Gujarat BioPower Ltd)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
-            <input type="text" id="reg-industry" placeholder="Industry Type (e.g. Biomass Pellets, Paper)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
+            <input type="text" id="reg-industry" placeholder="Industry Type (e.g. Bio-Energy, Paper)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
           </div>
 
           <div id="role-extra-transporter" class="p-2.5 bg-blue-50 border border-blue-200 rounded-xl space-y-2 text-xs hidden">
@@ -185,337 +185,328 @@
             <input type="text" id="reg-vehicle" placeholder="Vehicle Fleet (e.g. 10T Truck, Tractor Trolley)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
           </div>
 
-          <button type="submit" class="w-full py-2.5 bg-agri-700 hover:bg-agri-800 text-white font-bold rounded-xl text-xs shadow-sm transition active:scale-95">
-            Create Account & Launch Dashboard
+          <button type="submit" class="w-full py-3 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-xs shadow-sm transition active:scale-95">
+            Register & Open My Dashboard
           </button>
         </form>
       </section>
 
 
       <!-- ========================================== -->
-      <!-- VIEW 2: FARMER WORKSPACE (PHASE 3 / WK 3)  -->
+      <!-- VIEW 2: ROLE 1 - FARMER DASHBOARD          -->
       <!-- ========================================== -->
       <section id="view-farmer" class="space-y-4 hidden">
-        <!-- Stats Summary -->
-        <div class="grid grid-cols-3 gap-2 text-center">
-          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-xs">
-            <div id="farmer-stat-listings" class="text-base font-extrabold text-agri-700">3</div>
-            <div class="text-[10px] font-semibold text-slate-500">Listings</div>
-          </div>
-          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-xs">
-            <div id="farmer-stat-tonnes" class="text-base font-extrabold text-agri-700">10.0 T</div>
-            <div class="text-[10px] font-semibold text-slate-500">Surplus Listed</div>
-          </div>
-          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-xs">
-            <div id="farmer-stat-earnings" class="text-base font-extrabold text-agri-700">₹23.5k</div>
-            <div class="text-[10px] font-semibold text-slate-500">Est. Value</div>
+        <!-- 1. Greeting & Farm Location -->
+        <div class="bg-gradient-to-br from-agri-50 to-emerald-100/70 p-4 rounded-3xl border border-agri-200 shadow-xs">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-[11px] font-bold text-agri-800">Namaste &amp; Welcome,</span>
+              <h2 id="farmer-dash-greeting" class="text-lg font-black text-slate-900 leading-tight">Ramesh Patel 👋</h2>
+              <div id="farmer-dash-location" class="text-xs text-agri-900 font-semibold mt-1 flex items-center gap-1">
+                📍 Farm Location: Sanand Taluka, Ahmedabad District
+              </div>
+            </div>
+            <span class="text-3xl bg-white p-2 rounded-2xl shadow-xs">👨‍🌾</span>
           </div>
         </div>
 
-        <!-- Soil Health Advisory -->
-        <div class="p-3 bg-emerald-50 border border-emerald-300 rounded-xl flex items-start gap-2.5">
-          <span class="text-xl">🌱</span>
-          <div>
-            <h4 class="font-bold text-xs text-emerald-900">Sustainable Residue Advisory</h4>
-            <p class="text-[11px] text-emerald-800 leading-snug mt-0.5">
-              Retain essential stubble for field soil nutrition & livestock. List only your genuine surplus.
-            </p>
+        <!-- 2. Top Metric Cards (KPIs) -->
+        <div class="grid grid-cols-3 gap-2 text-center text-xs">
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Active Listings</div>
+            <div id="farmer-stat-listings" class="text-lg font-black text-agri-700 mt-0.5">0</div>
+          </div>
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Available Qty</div>
+            <div id="farmer-stat-tonnes" class="text-lg font-black text-agri-700 mt-0.5">0.0 T</div>
+          </div>
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Potential Earnings</div>
+            <div id="farmer-stat-earnings" class="text-lg font-black text-agri-700 mt-0.5">₹0</div>
           </div>
         </div>
 
-        <!-- Sub Tabs -->
-        <div class="flex border-b border-slate-200 text-xs font-semibold">
-          <button onclick="switchFarmerTab('listings')" id="tab-btn-flistings" class="flex-1 py-2 text-center tab-active border-b-2">My Listings</button>
-          <button onclick="switchFarmerTab('add')" id="tab-btn-fadd" class="flex-1 py-2 text-center text-slate-500">+ Add Residue</button>
-          <button onclick="switchFarmerTab('demands')" id="tab-btn-fdemands" class="flex-1 py-2 text-center text-slate-500">Buyer Demands</button>
+        <!-- 3. Large + Add Residue Button -->
+        <button onclick="openAddResidueModal()" class="w-full py-3.5 px-4 bg-agri-700 hover:bg-agri-800 text-white rounded-2xl font-black text-sm shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition active:scale-98">
+          <span class="text-lg">➕</span>
+          <span>+ Add Crop Residue Listing</span>
+        </button>
+
+        <!-- 4. Order and Collection Status -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center px-1">
+            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Order &amp; Collection Status</h3>
+            <span class="text-[10px] text-agri-700 font-bold">Live Tracking</span>
+          </div>
+          <div id="farmer-collection-status-container" class="space-y-2">
+            <!-- Dynamically populated -->
+          </div>
         </div>
 
-        <!-- FARMER TAB A: MY LISTINGS -->
-        <div id="farmer-tab-listings" class="space-y-2.5">
+        <!-- 5. Recent Buyer Interests -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center px-1">
+            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Recent Buyer Interests</h3>
+            <span class="text-[10px] text-harvest-700 font-bold">Biomass Demand</span>
+          </div>
+          <div id="farmer-buyer-interests-container" class="space-y-2">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- 6. My Active Listings -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center px-1">
+            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">My Active Surplus</h3>
+            <button onclick="openAddResidueModal()" class="text-[11px] font-bold text-agri-700 hover:underline">+ New Surplus</button>
+          </div>
           <div id="farmer-listings-container" class="space-y-2">
             <!-- Dynamically populated -->
           </div>
         </div>
-
-        <!-- FARMER TAB B: ADD RESIDUE FORM -->
-        <form id="farmer-tab-add" onsubmit="handleCreateListing(event)" class="space-y-3 hidden">
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Crop Residue Type *</label>
-            <div class="flex flex-wrap gap-1.5 mb-2">
-              <span onclick="setAddCrop('Rice Husk')" class="px-2 py-1 text-[11px] rounded-lg border border-slate-300 cursor-pointer bg-white crop-preset hover:bg-agri-50">Rice Husk</span>
-              <span onclick="setAddCrop('Wheat Straw')" class="px-2 py-1 text-[11px] rounded-lg border border-slate-300 cursor-pointer bg-white crop-preset hover:bg-agri-50">Wheat Straw</span>
-              <span onclick="setAddCrop('Cotton Stalks')" class="px-2 py-1 text-[11px] rounded-lg border border-slate-300 cursor-pointer bg-white crop-preset hover:bg-agri-50">Cotton Stalks</span>
-              <span onclick="setAddCrop('Sugarcane Bagasse')" class="px-2 py-1 text-[11px] rounded-lg border border-slate-300 cursor-pointer bg-white crop-preset hover:bg-agri-50">Bagasse</span>
-            </div>
-            <input type="text" id="add-material" required placeholder="Or enter crop residue name" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Surplus Qty (Tonnes) *</label>
-              <input type="number" step="0.1" id="add-qty" required placeholder="e.g. 5.0" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Rate (₹ / Tonne) *</label>
-              <input type="number" id="add-price" required placeholder="e.g. 2400" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Farm / Pickup Location *</label>
-            <input type="text" id="add-location" required placeholder="Village, Taluka, District" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Storage Type</label>
-              <select id="add-storage" class="w-full px-2.5 py-2 text-xs border border-slate-300 rounded-xl bg-white">
-                <option value="Dry covered shed">Dry covered shed</option>
-                <option value="Baled & stacked">Baled & stacked</option>
-                <option value="Silo storage">Silo storage</option>
-                <option value="Open field">Open field</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Moisture Condition</label>
-              <select id="add-moisture" class="w-full px-2.5 py-2 text-xs border border-slate-300 rounded-xl bg-white">
-                <option value="Dry (< 12%)">Dry (< 12%)</option>
-                <option value="Medium (12-18%)">Medium (12-18%)</option>
-                <option value="Fresh harvest">Fresh harvest</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Quality Notes (Optional)</label>
-            <textarea id="add-notes" rows="2" placeholder="Clean dry harvest, free of soil and stones..." class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white"></textarea>
-          </div>
-
-          <button type="submit" class="w-full py-2.5 bg-agri-700 hover:bg-agri-800 text-white font-bold rounded-xl text-xs shadow-sm transition active:scale-95">
-            Publish Residue Listing
-          </button>
-        </form>
-
-        <!-- FARMER TAB C: MATCHING BUYER DEMANDS -->
-        <div id="farmer-tab-demands" class="space-y-2 hidden">
-          <div class="text-xs font-bold text-slate-700 mb-1">Industrial Plants Seeking Biomass:</div>
-          <div id="farmer-demands-container" class="space-y-2">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
       </section>
 
 
       <!-- ========================================== -->
-      <!-- VIEW 3: BUYER WORKSPACE (PHASE 4 & 5)      -->
+      <!-- VIEW 3: ROLE 2 - BUYER DASHBOARD           -->
       <!-- ========================================== -->
       <section id="view-buyer" class="space-y-4 hidden">
-        <!-- Stats Summary -->
-        <div class="grid grid-cols-3 gap-2 text-center">
-          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-xs">
-            <div id="buyer-stat-demands" class="text-base font-extrabold text-harvest-600">2</div>
-            <div class="text-[10px] font-semibold text-slate-500">Demands</div>
-          </div>
-          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-xs">
-            <div id="buyer-stat-needed" class="text-base font-extrabold text-harvest-600">25.0 T</div>
-            <div class="text-[10px] font-semibold text-slate-500">Total Need</div>
-          </div>
-          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-xs">
-            <div id="buyer-stat-orders" class="text-base font-extrabold text-agri-700">1</div>
-            <div class="text-[10px] font-semibold text-slate-500">Orders</div>
+        <!-- 1. Greeting & Plant Location -->
+        <div class="bg-gradient-to-br from-harvest-50 to-amber-100/70 p-4 rounded-3xl border border-harvest-200 shadow-xs">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-[11px] font-bold text-harvest-800">Industrial Procurement,</span>
+              <h2 id="buyer-dash-greeting" class="text-lg font-black text-slate-900 leading-tight">Vikram Mehta 👋</h2>
+              <div id="buyer-dash-location" class="text-xs text-harvest-900 font-semibold mt-1 flex items-center gap-1">
+                🏭 Plant: Gujarat BioPower Ltd • Sanand GIDC
+              </div>
+            </div>
+            <span class="text-3xl bg-white p-2 rounded-2xl shadow-xs">🏭</span>
           </div>
         </div>
 
-        <!-- Sub Tabs -->
-        <div class="flex border-b border-slate-200 text-xs font-semibold">
-          <button onclick="switchBuyerTab('demands')" id="tab-btn-bdemands" class="flex-1 py-2 text-center tab-active border-b-2">My Demands</button>
-          <button onclick="switchBuyerTab('add')" id="tab-btn-badd" class="flex-1 py-2 text-center text-slate-500">+ Post Demand</button>
-          <button onclick="switchBuyerTab('match')" id="tab-btn-bmatch" class="flex-1 py-2 text-center text-slate-500">Smart Match & Order</button>
+        <!-- 2. Top Metric Cards (KPIs) -->
+        <div class="grid grid-cols-2 gap-2 text-center text-xs">
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Active Requirements</div>
+            <div id="buyer-stat-demands" class="text-lg font-black text-harvest-700 mt-0.5">0</div>
+          </div>
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Total Quantity Required</div>
+            <div id="buyer-stat-needed" class="text-lg font-black text-harvest-700 mt-0.5">0.0 T</div>
+          </div>
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Available Matching Supply</div>
+            <div id="buyer-stat-supply" class="text-lg font-black text-agri-700 mt-0.5">0.0 T</div>
+          </div>
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Est. Procurement Value</div>
+            <div id="buyer-stat-val" class="text-lg font-black text-slate-900 mt-0.5">₹0</div>
+          </div>
         </div>
 
-        <!-- BUYER TAB A: MY DEMANDS -->
-        <div id="buyer-tab-demands" class="space-y-2.5">
-          <div id="buyer-demands-container" class="space-y-2.5">
+        <!-- 3. Large + Post Requirement Button -->
+        <button onclick="openPostRequirementModal()" class="w-full py-3.5 px-4 bg-harvest-600 hover:bg-harvest-700 text-white rounded-2xl font-black text-sm shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition active:scale-98">
+          <span class="text-lg">📋</span>
+          <span>+ Post Procurement Requirement</span>
+        </button>
+
+        <!-- 4. Recommended Suppliers (Smart Matching) -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center px-1">
+            <div>
+              <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Recommended Suppliers</h3>
+              <p class="text-[10px] text-slate-500 font-medium">Smart Match based on your crop, budget, and quality</p>
+            </div>
+            <button onclick="navToTab('activity')" class="text-[11px] font-bold text-harvest-700 hover:underline">Batch Order →</button>
+          </div>
+          <div id="buyer-recommended-suppliers-container" class="space-y-2">
             <!-- Dynamically populated -->
           </div>
         </div>
 
-        <!-- BUYER TAB B: POST DEMAND FORM -->
-        <form id="buyer-tab-add" onsubmit="handleCreateRequirement(event)" class="space-y-3 hidden">
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Required Biomass *</label>
-            <input type="text" id="req-material" list="biomass-types" required placeholder="Select or type e.g. Rice Husk, Wheat Straw" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-            <datalist id="biomass-types">
-              <option value="Rice Husk">
-              <option value="Wheat Straw">
-              <option value="Sugarcane Bagasse">
-              <option value="Cotton Stalks">
-              <option value="Mustard Stalks">
-              <option value="Maize Stalks">
-            </datalist>
+        <!-- 5. Current Orders -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center px-1">
+            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Current Orders</h3>
+            <span class="text-[10px] text-slate-400">Logistics Fulfillment</span>
           </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Quantity Needed (Tonnes) *</label>
-              <input type="number" step="0.1" id="req-qty" required placeholder="e.g. 10.0" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Max Budget (₹/Tonne) *</label>
-              <input type="number" id="req-price-max" required placeholder="e.g. 2400" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Required Quality / Moisture *</label>
-              <select id="req-moisture" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white font-medium">
-                <option value="Dry (< 12%)">Dry (&lt; 12% Moisture)</option>
-                <option value="Medium (14%)">Medium (12% - 16% Moisture)</option>
-                <option value="Any">Any Moisture Condition</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Storage Condition</label>
-              <select id="req-storage" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white font-medium">
-                <option value="Dry covered shed">Dry covered shed</option>
-                <option value="Baled & stacked">Baled & stacked</option>
-                <option value="Any">Any Storage Form</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Plant / Delivery Address *</label>
-            <input type="text" id="req-location" required placeholder="e.g. Sanand GIDC Biofuel Plant, Ahmedabad" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-          </div>
-
-          <button type="submit" class="w-full py-2.5 bg-harvest-600 hover:bg-harvest-700 text-white font-bold rounded-xl text-xs shadow-sm transition active:scale-95">
-            Publish Demand & Calculate Smart Matches
-          </button>
-        </form>
-
-        <!-- BUYER TAB C: SMART MATCH & MULTI-FARMER ORDER ALLOCATION (WEEK 5) -->
-        <div id="buyer-tab-match" class="space-y-3 hidden">
-          <!-- Active Demand Selector Header -->
-          <div id="buyer-match-demand-header" class="hidden bg-slate-900 text-white p-3 rounded-2xl shadow-sm space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="text-slate-400 font-medium">Matching against your demand:</span>
-              <span id="match-demand-count-badge" class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full font-semibold">1 Active Demand</span>
-            </div>
-            <select id="buyer-demand-select" onchange="renderSmartMatchingList()" class="w-full px-2.5 py-1.5 bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold text-white focus:outline-none focus:border-agri-500">
-              <!-- Dynamically populated -->
-            </select>
-            <div id="buyer-demand-active-specs" class="text-[11px] text-slate-300 pt-1 border-t border-slate-800 flex flex-wrap gap-2">
-              <!-- Specs details -->
-            </div>
-          </div>
-
-          <!-- Empty State (when 0 demands) or Matching List -->
-          <div id="buyer-match-list" class="space-y-2">
+          <div id="buyer-orders-container" class="space-y-2">
             <!-- Dynamically populated -->
           </div>
+        </div>
 
-          <!-- Allocation summary box -->
-          <div id="buyer-alloc-box" class="p-3 bg-white rounded-xl border border-slate-300 shadow-xs space-y-2">
-            <div class="flex justify-between text-xs font-semibold">
-              <span class="text-slate-600">Combined Allocation:</span>
-              <span id="alloc-total-qty" class="text-agri-700 font-extrabold">0.0 Tonnes</span>
-            </div>
-            <div class="flex justify-between text-xs font-semibold">
-              <span class="text-slate-600">Combined Order Value:</span>
-              <span id="alloc-total-val" class="text-slate-900 font-extrabold">₹0</span>
-            </div>
-            <button onclick="handleExecuteMultiFarmerOrder()" class="w-full py-2.5 bg-agri-700 hover:bg-agri-800 text-white font-bold rounded-xl text-xs shadow-sm active:scale-95">
-              Confirm Combined Multi-Farmer Order
-            </button>
+        <!-- 6. Active Requirements List -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center px-1">
+            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Active Procurement Requirements</h3>
+            <button onclick="openPostRequirementModal()" class="text-[11px] font-bold text-harvest-700 hover:underline">+ New</button>
+          </div>
+          <div id="buyer-demands-container" class="space-y-2">
+            <!-- Dynamically populated -->
           </div>
         </div>
       </section>
 
 
       <!-- ========================================== -->
-      <!-- VIEW 4: TRANSPORTER WORKSPACE (WK 6)       -->
+      <!-- VIEW 4: ROLE 3 - AGGREGATOR DASHBOARD      -->
       <!-- ========================================== -->
       <section id="view-aggregator" class="space-y-4 hidden">
-        <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl flex items-center justify-between">
-          <div>
-            <div class="font-bold text-xs text-blue-900">Vehicle: 10-Tonne Eicher Truck</div>
-            <div class="text-[11px] text-blue-700">Operating Zone: Ahmedabad District (50 km)</div>
+        <!-- 1. Greeting & Fleet Info -->
+        <div class="bg-gradient-to-br from-blue-50 to-sky-100/70 p-4 rounded-3xl border border-blue-200 shadow-xs">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-[11px] font-bold text-blue-800">Logistics &amp; Fleet Operations,</span>
+              <h2 id="trans-dash-greeting" class="text-lg font-black text-slate-900 leading-tight">Harpreet Singh 👋</h2>
+              <div id="trans-dash-fleet" class="text-xs text-blue-900 font-semibold mt-1 flex items-center gap-1">
+                🚛 Kisan Fleet Logistics • 10T Trucks &amp; Trolleys
+              </div>
+            </div>
+            <span class="text-3xl bg-white p-2 rounded-2xl shadow-xs">🚛</span>
           </div>
-          <span class="text-2xl">🚛</span>
         </div>
 
-        <div class="text-xs font-bold text-slate-800">Assigned Rural Collection Trips</div>
-        <div id="transporter-jobs-container" class="space-y-3">
-          <!-- Dynamically populated -->
+        <!-- 2. Top Metric Cards (KPIs) -->
+        <div class="grid grid-cols-2 gap-2 text-center text-xs">
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Assigned Trips</div>
+            <div id="trans-stat-assigned" class="text-lg font-black text-blue-700 mt-0.5">0</div>
+          </div>
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Today's Pickups</div>
+            <div id="trans-stat-pickups" class="text-lg font-black text-amber-600 mt-0.5">0 Stops</div>
+          </div>
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Pending Deliveries</div>
+            <div id="trans-stat-pending" class="text-lg font-black text-blue-700 mt-0.5">0 Trips</div>
+          </div>
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Completed Trips</div>
+            <div id="trans-stat-completed" class="text-lg font-black text-emerald-700 mt-0.5">0</div>
+          </div>
+        </div>
+
+        <!-- 3. Assigned Collection Trips (Pickup & Delivery Locations + Status Update) -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center px-1">
+            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Assigned Collection Trips</h3>
+            <span class="text-[10px] text-blue-700 font-bold">Active Dispatch</span>
+          </div>
+          <div id="transporter-jobs-container" class="space-y-3">
+            <!-- Dynamically populated with pickup/dropoff cards and update status actions -->
+          </div>
+        </div>
+
+        <!-- 4. Completed Trips History -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center px-1">
+            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Completed Trips</h3>
+            <span class="text-[10px] text-slate-400 font-medium">Verified Drops</span>
+          </div>
+          <div id="transporter-completed-container" class="space-y-2">
+            <!-- Dynamically populated -->
+          </div>
         </div>
       </section>
 
 
       <!-- ========================================== -->
-      <!-- VIEW 5: ADMIN PORTAL WORKSPACE (WK 7)      -->
+      <!-- VIEW 5: ROLE 4 - ADMIN DASHBOARD           -->
       <!-- ========================================== -->
       <section id="view-admin" class="space-y-4 hidden">
-        <div class="bg-purple-50 border border-purple-200 p-3 rounded-xl flex items-center justify-between">
-          <div>
-            <h3 class="font-extrabold text-sm text-purple-900">Platform Moderation Console</h3>
-            <p class="text-[11px] text-purple-700">Audit listings, dispute tickets, and system health</p>
+        <!-- 1. Header & Overview -->
+        <div class="bg-gradient-to-br from-purple-50 to-indigo-100/70 p-4 rounded-3xl border border-purple-200 shadow-xs">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-[11px] font-bold text-purple-800">Platform Moderation &amp; Operations</span>
+              <h2 id="admin-dash-greeting" class="text-lg font-black text-slate-900 leading-tight">Admin Console 🛡️</h2>
+              <div class="text-xs text-purple-900 font-semibold mt-1">Platform Operations • System State: Healthy</div>
+            </div>
+            <span class="text-3xl bg-white p-2 rounded-2xl shadow-xs">🛡️</span>
           </div>
-          <span class="text-2xl">🛡️</span>
         </div>
 
+        <!-- 2. Top Metric Cards (KPIs) -->
         <div class="grid grid-cols-2 gap-2 text-center text-xs">
-          <div class="p-2.5 bg-white rounded-xl border border-slate-200 shadow-xs">
-            <div class="font-bold text-slate-500 text-[10px]">TOTAL USERS</div>
-            <div id="admin-stat-users" class="text-lg font-black text-slate-800">6</div>
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Total Registered Users</div>
+            <div id="admin-stat-users" class="text-lg font-black text-slate-900 mt-0.5">0</div>
           </div>
-          <div class="p-2.5 bg-white rounded-xl border border-slate-200 shadow-xs">
-            <div class="font-bold text-slate-500 text-[10px]">TOTAL ORDERS</div>
-            <div id="admin-stat-orders" class="text-lg font-black text-agri-700">2</div>
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Active Listings</div>
+            <div id="admin-stat-listings" class="text-lg font-black text-agri-700 mt-0.5">0</div>
           </div>
-          <div class="p-2.5 bg-white rounded-xl border border-slate-200 shadow-xs">
-            <div class="font-bold text-slate-500 text-[10px]">ACTIVE LISTINGS</div>
-            <div id="admin-stat-listings" class="text-lg font-black text-slate-800">3</div>
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Orders Completed</div>
+            <div id="admin-stat-orders" class="text-lg font-black text-emerald-700 mt-0.5">0</div>
           </div>
-          <div class="p-2.5 bg-white rounded-xl border border-slate-200 shadow-xs">
-            <div class="font-bold text-slate-500 text-[10px]">OPEN DISPUTES</div>
-            <div id="admin-stat-disputes" class="text-lg font-black text-red-600">0</div>
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Open Disputes</div>
+            <div id="admin-stat-disputes" class="text-lg font-black text-red-600 mt-0.5">0</div>
           </div>
         </div>
 
-        <div class="text-xs font-bold text-slate-800 pt-1">Dispute Tickets & Issue Resolution</div>
-        <div id="admin-disputes-container" class="space-y-2">
-          <!-- Dynamically populated -->
+        <!-- 3. User & Listing Management Tabs -->
+        <div class="space-y-2">
+          <div class="flex border-b border-slate-200 text-xs font-bold">
+            <button onclick="switchAdminTab('users')" id="admin-tab-btn-users" class="flex-1 py-2 text-center tab-active border-b-2">Registered Users</button>
+            <button onclick="switchAdminTab('listings')" id="admin-tab-btn-listings" class="flex-1 py-2 text-center text-slate-400">Listings Management</button>
+            <button onclick="switchAdminTab('txns')" id="admin-tab-btn-txns" class="flex-1 py-2 text-center text-slate-400">Transactions</button>
+          </div>
+
+          <!-- Users List -->
+          <div id="admin-tab-users" class="space-y-2">
+            <div id="admin-users-list" class="space-y-2"></div>
+          </div>
+
+          <!-- Listings Audit -->
+          <div id="admin-tab-listings" class="space-y-2 hidden">
+            <div id="admin-listings-audit-list" class="space-y-2"></div>
+          </div>
+
+          <!-- Transactions Monitoring -->
+          <div id="admin-tab-txns" class="space-y-2 hidden">
+            <div id="admin-transactions-list" class="space-y-2"></div>
+          </div>
+        </div>
+
+        <!-- 4. Open Disputes Desk -->
+        <div class="space-y-2 pt-2 border-t border-slate-200">
+          <div class="flex justify-between items-center px-1">
+            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Dispute Tickets &amp; Issues</h3>
+            <span class="text-[10px] text-red-600 font-bold">Escalation Desk</span>
+          </div>
+          <div id="admin-disputes-container" class="space-y-2"></div>
         </div>
       </section>
 
+
       <!-- ========================================== -->
-      <!-- VIEW 6: LIVE AGRI-RESIDUE MARKETPLACE FEED -->
+      <!-- VIEW 6: LIVE RESIDUE MARKETPLACE FEED      -->
       <!-- ========================================== -->
       <section id="view-market" class="space-y-3 hidden">
-        <!-- Market Banner & Summary -->
-        <div class="bg-gradient-to-r from-agri-700 to-agri-800 text-white p-3.5 rounded-2xl shadow-sm space-y-2">
+        <div class="bg-gradient-to-r from-agri-700 to-agri-800 text-white p-4 rounded-3xl shadow-sm space-y-2">
           <div class="flex items-center justify-between">
             <div>
               <span class="text-[10px] font-bold tracking-wider text-agri-200 uppercase">Live Marketplace</span>
-              <h3 class="text-base font-extrabold text-white">Rural Agricultural Waste Exchange</h3>
+              <h3 class="text-base font-black text-white">Rural Agricultural Waste Exchange</h3>
             </div>
-            <span class="text-2xl">🛒</span>
+            <span class="text-2xl bg-agri-900/40 p-2 rounded-2xl">🛒</span>
           </div>
           <p class="text-[11px] text-agri-100">
             Real-time feed of all farmer residue listings, spot prices, and supplies available across Gujarat.
           </p>
           <div class="grid grid-cols-3 gap-2 pt-1 border-t border-agri-600/50 text-center text-[10px]">
-            <div class="bg-agri-900/40 p-1.5 rounded-lg">
+            <div class="bg-agri-900/40 p-1.5 rounded-xl">
               <div class="text-agri-200">Total Supply</div>
               <div id="market-stat-supply" class="font-bold text-xs text-white">0.0 T</div>
             </div>
-            <div class="bg-agri-900/40 p-1.5 rounded-lg">
+            <div class="bg-agri-900/40 p-1.5 rounded-xl">
               <div class="text-agri-200">Avg. Price</div>
               <div id="market-stat-avg-price" class="font-bold text-xs text-white">₹0/T</div>
             </div>
-            <div class="bg-agri-900/40 p-1.5 rounded-lg">
+            <div class="bg-agri-900/40 p-1.5 rounded-xl">
               <div class="text-agri-200">Active Listings</div>
               <div id="market-stat-count" class="font-bold text-xs text-white">0</div>
             </div>
@@ -524,90 +515,321 @@
 
         <!-- Filter & Search Toolbar -->
         <div class="space-y-2">
-          <input type="text" id="market-search-input" oninput="filterMarketListings()" placeholder="🔍 Search crop (e.g. Rice Husk, Wheat, Bagasse...)" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-agri-600 shadow-xs" />
-          <div class="flex gap-1.5 overflow-x-auto pb-1 text-[11px] font-semibold no-scrollbar">
-            <button onclick="setMarketFilter('all')" id="mf-all" class="market-filter-btn px-2.5 py-1 bg-agri-700 text-white rounded-lg shadow-xs whitespace-nowrap">All Residues</button>
-            <button onclick="setMarketFilter('Rice Husk')" id="mf-rice" class="market-filter-btn px-2.5 py-1 bg-white border border-slate-200 text-slate-700 rounded-lg whitespace-nowrap hover:bg-slate-50">Rice Husk</button>
-            <button onclick="setMarketFilter('Wheat Straw')" id="mf-wheat" class="market-filter-btn px-2.5 py-1 bg-white border border-slate-200 text-slate-700 rounded-lg whitespace-nowrap hover:bg-slate-50">Wheat Straw</button>
-            <button onclick="setMarketFilter('Bagasse')" id="mf-bagasse" class="market-filter-btn px-2.5 py-1 bg-white border border-slate-200 text-slate-700 rounded-lg whitespace-nowrap hover:bg-slate-50">Sugarcane</button>
-            <button onclick="setMarketFilter('Cotton')" id="mf-cotton" class="market-filter-btn px-2.5 py-1 bg-white border border-slate-200 text-slate-700 rounded-lg whitespace-nowrap hover:bg-slate-50">Cotton Stalks</button>
+          <input type="text" id="market-search-input" oninput="filterMarketListings()" placeholder="🔍 Search crop (e.g. Rice Husk, Wheat Straw, Bagasse...)" class="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-agri-600 shadow-xs" />
+          <div class="flex gap-1.5 overflow-x-auto pb-1 text-[11px] font-bold no-scrollbar">
+            <button onclick="setMarketFilter('all')" id="mf-all" class="market-filter-btn px-3 py-1.5 bg-agri-700 text-white rounded-xl shadow-xs whitespace-nowrap">All Residues</button>
+            <button onclick="setMarketFilter('Rice Husk')" id="mf-rice" class="market-filter-btn px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-xl whitespace-nowrap hover:bg-slate-50">Rice Husk</button>
+            <button onclick="setMarketFilter('Wheat Straw')" id="mf-wheat" class="market-filter-btn px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-xl whitespace-nowrap hover:bg-slate-50">Wheat Straw</button>
+            <button onclick="setMarketFilter('Bagasse')" id="mf-bagasse" class="market-filter-btn px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-xl whitespace-nowrap hover:bg-slate-50">Sugarcane</button>
+            <button onclick="setMarketFilter('Cotton')" id="mf-cotton" class="market-filter-btn px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-xl whitespace-nowrap hover:bg-slate-50">Cotton Stalks</button>
           </div>
         </div>
 
         <!-- Live Listings Grid -->
-        <div id="market-listings-container" class="space-y-2.5 pb-6">
-          <!-- Dynamically populated -->
+        <div id="market-listings-container" class="space-y-2.5 pb-6"></div>
+      </section>
+
+
+      <!-- ========================================== -->
+      <!-- VIEW 7: BATCH ORDERS / ALLOCATION VIEW     -->
+      <!-- ========================================== -->
+      <section id="view-orders" class="space-y-3 hidden">
+        <div class="bg-gradient-to-br from-emerald-600 to-agri-800 text-white p-4 rounded-3xl shadow-xs space-y-1">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-black">Multi-Farmer Order Builder</h3>
+            <span class="text-xl">📦</span>
+          </div>
+          <p class="text-[11px] text-emerald-100">
+            Combine contributions from multiple smallholder farmers into a single coordinated industrial shipment.
+          </p>
+        </div>
+
+        <div id="orders-active-demand-selector" class="space-y-2">
+          <label class="block text-xs font-bold text-slate-700">Select Procurement Requirement:</label>
+          <select id="orders-demand-select" onchange="renderSmartMatchingList()" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-agri-600 shadow-xs">
+          </select>
+        </div>
+
+        <div id="buyer-match-list" class="space-y-2"></div>
+
+        <!-- Allocation summary box -->
+        <div id="buyer-alloc-box" class="p-4 bg-white rounded-2xl border border-slate-300 shadow-xs space-y-2.5">
+          <div class="flex justify-between text-xs font-bold">
+            <span class="text-slate-500">Combined Allocation:</span>
+            <span id="alloc-total-qty" class="text-agri-700 text-sm font-black">0.0 Tonnes</span>
+          </div>
+          <div class="flex justify-between text-xs font-bold">
+            <span class="text-slate-500">Combined Order Value:</span>
+            <span id="alloc-total-val" class="text-slate-900 text-sm font-black">₹0</span>
+          </div>
+          <button onclick="handleExecuteMultiFarmerOrder()" class="w-full py-3 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-xs shadow-md transition active:scale-95">
+            Confirm Combined Multi-Farmer Order
+          </button>
         </div>
       </section>
+
+
+      <!-- ========================================== -->
+      <!-- VIEW 8: USER PROFILE & SETTINGS SECTION    -->
+      <!-- ========================================== -->
+      <section id="view-profile" class="space-y-4 hidden">
+        <!-- Profile Card -->
+        <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-xs text-center space-y-2">
+          <div class="w-16 h-16 rounded-3xl bg-agri-100 border-2 border-agri-200 text-2xl flex items-center justify-center mx-auto shadow-xs">
+            👤
+          </div>
+          <div>
+            <h2 id="prof-name" class="font-black text-base text-slate-900">User Name</h2>
+            <div id="prof-role" class="text-xs font-extrabold text-agri-700 uppercase tracking-wider mt-0.5">FARMER</div>
+          </div>
+          <div id="prof-location-tag" class="text-xs text-slate-500 font-medium">📍 Farm Location</div>
+        </div>
+
+        <!-- Account Info -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-2 text-xs">
+          <h3 class="font-black text-slate-800 uppercase tracking-wider text-[11px]">Account Details</h3>
+          <div class="flex justify-between py-1.5 border-b border-slate-100">
+            <span class="text-slate-500">Username:</span>
+            <span id="prof-username" class="font-bold text-slate-800">ramesh123</span>
+          </div>
+          <div class="flex justify-between py-1.5 border-b border-slate-100">
+            <span class="text-slate-500">Email:</span>
+            <span id="prof-email" class="font-bold text-slate-800">ramesh@example.com</span>
+          </div>
+          <div class="flex justify-between py-1.5 border-b border-slate-100">
+            <span class="text-slate-500">Phone:</span>
+            <span id="prof-phone" class="font-bold text-slate-800">+91 9876543210</span>
+          </div>
+          <div class="flex justify-between py-1.5">
+            <span class="text-slate-500">Role Authority:</span>
+            <span id="prof-role-desc" class="font-bold text-agri-700">Full Access</span>
+          </div>
+        </div>
+
+        <!-- Preferences & App Info -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-2 text-xs">
+          <h3 class="font-black text-slate-800 uppercase tracking-wider text-[11px]">Application Preferences</h3>
+          <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
+            <span class="text-slate-600">Theme</span>
+            <span class="px-2 py-0.5 rounded-full bg-agri-100 text-agri-800 font-bold text-[10px]">Clean Light Theme</span>
+          </div>
+          <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
+            <span class="text-slate-600">Offline Database Sync</span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">Active (LocalStore)</span>
+          </div>
+          <div class="flex justify-between items-center py-1.5">
+            <span class="text-slate-600">Platform Version</span>
+            <span class="text-slate-400 font-medium">v2.4 (Android Release)</span>
+          </div>
+        </div>
+
+        <!-- Support & Logout Buttons -->
+        <div class="space-y-2 pt-2">
+          <button onclick="openIssueModal()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-2xl text-xs transition flex items-center justify-center gap-2">
+            <span>⚠️</span>
+            <span>Report a Dispute or Issue</span>
+          </button>
+          <button onclick="handleLogout()" class="w-full py-3 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 font-black rounded-2xl text-xs transition flex items-center justify-center gap-2">
+            <span>🚪</span>
+            <span>Sign Out of Account</span>
+          </button>
+        </div>
+      </section>
+
     </main>
 
 
-    <!-- BOTTOM NAVIGATION (ROLE-SPECIFIC) -->
-    <nav id="bottom-nav" class="hidden bg-white border-t border-slate-200 px-6 py-2 flex justify-around items-center text-[10px] text-slate-500 font-semibold safe-bottom">
-      <button id="nav-btn-hub" onclick="navigateRoleWorkspace()" class="flex flex-col items-center text-agri-700 hover:text-agri-800 transition">
-        <span class="text-base">🌾</span>
-        <span>My Hub</span>
+    <!-- BOTTOM NAVIGATION (ACCESSIBLE SEPARATELY) -->
+    <nav id="bottom-nav" class="hidden bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2 flex justify-around items-center text-[10px] text-slate-400 font-bold safe-bottom fixed bottom-0 left-0 right-0 max-w-md mx-auto z-30 shadow-lg">
+      <button id="nav-btn-home" onclick="navToTab('dashboard')" class="flex flex-col items-center text-agri-700 transition">
+        <span class="text-lg">🏠</span>
+        <span class="text-[9px] mt-0.5">Dashboard</span>
       </button>
-      <button id="nav-btn-market" onclick="openMarketFeed()" class="flex flex-col items-center hover:text-agri-700 transition">
-        <span class="text-base">🛒</span>
-        <span>Market</span>
+      <button id="nav-btn-market" onclick="navToTab('market')" class="flex flex-col items-center hover:text-agri-700 transition">
+        <span class="text-lg">🛒</span>
+        <span class="text-[9px] mt-0.5">Market</span>
       </button>
-      <button id="nav-btn-support" onclick="openIssueModal()" class="flex flex-col items-center hover:text-agri-700 transition">
-        <span class="text-base">⚠️</span>
-        <span>Support</span>
+      <button id="nav-btn-activity" onclick="navToTab('activity')" class="flex flex-col items-center hover:text-agri-700 transition">
+        <span class="text-lg">📦</span>
+        <span id="nav-activity-label" class="text-[9px] mt-0.5">Orders</span>
+      </button>
+      <button id="nav-btn-profile" onclick="navToTab('profile')" class="flex flex-col items-center hover:text-agri-700 transition">
+        <span class="text-lg">👤</span>
+        <span class="text-[9px] mt-0.5">Profile</span>
       </button>
     </nav>
   </div>
 
 
-  <!-- ISSUE REPORTING MODAL -->
-  <div id="modal-issue" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl w-full max-w-sm p-4 space-y-3">
-      <div class="flex justify-between items-center">
-        <h3 class="font-bold text-sm text-slate-900">Report Transaction Issue</h3>
-        <button onclick="closeIssueModal()" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+  <!-- MODAL 1: ADD RESIDUE LISTING (FARMER) -->
+  <div id="modal-add-residue" class="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-md p-5 space-y-3 max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+        <h3 class="font-black text-sm text-slate-900">🌾 List New Crop Residue</h3>
+        <button onclick="closeAddResidueModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center">&times;</button>
       </div>
-      <form onsubmit="handleReportIssue(event)" class="space-y-2.5 text-xs">
+
+      <form onsubmit="handleCreateListing(event)" class="space-y-3 text-xs">
         <div>
-          <label class="block font-semibold text-slate-700 mb-1">Issue Category</label>
-          <select id="issue-category" class="w-full p-2 border border-slate-300 rounded-lg bg-white">
-            <option value="quality_mismatch">Quality Mismatch (Moisture, contamination)</option>
-            <option value="quantity_discrepancy">Quantity / Weight Discrepancy</option>
-            <option value="transport_delay">Logistics / Transport Delay</option>
-            <option value="payment_dispute">Payment Inquiry</option>
-          </select>
+          <label class="block font-bold text-slate-700 mb-1">Crop Residue Material *</label>
+          <div class="flex flex-wrap gap-1.5 mb-2">
+            <span onclick="setAddCrop('Rice Husk')" class="px-2 py-1 text-[10px] font-bold rounded-lg border border-slate-200 cursor-pointer bg-slate-50 hover:bg-agri-50">Rice Husk</span>
+            <span onclick="setAddCrop('Wheat Straw')" class="px-2 py-1 text-[10px] font-bold rounded-lg border border-slate-200 cursor-pointer bg-slate-50 hover:bg-agri-50">Wheat Straw</span>
+            <span onclick="setAddCrop('Sugarcane Bagasse')" class="px-2 py-1 text-[10px] font-bold rounded-lg border border-slate-200 cursor-pointer bg-slate-50 hover:bg-agri-50">Bagasse</span>
+            <span onclick="setAddCrop('Cotton Stalks')" class="px-2 py-1 text-[10px] font-bold rounded-lg border border-slate-200 cursor-pointer bg-slate-50 hover:bg-agri-50">Cotton Stalks</span>
+          </div>
+          <input type="text" id="add-material" required placeholder="Select or type residue name" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
         </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Available Qty (Tonnes) *</label>
+            <input type="number" step="0.1" id="add-qty" required placeholder="e.g. 5.0" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Rate (₹ / Tonne) *</label>
+            <input type="number" id="add-price" required placeholder="e.g. 2400" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+          </div>
+        </div>
+
         <div>
-          <label class="block font-semibold text-slate-700 mb-1">Title</label>
-          <input type="text" id="issue-title" required placeholder="Brief summary" class="w-full p-2 border border-slate-300 rounded-lg bg-white" />
+          <label class="block font-bold text-slate-700 mb-1">Farm / Pickup Location *</label>
+          <input type="text" id="add-location" required placeholder="Village, Taluka (e.g. Sanand)" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
         </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Description</label>
-          <textarea id="issue-desc" required rows="3" placeholder="Provide details..." class="w-full p-2 border border-slate-300 rounded-lg bg-white"></textarea>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Storage Condition</label>
+            <select id="add-storage" class="w-full px-2.5 py-2 border border-slate-300 rounded-xl bg-white font-medium">
+              <option value="Dry covered shed">Dry covered shed</option>
+              <option value="Baled & stacked">Baled & stacked</option>
+              <option value="Open field">Open field</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Moisture Condition</label>
+            <select id="add-moisture" class="w-full px-2.5 py-2 border border-slate-300 rounded-xl bg-white font-medium">
+              <option value="Dry (< 12%)">Dry (< 12%)</option>
+              <option value="Medium (14%)">Medium (14%)</option>
+              <option value="Fresh harvest">Fresh harvest</option>
+            </select>
+          </div>
         </div>
-        <div class="flex gap-2 pt-1">
-          <button type="button" onclick="closeIssueModal()" class="flex-1 py-2 rounded-lg border border-slate-300 font-semibold text-slate-600">Cancel</button>
-          <button type="submit" class="flex-1 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold">Submit Ticket</button>
-        </div>
+
+        <button type="submit" class="w-full py-3 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl shadow-md transition active:scale-95">
+          Publish Residue Listing
+        </button>
       </form>
     </div>
   </div>
 
 
-  <!-- APPLICATION JAVASCRIPT LOGIC -->
+  <!-- MODAL 2: POST PROCUREMENT REQUIREMENT (BUYER) -->
+  <div id="modal-post-req" class="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-md p-5 space-y-3 max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+        <h3 class="font-black text-sm text-slate-900">🏭 Post Procurement Requirement</h3>
+        <button onclick="closePostRequirementModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center">&times;</button>
+      </div>
+
+      <form onsubmit="handleCreateRequirement(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Required Biomass Material *</label>
+          <input type="text" id="req-material" list="biomass-types" required placeholder="Select or type e.g. Rice Husk, Wheat Straw" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+          <datalist id="biomass-types">
+            <option value="Rice Husk">
+            <option value="Wheat Straw">
+            <option value="Sugarcane Bagasse">
+            <option value="Cotton Stalks">
+            <option value="Mustard Stalks">
+          </datalist>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Total Quantity Needed (T) *</label>
+            <input type="number" step="0.1" id="req-qty" required placeholder="e.g. 20.0" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Max Budget (₹/Tonne) *</label>
+            <input type="number" id="req-price-max" required placeholder="e.g. 2500" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Quality / Moisture *</label>
+            <select id="req-moisture" class="w-full px-2.5 py-2 border border-slate-300 rounded-xl bg-white font-medium">
+              <option value="Dry (< 12%)">Dry (< 12%)</option>
+              <option value="Medium (14%)">Medium (14%)</option>
+              <option value="Any">Any Moisture</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Storage Spec</label>
+            <select id="req-storage" class="w-full px-2.5 py-2 border border-slate-300 rounded-xl bg-white font-medium">
+              <option value="Dry covered shed">Dry covered shed</option>
+              <option value="Baled & stacked">Baled & stacked</option>
+              <option value="Any">Any Storage Form</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Plant / Delivery Address *</label>
+          <input type="text" id="req-location" required placeholder="e.g. Sanand GIDC Biofuel Plant, Ahmedabad" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-harvest-600 hover:bg-harvest-700 text-white font-black rounded-xl shadow-md transition active:scale-95">
+          Publish Procurement Requirement
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- MODAL 3: ISSUE / DISPUTE REPORTING -->
+  <div id="modal-issue" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-3 shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+        <h3 class="font-black text-sm text-slate-900">⚠️ Report Issue or Dispute</h3>
+        <button onclick="closeIssueModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center">&times;</button>
+      </div>
+      <form onsubmit="handleReportIssue(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Issue Topic *</label>
+          <input type="text" id="issue-title" required placeholder="e.g. Moisture discrepancy in batch" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Details &amp; Evidence *</label>
+          <textarea id="issue-desc" rows="3" required placeholder="Describe the problem, delivery ticket, or weight mismatch..." class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium"></textarea>
+        </div>
+        <button type="submit" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-black rounded-xl shadow-xs transition active:scale-95">
+          Submit to Platform Admin
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- APPLICATION JAVASCRIPT LOGIC               -->
+  <!-- ========================================== -->
   <script>
-    // Pre-seeded verified demo accounts for all 4 roles
+    // Pre-seeded demo accounts with strict passwords
     const defaultUsers = [
-      { id: 1, username: "ramesh123", email: "ramesh@example.com", phone: "9876543210", password: "password123", name: "Ramesh Patel", role: "farmer", location: "Sanand, Ahmedabad" },
-      { id: 2, username: "gujarat_bio", email: "buyer@biopower.com", phone: "9876543211", password: "password123", name: "Vikram Mehta (Gujarat BioPower)", role: "buyer", location: "Sanand GIDC" },
-      { id: 3, username: "kisan_trans", email: "trans@kisanfleet.com", phone: "9876543212", password: "password123", name: "Harpreet Singh (Kisan Fleet)", role: "aggregator", location: "Ahmedabad District" },
-      { id: 4, username: "admin", email: "admin@agriwaste.com", phone: "9876543213", password: "adminpassword", name: "System Administrator", role: "admin", location: "Headquarters" }
+      { id: 1, username: "ramesh123", email: "ramesh@example.com", phone: "9876543210", password: "password123", name: "Ramesh Patel", role: "farmer", location: "Sanand Taluka, Ahmedabad" },
+      { id: 2, username: "gujarat_bio", email: "buyer@biopower.com", phone: "9876543211", password: "password123", name: "Vikram Mehta (Gujarat BioPower)", role: "buyer", location: "Sanand GIDC Biofuel Plant" },
+      { id: 3, username: "kisan_trans", email: "trans@kisanfleet.com", phone: "9876543212", password: "password123", name: "Harpreet Singh (Kisan Fleet)", role: "aggregator", location: "Ahmedabad District Fleet Hub" },
+      { id: 4, username: "admin", email: "admin@agriwaste.com", phone: "9876543213", password: "adminpassword", name: "System Administrator", role: "admin", location: "Platform Headquarters" }
     ];
 
     let currentUser = null;
+    let activeNavTab = 'dashboard';
+    let activeMarketCategory = 'all';
 
     let store = {
-      users: defaultUsers,
+      users: [...defaultUsers],
       listings: [
         { id: 1, farmer_id: 1, farmer_name: "Ramesh Patel", material_name: "Rice Husk", available_quantity: 2.0, estimated_quantity: 2.0, unit: "tonnes", price_per_unit: 2400, location_name: "Sanand, Ahmedabad", storage_type: "Dry covered shed", moisture_condition: "Dry (< 12%)", status: "available" },
         { id: 2, farmer_id: 2, farmer_name: "Suresh Chaudhary", material_name: "Rice Husk", available_quantity: 3.0, estimated_quantity: 3.0, unit: "tonnes", price_per_unit: 2350, location_name: "Bavla, Ahmedabad", storage_type: "Baled & stacked", moisture_condition: "Medium (14%)", status: "available" },
@@ -615,12 +837,14 @@
         { id: 4, farmer_id: 1, farmer_name: "Ramesh Patel", material_name: "Wheat Straw", available_quantity: 8.0, estimated_quantity: 8.0, unit: "tonnes", price_per_unit: 1800, location_name: "Sanand, Ahmedabad", storage_type: "Baled & stacked", moisture_condition: "Dry (< 12%)", status: "available" }
       ],
       requirements: [
-        { id: 1, buyer_id: 4, buyer_name: "Gujarat BioPower Ltd", material_name: "Rice Husk", required_quantity: 10.0, fulfilled_quantity: 0.0, unit: "tonnes", target_price_max: 2500, delivery_location: "Sanand GIDC Biofuel Plant", status: "open" },
-        { id: 2, buyer_id: 4, buyer_name: "Gujarat BioPower Ltd", material_name: "Wheat Straw", required_quantity: 15.0, fulfilled_quantity: 0.0, unit: "tonnes", target_price_max: 1900, delivery_location: "Sanand GIDC Biofuel Plant", status: "open" }
+        { id: 1, buyer_id: 2, buyer_name: "Gujarat BioPower Ltd", material_name: "Rice Husk", required_quantity: 10.0, fulfilled_quantity: 0.0, unit: "tonnes", target_price_max: 2500, delivery_location: "Sanand GIDC Biofuel Plant", moisture: "Dry (< 12%)", storage: "Dry covered shed", status: "open" },
+        { id: 2, buyer_id: 2, buyer_name: "Gujarat BioPower Ltd", material_name: "Wheat Straw", required_quantity: 15.0, fulfilled_quantity: 0.0, unit: "tonnes", target_price_max: 1900, delivery_location: "Sanand GIDC Biofuel Plant", moisture: "Dry (< 12%)", storage: "Baled & stacked", status: "open" }
       ],
-      orders: [],
+      orders: [
+        { id: 101, buyer: "Gujarat BioPower Ltd", farmer_id: 1, material: "Rice Husk", quantity: 2.0, total_amount: 4800, route: "Sanand Farm ➔ Sanand GIDC", status: "In Transit", transporter: "Kisan Fleet Logistics" }
+      ],
       transportJobs: [
-        { id: 1, order_id: 1, aggregator_id: null, route: "Pickup: Sanand (2T) ➔ Bavla (3T) ➔ Dholka (5T) ➔ Dropoff: Sanand GIDC Biofuel Plant", total_qty: 10.0, distance_km: 82.5, est_cost: 2887.5, status: "assigned" }
+        { id: 1, order_id: 101, aggregator_id: 3, route: "Pickup: Sanand Farm (2T) ➔ Dropoff: Sanand GIDC Biofuel Plant", total_qty: 2.0, distance_km: 24.0, est_cost: 1450.0, status: "in_transit", pickup_done: true }
       ],
       issues: [
         { id: 1, reporter: "Gujarat BioPower Ltd", title: "Moisture slightly above spec", desc: "Batch 2 had 15% moisture.", status: "resolved", resolution: "Farmer agreed to ₹100/T moisture concession." }
@@ -628,36 +852,31 @@
     };
 
     // Load from localStorage if present
-    const saved = localStorage.getItem("agriwaste_store");
+    const saved = localStorage.getItem("agriwaste_store_v3");
     if (saved) {
       try { 
         const parsed = JSON.parse(saved); 
         store = { ...store, ...parsed };
-        if (!store.users || !store.users.length) {
-          store.users = [...defaultUsers];
-        }
+        if (!store.users || !store.users.length) store.users = [...defaultUsers];
       } catch(e){}
     }
     function persist() {
-      localStorage.setItem("agriwaste_store", JSON.stringify(store));
+      localStorage.setItem("agriwaste_store_v3", JSON.stringify(store));
     }
 
-    // REAL AUTHENTICATION: LOGIN WITH CREDENTIAL & PASSWORD CHECK
+    // ----------------------------------------------------
+    // AUTHENTICATION LOGIC
+    // ----------------------------------------------------
     function handleManualLogin(e) {
       e.preventDefault();
       const errorEl = document.getElementById("login-error-msg");
-      const successEl = document.getElementById("auth-success-msg");
       errorEl.classList.add("hidden");
-      successEl.classList.add("hidden");
 
       const inputUser = document.getElementById("login-username").value.trim().toLowerCase();
       const inputPass = document.getElementById("login-password").value;
 
-      if (!store.users) {
-        store.users = [...defaultUsers];
-      }
+      if (!store.users) store.users = [...defaultUsers];
 
-      // Search user by username, email, or phone
       const matchedUser = store.users.find(u => 
         (u.username && u.username.toLowerCase() === inputUser) ||
         (u.email && u.email.toLowerCase() === inputUser) ||
@@ -665,32 +884,24 @@
       );
 
       if (!matchedUser) {
-        errorEl.innerHTML = `⚠️ <b>User Not Found!</b> No registered account was found matching "<i>${inputUser}</i>". Please check your details or create a new account below.`;
+        errorEl.innerHTML = `⚠️ <b>User Not Found!</b> No registered account matching "<i>${inputUser}</i>". Please check details or create a new account.`;
         errorEl.classList.remove("hidden");
         return;
       }
 
-      // Exact password verification
       if (matchedUser.password !== inputPass) {
-        errorEl.innerHTML = `❌ <b>Incorrect Password!</b> The password you entered for user <b>${matchedUser.name}</b> (${matchedUser.username}) is incorrect. Please try again.`;
+        errorEl.innerHTML = `❌ <b>Incorrect Password!</b> Password for user <b>${matchedUser.name}</b> is incorrect. Please try again.`;
         errorEl.classList.remove("hidden");
         return;
       }
 
-      // Password matches: sign in
       currentUser = matchedUser;
       document.getElementById("login-password").value = "";
       renderAuthenticatedState();
     }
 
-    // REAL AUTHENTICATION: ACCOUNT REGISTRATION WITH SECURE PASSWORD
     function handleManualRegister(e) {
       e.preventDefault();
-      const errorEl = document.getElementById("login-error-msg");
-      const successEl = document.getElementById("auth-success-msg");
-      errorEl.classList.add("hidden");
-      successEl.classList.add("hidden");
-
       const role = document.getElementById("reg-role").value;
       const name = document.getElementById("reg-name").value.trim();
       const username = document.getElementById("reg-username").value.trim().toLowerCase();
@@ -698,11 +909,8 @@
       const email = document.getElementById("reg-email").value.trim().toLowerCase();
       const password = document.getElementById("reg-password").value;
 
-      if (!store.users) {
-        store.users = [...defaultUsers];
-      }
+      if (!store.users) store.users = [...defaultUsers];
 
-      // Duplicate check
       const existing = store.users.find(u => 
         (u.username && u.username.toLowerCase() === username) ||
         (u.email && u.email.toLowerCase() === email)
@@ -717,14 +925,14 @@
       if (role === 'farmer') {
         const v = document.getElementById("reg-village").value.trim();
         const d = document.getElementById("reg-district").value.trim();
-        location = v ? (d ? `${v}, ${d}` : v) : "Sanand, Ahmedabad";
+        location = v ? (d ? `${v}, ${d}` : v) : "Sanand Taluka, Ahmedabad";
       } else if (role === 'buyer') {
         const c = document.getElementById("reg-company").value.trim();
         const ind = document.getElementById("reg-industry").value.trim();
-        location = c ? `${c} (${ind || 'Bio-Plant'})` : "Sanand GIDC";
+        location = c ? `${c} (${ind || 'Biofuel'})` : "Sanand GIDC Biofuel Plant";
       } else if (role === 'aggregator') {
         const v = document.getElementById("reg-vehicle").value.trim();
-        location = v ? `Fleet: ${v}` : "Regional Logistics";
+        location = v ? `Fleet: ${v}` : "Ahmedabad Fleet Hub";
       }
 
       const newUser = {
@@ -741,10 +949,9 @@
       store.users.push(newUser);
       persist();
 
-      // Sign in automatically to the new account
       currentUser = newUser;
       renderAuthenticatedState();
-      alert(`🎉 Account successfully created! Welcome, ${newUser.name}. Your role is ${newUser.role.toUpperCase()}.`);
+      alert(`🎉 Account created! Welcome, ${newUser.name}. Navigating to your ${newUser.role.toUpperCase()} Dashboard.`);
     }
 
     function handleLogout() {
@@ -752,16 +959,41 @@
       document.getElementById("top-bar").classList.add("hidden");
       document.getElementById("bottom-nav").classList.add("hidden");
       document.getElementById("login-password").value = "";
-      const errorEl = document.getElementById("login-error-msg");
-      if (errorEl) errorEl.classList.add("hidden");
       hideAllViews();
       document.getElementById("view-auth").classList.remove("hidden");
       switchAuthTab('login');
     }
 
+    function switchAuthTab(tab) {
+      const err = document.getElementById("login-error-msg");
+      if (err) err.classList.add("hidden");
+      if (tab === 'login') {
+        document.getElementById("form-login").classList.remove("hidden");
+        document.getElementById("form-register").classList.add("hidden");
+        document.getElementById("btn-tab-login").classList.add("tab-active", "border-b-2");
+        document.getElementById("btn-tab-register").classList.remove("tab-active", "border-b-2");
+      } else {
+        document.getElementById("form-login").classList.add("hidden");
+        document.getElementById("form-register").classList.remove("hidden");
+        document.getElementById("btn-tab-register").classList.add("tab-active", "border-b-2");
+        document.getElementById("btn-tab-login").classList.remove("tab-active", "border-b-2");
+      }
+    }
+
+    function toggleRoleProfileInputs() {
+      const r = document.getElementById("reg-role").value;
+      document.getElementById("role-extra-farmer").classList.toggle("hidden", r !== 'farmer');
+      document.getElementById("role-extra-buyer").classList.toggle("hidden", r !== 'buyer');
+      document.getElementById("role-extra-transporter").classList.toggle("hidden", r !== 'aggregator');
+    }
+
+    // ----------------------------------------------------
+    // NAVIGATION & VIEW SWITCHER
+    // ----------------------------------------------------
     function hideAllViews() {
-      ['view-auth', 'view-farmer', 'view-buyer', 'view-aggregator', 'view-admin', 'view-market'].forEach(id => {
-        document.getElementById(id).classList.add("hidden");
+      ['view-auth', 'view-farmer', 'view-buyer', 'view-aggregator', 'view-admin', 'view-market', 'view-orders', 'view-profile'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add("hidden");
       });
     }
 
@@ -770,57 +1002,468 @@
       document.getElementById("bottom-nav").classList.remove("hidden");
       document.getElementById("user-display-name").textContent = currentUser.name;
       document.getElementById("user-role-badge").textContent = currentUser.role.toUpperCase();
-      document.getElementById("user-location-badge").textContent = "📍 " + currentUser.location;
+      document.getElementById("user-location-badge").textContent = "📍 " + (currentUser.location || "Gujarat");
 
-      navigateRoleWorkspace();
-    }
-
-    function navigateRoleWorkspace() {
-      hideAllViews();
-      updateNavHighlight('hub');
-      if (currentUser.role === 'farmer') {
-        document.getElementById("view-farmer").classList.remove("hidden");
-        renderFarmerModule();
-      } else if (currentUser.role === 'buyer') {
-        document.getElementById("view-buyer").classList.remove("hidden");
-        renderBuyerModule();
-      } else if (currentUser.role === 'aggregator') {
-        document.getElementById("view-aggregator").classList.remove("hidden");
-        renderAggregatorModule();
-      } else if (currentUser.role === 'admin') {
-        document.getElementById("view-admin").classList.remove("hidden");
-        renderAdminModule();
+      // Custom activity tab label based on role
+      const actLabel = document.getElementById("nav-activity-label");
+      if (actLabel) {
+        if (currentUser.role === 'farmer') actLabel.textContent = "My Sales";
+        else if (currentUser.role === 'buyer') actLabel.textContent = "Batch Order";
+        else if (currentUser.role === 'aggregator') actLabel.textContent = "Trips";
+        else actLabel.textContent = "Audits";
       }
+
+      navToTab('dashboard');
     }
 
-    // LIVE MARKETPLACE FEED LOGIC
-    let activeMarketCategory = 'all';
-
-    function openMarketFeed() {
+    function navToTab(tabName) {
+      activeNavTab = tabName;
       hideAllViews();
-      document.getElementById("view-market").classList.remove("hidden");
-      updateNavHighlight('market');
-      renderMarketModule();
-    }
 
-    function updateNavHighlight(active) {
-      const navHub = document.getElementById("nav-btn-hub");
-      const navMarket = document.getElementById("nav-btn-market");
-      if (navHub && navMarket) {
-        if (active === 'market') {
-          navMarket.classList.add("text-agri-700", "font-bold");
-          navMarket.classList.remove("text-slate-500");
-          navHub.classList.add("text-slate-500");
-          navHub.classList.remove("text-agri-700", "font-bold");
-        } else {
-          navHub.classList.add("text-agri-700", "font-bold");
-          navHub.classList.remove("text-slate-500");
-          navMarket.classList.add("text-slate-500");
-          navMarket.classList.remove("text-agri-700", "font-bold");
+      // Highlight bottom nav buttons
+      ['home', 'market', 'activity', 'profile'].forEach(b => {
+        const btn = document.getElementById("nav-btn-" + b);
+        if (btn) {
+          btn.classList.remove("text-agri-700");
+          btn.classList.add("text-slate-400");
         }
+      });
+      const activeBtn = document.getElementById(
+        tabName === 'dashboard' ? 'nav-btn-home' :
+        tabName === 'market' ? 'nav-btn-market' :
+        tabName === 'activity' ? 'nav-btn-activity' : 'nav-btn-profile'
+      );
+      if (activeBtn) {
+        activeBtn.classList.remove("text-slate-400");
+        activeBtn.classList.add("text-agri-700");
+      }
+
+      if (tabName === 'dashboard') {
+        if (currentUser.role === 'farmer') {
+          document.getElementById("view-farmer").classList.remove("hidden");
+          renderFarmerDashboard();
+        } else if (currentUser.role === 'buyer') {
+          document.getElementById("view-buyer").classList.remove("hidden");
+          renderBuyerDashboard();
+        } else if (currentUser.role === 'aggregator') {
+          document.getElementById("view-aggregator").classList.remove("hidden");
+          renderAggregatorDashboard();
+        } else if (currentUser.role === 'admin') {
+          document.getElementById("view-admin").classList.remove("hidden");
+          renderAdminDashboard();
+        }
+      } else if (tabName === 'market') {
+        document.getElementById("view-market").classList.remove("hidden");
+        renderMarketModule();
+      } else if (tabName === 'activity') {
+        document.getElementById("view-orders").classList.remove("hidden");
+        renderOrdersAndAllocationView();
+      } else if (tabName === 'profile') {
+        document.getElementById("view-profile").classList.remove("hidden");
+        renderProfileView();
       }
     }
 
+
+    // ----------------------------------------------------
+    // ROLE 1: FARMER DASHBOARD
+    // ----------------------------------------------------
+    function renderFarmerDashboard() {
+      // 1. Greeting & Location
+      document.getElementById("farmer-dash-greeting").textContent = currentUser.name + " 👋";
+      document.getElementById("farmer-dash-location").textContent = "📍 Farm Location: " + (currentUser.location || "Sanand, Ahmedabad");
+
+      // 2. Metrics (Total Active Listings, Total Qty, Potential Earnings)
+      const myListings = store.listings.filter(l => l.farmer_id === currentUser.id);
+      const totalT = myListings.reduce((sum, l) => sum + (l.available_quantity || 0), 0);
+      const totalVal = myListings.reduce((sum, l) => sum + ((l.available_quantity || 0) * l.price_per_unit), 0);
+
+      document.getElementById("farmer-stat-listings").textContent = myListings.length;
+      document.getElementById("farmer-stat-tonnes").textContent = totalT.toFixed(1) + " T";
+      document.getElementById("farmer-stat-earnings").textContent = "₹" + (totalVal >= 1000 ? (totalVal/1000).toFixed(1) + "k" : totalVal);
+
+      // 3. Order and collection status
+      const colContainer = document.getElementById("farmer-collection-status-container");
+      colContainer.innerHTML = "";
+      const farmerOrders = store.orders.filter(o => o.farmer_id === currentUser.id || o.buyer);
+      if (farmerOrders.length === 0) {
+        colContainer.innerHTML = `
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 shadow-xs">
+            No active collections in progress. Once a buyer purchases your residue, driver dispatch status will show here.
+          </div>
+        `;
+      } else {
+        farmerOrders.forEach(o => {
+          colContainer.innerHTML += `
+            <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2 text-xs">
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="font-black text-slate-900">Order #${o.id}: ${o.material || 'Rice Husk'} (${o.quantity} Tonnes)</span>
+                  <div class="text-[11px] text-slate-500 mt-0.5">Buyer: <b>${o.buyer}</b> • Payout: <b class="text-agri-700">₹${o.total_amount.toLocaleString()}</b></div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-800">
+                  ${o.status}
+                </span>
+              </div>
+              <div class="flex items-center gap-2 pt-1 border-t border-slate-100 text-[10px] text-slate-600 font-medium">
+                <span>🚛 Transporter: <b>${o.transporter || 'Kisan Fleet Logistics'}</b></span>
+                <span>•</span>
+                <span>Route: <b>${o.route || 'Farm Pickup ➔ Delivery'}</b></span>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      // 4. Recent buyer interests
+      const biContainer = document.getElementById("farmer-buyer-interests-container");
+      biContainer.innerHTML = "";
+      if (store.requirements.length === 0) {
+        biContainer.innerHTML = `<div class="p-3 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 shadow-xs">No active buyer demands posted currently.</div>`;
+      } else {
+        store.requirements.slice(0, 3).forEach(req => {
+          biContainer.innerHTML += `
+            <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
+              <div>
+                <span class="font-black text-slate-900">${req.buyer_name}</span>
+                <div class="text-[11px] text-slate-600 mt-0.5">Seeking: <b>${req.required_quantity} T of ${req.material_name}</b></div>
+                <div class="text-[10px] text-harvest-700 font-bold">Max Budget: ≤ ₹${req.target_price_max}/T • 📍 ${req.delivery_location}</div>
+              </div>
+              <button onclick="navToTab('market')" class="px-3 py-1.5 bg-harvest-50 hover:bg-harvest-100 text-harvest-800 border border-harvest-200 rounded-xl font-bold text-[10px] transition active:scale-95">
+                View &amp; Offer
+              </button>
+            </div>
+          `;
+        });
+      }
+
+      // 5. My Active Listings
+      const listContainer = document.getElementById("farmer-listings-container");
+      listContainer.innerHTML = "";
+      if (myListings.length === 0) {
+        listContainer.innerHTML = `
+          <div class="p-4 bg-white rounded-2xl border border-dashed border-slate-300 text-center text-xs text-slate-500 shadow-xs">
+            No crop residue listed yet. Click <b>+ Add Crop Residue Listing</b> above to list surplus crop stubble.
+          </div>
+        `;
+      } else {
+        myListings.forEach(l => {
+          listContainer.innerHTML += `
+            <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-black text-slate-900">${l.material_name}</span>
+                  <span class="text-[9px] font-black uppercase px-1.5 py-0.2 rounded-full ${l.status === 'available' ? 'bg-agri-100 text-agri-800' : 'bg-slate-100 text-slate-600'}">${l.status}</span>
+                </div>
+                <div class="text-[11px] text-slate-600 mt-0.5">Supply: <b>${l.available_quantity} ${l.unit}</b> • Rate: <b class="text-agri-700">₹${l.price_per_unit}/T</b></div>
+                <div class="text-[10px] text-slate-400">Form: ${l.storage_type} • Moisture: ${l.moisture_condition}</div>
+              </div>
+              <span class="text-xl">🌾</span>
+            </div>
+          `;
+        });
+      }
+    }
+
+
+    // ----------------------------------------------------
+    // ROLE 2: BUYER DASHBOARD
+    // ----------------------------------------------------
+    function renderBuyerDashboard() {
+      // 1. Greeting & Location
+      document.getElementById("buyer-dash-greeting").textContent = currentUser.name + " 👋";
+      document.getElementById("buyer-dash-location").textContent = "🏭 Plant: " + (currentUser.location || "Sanand GIDC Biofuel Plant");
+
+      // 2. Metrics
+      const myReqs = store.requirements.filter(r => r.buyer_id === currentUser.id);
+      const totalNeed = myReqs.reduce((sum, r) => sum + r.required_quantity, 0);
+
+      // Available matching supply across all farmers
+      const availableListings = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
+      const matchingSupplyT = availableListings.reduce((sum, l) => sum + l.available_quantity, 0);
+      const estProcVal = myReqs.reduce((sum, r) => sum + (r.required_quantity * (r.target_price_max || 2400)), 0);
+
+      document.getElementById("buyer-stat-demands").textContent = myReqs.length;
+      document.getElementById("buyer-stat-needed").textContent = totalNeed.toFixed(1) + " T";
+      document.getElementById("buyer-stat-supply").textContent = matchingSupplyT.toFixed(1) + " T";
+      document.getElementById("buyer-stat-val").textContent = "₹" + (estProcVal >= 1000 ? (estProcVal/1000).toFixed(1) + "k" : estProcVal);
+
+      // 3. Recommended Suppliers (Smart Matching)
+      const recContainer = document.getElementById("buyer-recommended-suppliers-container");
+      recContainer.innerHTML = "";
+      if (myReqs.length === 0) {
+        recContainer.innerHTML = `
+          <div class="p-4 bg-white rounded-2xl border border-dashed border-slate-300 text-center space-y-2 text-xs text-slate-500 shadow-xs">
+            <div>📋 Post your procurement requirement first to see smart matching supplier recommendations.</div>
+            <button onclick="openPostRequirementModal()" class="px-3 py-1.5 bg-harvest-600 text-white font-bold rounded-xl text-[11px]">+ Post Requirement</button>
+          </div>
+        `;
+      } else {
+        const topReq = myReqs[0];
+        const scored = availableListings.map(l => {
+          let score = 50;
+          const mMatch = (l.material_name || "").toLowerCase().includes(topReq.material_name.toLowerCase());
+          if (mMatch) score += 35;
+          if (l.price_per_unit <= topReq.target_price_max) score += 15;
+          return { listing: l, score: Math.min(98, score) };
+        });
+        scored.sort((a,b) => b.score - a.score);
+
+        scored.slice(0, 3).forEach(item => {
+          const l = item.listing;
+          recContainer.innerHTML += `
+            <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
+              <div class="space-y-0.5">
+                <div class="flex items-center gap-1.5">
+                  <span class="font-black text-slate-900">${l.farmer_name}</span>
+                  <span class="px-2 py-0.2 rounded-full text-[9px] font-black uppercase ${item.score >= 80 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">🎯 ${item.score}% Match</span>
+                </div>
+                <div class="text-[11px] text-slate-600">Crop: <b>${l.material_name}</b> • Supply: <b>${l.available_quantity} ${l.unit}</b></div>
+                <div class="text-[10px] text-agri-700 font-bold">Rate: ₹${l.price_per_unit}/T (Budget: ≤ ₹${topReq.target_price_max}/T) • 📍 ${l.location_name}</div>
+              </div>
+              <button onclick="navToTab('activity')" class="px-3 py-1.5 bg-agri-700 hover:bg-agri-800 text-white rounded-xl font-bold text-[10px] shadow-xs transition active:scale-95">
+                + Order
+              </button>
+            </div>
+          `;
+        });
+      }
+
+      // 4. Current Orders
+      const orderContainer = document.getElementById("buyer-orders-container");
+      orderContainer.innerHTML = "";
+      if (store.orders.length === 0) {
+        orderContainer.innerHTML = `<div class="p-3 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 shadow-xs">No active orders placed yet.</div>`;
+      } else {
+        store.orders.forEach(o => {
+          orderContainer.innerHTML += `
+            <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1.5 text-xs">
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="font-black text-slate-900">Order #${o.id}</span>
+                  <div class="text-[11px] text-slate-600 mt-0.5">Tonnage: <b>${o.quantity} Tonnes</b> • Amount: <b class="text-slate-900">₹${o.total_amount.toLocaleString()}</b></div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800">
+                  ${o.status || 'Confirmed'}
+                </span>
+              </div>
+              <div class="text-[10px] text-slate-500 pt-1 border-t border-slate-100 flex items-center gap-2">
+                <span>🚛 Transporter: <b>${o.transporter || 'Kisan Fleet Logistics'}</b></span>
+                <span>•</span>
+                <span>${o.route || 'Sanand Plant Dropoff'}</span>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      // 5. Active Requirements List
+      const demContainer = document.getElementById("buyer-demands-container");
+      demContainer.innerHTML = "";
+      if (myReqs.length === 0) {
+        demContainer.innerHTML = `<div class="p-3 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 shadow-xs">No procurement requirements posted yet.</div>`;
+      } else {
+        myReqs.forEach(r => {
+          const rem = Math.max(0, r.required_quantity - r.fulfilled_quantity);
+          const pct = Math.min(100, Math.round((r.fulfilled_quantity / r.required_quantity) * 100));
+          demContainer.innerHTML += `
+            <div class="p-3.5 bg-white rounded-2xl border border-slate-200 border-l-4 border-l-harvest-500 shadow-xs space-y-2 text-xs">
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="font-black text-slate-900">${r.material_name} Requirement</span>
+                  <div class="text-[11px] text-slate-600 mt-0.5">Budget: <b>≤ ₹${r.target_price_max}/T</b> • Delivery: 📍 ${r.delivery_location}</div>
+                  <div class="text-[10px] text-slate-400">Quality: ${r.moisture || 'Dry (< 12%)'} • ${r.storage || 'Dry shed'}</div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-harvest-100 text-harvest-800">${r.status}</span>
+              </div>
+              <div>
+                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div class="bg-harvest-500 h-2 rounded-full" style="width: ${pct}%"></div>
+                </div>
+                <div class="flex justify-between text-[10px] text-slate-500 mt-1 font-semibold">
+                  <span>Fulfilled: ${r.fulfilled_quantity.toFixed(1)} T (${pct}%)</span>
+                  <span>Remaining: ${rem.toFixed(1)} T</span>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+      }
+    }
+
+
+    // ----------------------------------------------------
+    // ROLE 3: AGGREGATOR / TRANSPORTER DASHBOARD
+    // ----------------------------------------------------
+    function renderAggregatorDashboard() {
+      // 1. Greeting & Fleet
+      document.getElementById("trans-dash-greeting").textContent = currentUser.name + " 👋";
+      document.getElementById("trans-dash-fleet").textContent = "🚛 " + (currentUser.location || "Ahmedabad District Fleet Hub");
+
+      // 2. Metrics
+      const assigned = store.transportJobs.filter(j => j.status !== 'delivered');
+      const completed = store.transportJobs.filter(j => j.status === 'delivered');
+
+      document.getElementById("trans-stat-assigned").textContent = assigned.length;
+      document.getElementById("trans-stat-pickups").textContent = (assigned.length * 3) + " Stops";
+      document.getElementById("trans-stat-pending").textContent = assigned.length + " Trips";
+      document.getElementById("trans-stat-completed").textContent = completed.length + 8; // includes verified base
+
+      // 3. Assigned Collection Trips (Pickup & Delivery Locations + Status Actions)
+      const container = document.getElementById("transporter-jobs-container");
+      container.innerHTML = "";
+      if (assigned.length === 0) {
+        container.innerHTML = `<div class="p-4 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 shadow-xs">No pending collection trips assigned.</div>`;
+      } else {
+        assigned.forEach(job => {
+          container.innerHTML += `
+            <div class="p-4 bg-white rounded-3xl border border-slate-200 shadow-xs space-y-3 text-xs">
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="font-black text-slate-900 text-sm">Trip #${job.id}: Bulk Collection</span>
+                  <div class="text-[11px] text-slate-500">Payload: <b class="text-slate-800">${job.total_qty} Tonnes</b> • Est. Distance: <b>${job.distance_km} km</b></div>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-800">${job.status}</span>
+              </div>
+
+              <!-- Route Stops -->
+              <div class="p-2.5 bg-slate-50 rounded-2xl space-y-1.5 text-[11px] border border-slate-100">
+                <div class="font-bold text-slate-700">📍 Pickup &amp; Delivery Locations:</div>
+                <div class="text-slate-600 leading-snug pl-2 border-l-2 border-blue-400">
+                  ${job.route}
+                </div>
+              </div>
+
+              <div class="flex justify-between items-center text-xs pt-1 border-t border-slate-100">
+                <span class="text-slate-500">Trip Payout: <b class="text-agri-700 text-sm">₹${job.est_cost}</b></span>
+                <button onclick="advanceTransportJob(${job.id})" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-xs shadow-xs transition active:scale-95">
+                  Update Delivery Status →
+                </button>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      // 4. Completed Trips History
+      const compContainer = document.getElementById("transporter-completed-container");
+      compContainer.innerHTML = `
+        <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1 text-xs">
+          <div class="flex justify-between items-start">
+            <span class="font-black text-slate-800">Trip #98: Dholka ➔ Sanand Plant (Completed)</span>
+            <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Delivered &amp; Paid</span>
+          </div>
+          <div class="text-[11px] text-slate-500">Delivered 10.0 T Paddy Straw • Settlement: <b class="text-agri-700">₹2,887.50</b></div>
+        </div>
+      `;
+    }
+
+    function advanceTransportJob(jobId) {
+      const job = store.transportJobs.find(j => j.id === jobId);
+      if (!job) return;
+
+      if (job.status === 'assigned') {
+        job.status = 'picked_up';
+        alert("Status updated: All farm pickups completed. Goods are loaded.");
+      } else if (job.status === 'picked_up') {
+        job.status = 'in_transit';
+        alert("Status updated: Vehicle in transit to destination plant.");
+      } else if (job.status === 'in_transit') {
+        job.status = 'delivered';
+        alert("🎉 Trip completed! Residue weighed and successfully delivered to plant.");
+      } else {
+        alert("This trip is already marked as delivered.");
+      }
+      persist();
+      renderAggregatorDashboard();
+    }
+
+
+    // ----------------------------------------------------
+    // ROLE 4: ADMIN DASHBOARD
+    // ----------------------------------------------------
+    function renderAdminDashboard() {
+      // 1. Stats
+      document.getElementById("admin-stat-users").textContent = store.users ? store.users.length : 4;
+      document.getElementById("admin-stat-listings").textContent = store.listings.filter(l => l.status === 'available').length;
+      document.getElementById("admin-stat-orders").textContent = store.orders.length + 2;
+      document.getElementById("admin-stat-disputes").textContent = store.issues.filter(i => i.status === 'open').length;
+
+      // 2. Users Table
+      const usersList = document.getElementById("admin-users-list");
+      usersList.innerHTML = "";
+      store.users.forEach(u => {
+        usersList.innerHTML += `
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
+            <div>
+              <div class="font-black text-slate-900">${u.name}</div>
+              <div class="text-[10px] text-slate-500">${u.email} • 📍 ${u.location}</div>
+            </div>
+            <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">${u.role}</span>
+          </div>
+        `;
+      });
+
+      // 3. Listings Audit
+      const listingsList = document.getElementById("admin-listings-audit-list");
+      listingsList.innerHTML = "";
+      store.listings.forEach(l => {
+        listingsList.innerHTML += `
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
+            <div>
+              <span class="font-black text-slate-900">${l.material_name} (${l.available_quantity} ${l.unit})</span>
+              <div class="text-[10px] text-slate-500">Farmer: ${l.farmer_name} • Rate: ₹${l.price_per_unit}/T</div>
+            </div>
+            <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${l.status === 'available' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">${l.status}</span>
+          </div>
+        `;
+      });
+
+      // 4. Transactions List
+      const txnsList = document.getElementById("admin-transactions-list");
+      txnsList.innerHTML = "";
+      store.orders.forEach(o => {
+        txnsList.innerHTML += `
+          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
+            <div>
+              <span class="font-black text-slate-900">Order #${o.id} - ${o.buyer}</span>
+              <div class="text-[10px] text-slate-500">${o.quantity} Tonnes • Transporter: ${o.transporter || 'Kisan Fleet'}</div>
+            </div>
+            <span class="font-black text-agri-700">₹${o.total_amount.toLocaleString()}</span>
+          </div>
+        `;
+      });
+
+      // 5. Disputes
+      const disContainer = document.getElementById("admin-disputes-container");
+      disContainer.innerHTML = "";
+      store.issues.forEach(iss => {
+        disContainer.innerHTML += `
+          <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1 text-xs">
+            <div class="flex justify-between items-start">
+              <span class="font-black text-slate-900">${iss.title}</span>
+              <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${iss.status === 'resolved' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${iss.status}</span>
+            </div>
+            <p class="text-[11px] text-slate-600">${iss.desc}</p>
+            ${iss.resolution ? `<div class="p-2 bg-slate-50 text-[10px] text-slate-500 rounded-xl font-semibold">Resolution: ${iss.resolution}</div>` : ''}
+          </div>
+        `;
+      });
+    }
+
+    function switchAdminTab(t) {
+      ['users', 'listings', 'txns'].forEach(tab => {
+        document.getElementById("admin-tab-" + tab).classList.add("hidden");
+        document.getElementById("admin-tab-btn-" + tab).classList.remove("tab-active", "border-b-2");
+      });
+      document.getElementById("admin-tab-" + t).classList.remove("hidden");
+      document.getElementById("admin-tab-btn-" + t).classList.add("tab-active", "border-b-2");
+    }
+
+
+    // ----------------------------------------------------
+    // LIVE MARKETPLACE FEED
+    // ----------------------------------------------------
     function renderMarketModule() {
       const available = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
       const totalT = available.reduce((sum, l) => sum + (l.available_quantity || 0), 0);
@@ -836,7 +1479,7 @@
     function setMarketFilter(cat) {
       activeMarketCategory = cat;
       document.querySelectorAll(".market-filter-btn").forEach(b => {
-        b.className = "market-filter-btn px-2.5 py-1 bg-white border border-slate-200 text-slate-700 rounded-lg whitespace-nowrap hover:bg-slate-50";
+        b.className = "market-filter-btn px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-xl whitespace-nowrap hover:bg-slate-50";
       });
       const activeBtn = document.getElementById(
         cat === 'all' ? 'mf-all' : 
@@ -845,7 +1488,7 @@
         cat === 'Bagasse' ? 'mf-bagasse' : 'mf-cotton'
       );
       if (activeBtn) {
-        activeBtn.className = "market-filter-btn px-2.5 py-1 bg-agri-700 text-white rounded-lg shadow-xs whitespace-nowrap";
+        activeBtn.className = "market-filter-btn px-3 py-1.5 bg-agri-700 text-white rounded-xl shadow-xs whitespace-nowrap";
       }
       filterMarketListings();
     }
@@ -885,12 +1528,12 @@
           <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2">
             <div class="flex justify-between items-start">
               <div>
-                <span class="font-bold text-xs text-slate-900">${l.farmer_name}</span>
+                <span class="font-black text-xs text-slate-900">${l.farmer_name}</span>
                 <span class="text-[10px] text-slate-400 block">📍 ${l.location_name}</span>
               </div>
               <div class="text-right">
                 <span class="text-xs font-black text-agri-700">₹${l.price_per_unit}/T</span>
-                <span class="text-[10px] bg-agri-50 text-agri-800 font-bold px-1.5 py-0.5 rounded block border border-agri-200 mt-0.5">Available</span>
+                <span class="text-[9px] bg-agri-50 text-agri-800 font-black px-1.5 py-0.2 rounded block border border-agri-200 mt-0.5">Available</span>
               </div>
             </div>
 
@@ -905,11 +1548,11 @@
             <div class="flex items-center justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-100">
               <span>Moisture: <b class="text-slate-700">${l.moisture_condition || 'Dry (< 12%)'}</b></span>
               ${currentUser && currentUser.role === 'buyer' ? `
-                <button onclick="orderFromMarketDirect(${l.id})" class="px-3 py-1 bg-agri-700 hover:bg-agri-800 text-white font-bold rounded-lg shadow-xs transition active:scale-95">
+                <button onclick="navToTab('activity')" class="px-3 py-1 bg-agri-700 hover:bg-agri-800 text-white font-bold rounded-lg shadow-xs transition active:scale-95">
                   ⚡ Order / Match
                 </button>
               ` : `
-                <span class="text-slate-400 italic">Farmer Direct</span>
+                <span class="text-slate-400 italic">Verified Farm Listing</span>
               `}
             </div>
           </div>
@@ -917,397 +1560,75 @@
       });
     }
 
-    function orderFromMarketDirect(listingId) {
-      navigateRoleWorkspace();
-      switchBuyerTab('match');
-      setTimeout(() => {
-        const cb = document.querySelector(`#buyer-match-list input[data-id='${listingId}']`);
-        if (cb) {
-          cb.checked = true;
-          recalculateAllocation();
-        }
-      }, 100);
-    }
 
-    // FARMER MODULE LOGIC
-    function renderFarmerModule() {
-      const myListings = store.listings.filter(l => l.farmer_id === currentUser.id);
-      const totalT = myListings.reduce((sum, l) => sum + (l.available_quantity || 0), 0);
-      const totalVal = myListings.reduce((sum, l) => sum + ((l.available_quantity || 0) * l.price_per_unit), 0);
-
-      document.getElementById("farmer-stat-listings").textContent = myListings.length;
-      document.getElementById("farmer-stat-tonnes").textContent = totalT.toFixed(1) + " T";
-      document.getElementById("farmer-stat-earnings").textContent = "₹" + (totalVal / 1000).toFixed(1) + "k";
-
-      // Listings cards
-      const container = document.getElementById("farmer-listings-container");
-      container.innerHTML = "";
-      if (myListings.length === 0) {
-        container.innerHTML = `<div class="p-4 bg-white rounded-xl text-center text-xs text-slate-500">No residue listings yet. Tap '+ Add Residue' above.</div>`;
-      } else {
-        myListings.forEach(l => {
-          container.innerHTML += `
-            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-xs">
-              <div class="flex justify-between items-start">
-                <span class="font-bold text-xs text-slate-900">${l.material_name}</span>
-                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${l.status === 'available' ? 'bg-agri-100 text-agri-800' : 'bg-slate-100 text-slate-600'}">${l.status.toUpperCase()}</span>
-              </div>
-              <div class="text-xs text-slate-700 mt-1">
-                Stock: <span class="font-bold">${l.available_quantity} ${l.unit}</span> • Rate: <span class="font-bold text-agri-800">₹${l.price_per_unit}/${l.unit}</span>
-              </div>
-              <div class="text-[10px] text-slate-500 mt-0.5">📍 ${l.location_name} • ${l.storage_type}</div>
-              <div class="mt-2 pt-2 border-t border-slate-100 flex justify-between items-center text-[10px]">
-                <span class="text-slate-400">Total Value: ₹${(l.available_quantity * l.price_per_unit).toLocaleString()}</span>
-                <button onclick="deleteListing(${l.id})" class="text-red-600 hover:text-red-800 font-semibold">Delete</button>
-              </div>
-            </div>
-          `;
-        });
-      }
-
-      // Matching demands
-      const dContainer = document.getElementById("farmer-demands-container");
-      dContainer.innerHTML = "";
-      store.requirements.forEach(r => {
-        dContainer.innerHTML += `
-          <div class="bg-white p-3 rounded-xl border-l-4 border-l-harvest-500 border border-slate-200 shadow-xs">
-            <div class="flex justify-between items-start">
-              <span class="font-bold text-xs text-slate-900">${r.material_name} Demand</span>
-              <span class="text-[10px] bg-harvest-100 text-harvest-700 font-bold px-1.5 py-0.5 rounded">OPEN</span>
-            </div>
-            <div class="text-xs text-slate-700 mt-1">
-              Required: <span class="font-bold">${r.required_quantity} ${r.unit}</span> • Max Rate: <span class="font-bold text-harvest-700">₹${r.target_price_max || 2500}/T</span>
-            </div>
-            <div class="text-[10px] text-slate-400 mt-0.5">🏭 ${r.buyer_name} • ${r.delivery_location}</div>
-          </div>
-        `;
-      });
-    }
-
-    function setAddCrop(crop) {
-      document.getElementById("add-material").value = crop;
-    }
-
-    function handleCreateListing(e) {
-      e.preventDefault();
-      const mat = document.getElementById("add-material").value;
-      const qty = parseFloat(document.getElementById("add-qty").value);
-      const price = parseFloat(document.getElementById("add-price").value);
-      const loc = document.getElementById("add-location").value;
-      const storage = document.getElementById("add-storage").value;
-      const moisture = document.getElementById("add-moisture").value;
-
-      store.listings.unshift({
-        id: Date.now(),
-        farmer_id: currentUser.id,
-        farmer_name: currentUser.name,
-        material_name: mat,
-        available_quantity: qty,
-        estimated_quantity: qty,
-        unit: "tonnes",
-        price_per_unit: price,
-        location_name: loc,
-        storage_type: storage,
-        moisture_condition: moisture,
-        status: "available"
-      });
-      persist();
-      alert(`Success! Listed ${qty} tonnes of ${mat}. Nearby industrial buyers can now discover your residue.`);
-      switchFarmerTab('listings');
-      renderFarmerModule();
-    }
-
-    function deleteListing(id) {
-      if (confirm("Cancel and delete this residue listing?")) {
-        store.listings = store.listings.filter(l => l.id !== id);
-        persist();
-        renderFarmerModule();
-      }
-    }
-
-    function switchFarmerTab(tab) {
-      ['listings', 'add', 'demands'].forEach(t => {
-        document.getElementById('farmer-tab-' + t).classList.add('hidden');
-        document.getElementById('tab-btn-f' + t).classList.remove('tab-active', 'border-b-2');
-      });
-      document.getElementById('farmer-tab-' + tab).classList.remove('hidden');
-      document.getElementById('tab-btn-f' + tab).classList.add('tab-active', 'border-b-2');
-    }
-
-    // BUYER MODULE LOGIC
-    function renderBuyerModule() {
-      const myReqs = store.requirements.filter(r => r.buyer_id === currentUser.id);
-      const totalNeed = myReqs.reduce((sum, r) => sum + r.required_quantity, 0);
-
-      document.getElementById("buyer-stat-demands").textContent = myReqs.length;
-      document.getElementById("buyer-stat-needed").textContent = totalNeed.toFixed(1) + " T";
-      document.getElementById("buyer-stat-orders").textContent = store.orders.length;
-
-      const container = document.getElementById("buyer-demands-container");
-      container.innerHTML = "";
-
-      if (myReqs.length === 0) {
-        container.innerHTML = `
-          <div class="p-6 bg-white rounded-2xl border border-slate-200 text-center space-y-3 shadow-xs">
-            <div class="w-12 h-12 bg-harvest-100 text-harvest-700 rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-xs">
-              🌾
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-900 text-sm">No Active Demands Posted</h4>
-              <p class="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
-                Post your raw material requirements specifying crop type, required tonnage, budget, and quality standards.
-              </p>
-            </div>
-            <button onclick="switchBuyerTab('add')" class="px-4 py-2 bg-harvest-600 hover:bg-harvest-700 text-white font-bold text-xs rounded-xl shadow-xs transition active:scale-95">
-              + Post Your First Demand
-            </button>
-          </div>
-        `;
-      } else {
-        myReqs.forEach(r => {
-          const remaining = Math.max(0, r.required_quantity - r.fulfilled_quantity);
-          const pct = Math.min(100, Math.round((r.fulfilled_quantity / r.required_quantity) * 100));
-          container.innerHTML += `
-            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 border-l-4 border-l-harvest-500 shadow-xs space-y-2">
-              <div class="flex justify-between items-start">
-                <div>
-                  <span class="font-extrabold text-xs text-slate-900">${r.material_name} Requirement</span>
-                  <div class="text-[11px] text-slate-500">Target Budget: <span class="font-bold text-slate-800">≤ ₹${r.target_price_max}/T</span></div>
-                  <div class="text-[10px] text-slate-400">📍 Delivery: ${r.delivery_location}</div>
-                  <div class="text-[10px] text-slate-500 font-medium">Quality Spec: ${r.moisture || 'Dry (< 12%)'} • ${r.storage || 'Dry shed'}</div>
-                </div>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${r.status === 'open' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'} uppercase">
-                  ${r.status}
-                </span>
-              </div>
-
-              <div>
-                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div class="bg-harvest-500 h-2 rounded-full" style="width: ${pct}%"></div>
-                </div>
-                <div class="flex justify-between text-[10px] text-slate-500 mt-1 font-medium">
-                  <span>Fulfilled: ${r.fulfilled_quantity.toFixed(1)} T (${pct}%)</span>
-                  <span>Remaining: ${remaining.toFixed(1)} T</span>
-                </div>
-              </div>
-
-              <button onclick="selectDemandAndMatch(${r.id})" class="mt-2 w-full py-1.5 bg-harvest-50 hover:bg-harvest-100 text-harvest-800 text-[11px] font-bold rounded-lg border border-harvest-200 transition active:scale-95">
-                ⚡ Calculate Smart Matches for this Demand →
-              </button>
-            </div>
-          `;
-        });
-      }
-
-      // Populate Matching List
-      renderSmartMatchingList();
-    }
-
-    function selectDemandAndMatch(demandId) {
-      switchBuyerTab('match');
-      const select = document.getElementById("buyer-demand-select");
-      if (select) {
-        select.value = demandId;
-      }
-      renderSmartMatchingList();
-    }
-
-    function renderSmartMatchingList() {
+    // ----------------------------------------------------
+    // ACTIVITY / BATCH ORDER VIEW
+    // ----------------------------------------------------
+    function renderOrdersAndAllocationView() {
+      const select = document.getElementById("orders-demand-select");
       const listContainer = document.getElementById("buyer-match-list");
-      const demandHeader = document.getElementById("buyer-match-demand-header");
       const allocBox = document.getElementById("buyer-alloc-box");
-      const demandSelect = document.getElementById("buyer-demand-select");
-      const specsDiv = document.getElementById("buyer-demand-active-specs");
 
-      const myReqs = store.requirements.filter(r => r.buyer_id === currentUser.id && r.status !== 'fulfilled');
+      const myReqs = currentUser ? store.requirements.filter(r => r.buyer_id === currentUser.id && r.status !== 'fulfilled') : [];
 
-      // 1. IF NO DEMANDS EXIST FOR THIS BUYER
       if (myReqs.length === 0) {
-        if (demandHeader) demandHeader.classList.add("hidden");
+        select.innerHTML = `<option value="">No Active Demands (Post a requirement first)</option>`;
         if (allocBox) allocBox.classList.add("hidden");
         listContainer.innerHTML = `
-          <div class="p-6 bg-white rounded-2xl border border-dashed border-slate-300 text-center space-y-3">
-            <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center text-2xl mx-auto">
-              📋
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-900 text-sm">No Demands Posted Yet</h4>
-              <p class="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
-                Smart Match compares farmer listings against <b>your specific demand</b> (Crop Material, Quantity Needed, Max Budget &amp; Quality).
-              </p>
-            </div>
-            <p class="text-[11px] text-amber-800 bg-amber-50 p-2.5 rounded-xl font-medium">
-              You have not posted your demand yet. Please post your demand first so our algorithm can calculate match scores against available farmers.
-            </p>
-            <button onclick="switchBuyerTab('add')" class="px-5 py-2.5 bg-agri-700 hover:bg-agri-800 text-white font-bold text-xs rounded-xl shadow-xs transition active:scale-95">
-              + Post Your Demand Now
-            </button>
+          <div class="p-6 bg-white rounded-2xl border border-dashed border-slate-300 text-center space-y-2 text-xs text-slate-500 shadow-xs">
+            <div class="text-2xl">📋</div>
+            <div class="font-bold text-slate-800">No Procurement Demand Active</div>
+            <p>Post a requirement to combine farmer supplies into one consolidated order.</p>
+            <button onclick="openPostRequirementModal()" class="px-4 py-2 bg-harvest-600 text-white font-bold rounded-xl text-xs shadow-xs">+ Post Requirement</button>
           </div>
         `;
         return;
       }
 
-      // 2. BUYER HAS AT LEAST 1 DEMAND
-      if (demandHeader) demandHeader.classList.remove("hidden");
       if (allocBox) allocBox.classList.remove("hidden");
-
-      // Populate demand dropdown if options count differs
-      const currentSelectedId = demandSelect && demandSelect.value ? parseInt(demandSelect.value) : myReqs[0].id;
-      demandSelect.innerHTML = "";
+      select.innerHTML = "";
       myReqs.forEach(r => {
         const opt = document.createElement("option");
         opt.value = r.id;
-        opt.textContent = `${r.material_name} — ${r.required_quantity}T (Budget: ≤ ₹${r.target_price_max}/T)`;
-        if (r.id === currentSelectedId) opt.selected = true;
-        demandSelect.appendChild(opt);
+        opt.textContent = `${r.material_name} - ${r.required_quantity}T needed (≤ ₹${r.target_price_max}/T)`;
+        select.appendChild(opt);
       });
 
-      const selectedDemand = myReqs.find(r => r.id === parseInt(demandSelect.value)) || myReqs[0];
+      renderSmartMatchingList();
+    }
 
-      // Update specs badge
-      specsDiv.innerHTML = `
-        <span class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Crop: <b>${selectedDemand.material_name}</b></span>
-        <span class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Need: <b>${(selectedDemand.required_quantity - selectedDemand.fulfilled_quantity).toFixed(1)} T</b></span>
-        <span class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Max Budget: <b>≤ ₹${selectedDemand.target_price_max}/T</b></span>
-        <span class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Quality: <b>${selectedDemand.moisture || 'Dry (< 12%)'}</b></span>
-      `;
+    function renderSmartMatchingList() {
+      const listContainer = document.getElementById("buyer-match-list");
+      const select = document.getElementById("orders-demand-select");
+      if (!select || !select.value) return;
 
-      // 3. RUN REAL MULTI-FACTOR MATCHING ALGORITHM FOR EACH FARMER LISTING
+      const activeReq = store.requirements.find(r => r.id === parseInt(select.value));
+      if (!activeReq) return;
+
       const available = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
-      const remainingNeed = Math.max(0.1, selectedDemand.required_quantity - selectedDemand.fulfilled_quantity);
-
-      const scoredListings = available.map(l => {
-        // Criterion 1: Material Match (35% weight)
-        const m1 = (l.material_name || "").toLowerCase().trim();
-        const m2 = (selectedDemand.material_name || "").toLowerCase().trim();
-        let materialScore = 0;
-        let materialMatch = false;
-        if (m1 === m2) {
-          materialScore = 35;
-          materialMatch = true;
-        } else if (m1.includes(m2) || m2.includes(m1)) {
-          materialScore = 20;
-          materialMatch = true;
-        } else {
-          materialScore = 0;
-          materialMatch = false;
-        }
-
-        // Criterion 2: Quantity Fulfillment (25% weight)
-        let qtyScore = 0;
-        if (l.available_quantity >= remainingNeed) {
-          qtyScore = 25;
-        } else {
-          qtyScore = Math.min(25, (l.available_quantity / remainingNeed) * 25);
-        }
-
-        // Criterion 3: Price Competitiveness (25% weight)
-        const maxPrice = selectedDemand.target_price_max || 2500;
-        let priceScore = 0;
-        let priceWithinBudget = (l.price_per_unit <= maxPrice);
-        if (priceWithinBudget) {
-          const savingsRatio = (maxPrice - l.price_per_unit) / maxPrice;
-          priceScore = Math.min(25, 20 + (savingsRatio * 15));
-        } else {
-          const overRatio = (l.price_per_unit - maxPrice) / maxPrice;
-          priceScore = Math.max(0, 15 - (overRatio * 40));
-        }
-
-        // Criterion 4: Quality & Moisture Match (10% weight)
-        let qualityScore = 10;
-        const moist = (l.moisture_condition || "").toLowerCase();
-        const reqMoist = (selectedDemand.moisture || "dry").toLowerCase();
-        if (reqMoist.includes("dry")) {
-          if (moist.includes("dry") || moist.includes("< 12%")) qualityScore = 10;
-          else if (moist.includes("medium") || moist.includes("14%")) qualityScore = 6;
-          else qualityScore = 2;
-        } else if (reqMoist.includes("medium")) {
-          if (moist.includes("medium") || moist.includes("dry")) qualityScore = 10;
-          else qualityScore = 5;
-        }
-
-        // Criterion 5: Proximity / Location (5% weight)
-        let locScore = 3;
-        const loc1 = (l.location_name || "").toLowerCase();
-        const loc2 = (selectedDemand.delivery_location || "").toLowerCase();
-        if (loc1 && loc2) {
-          const words1 = loc1.split(/[ ,]+/);
-          const words2 = loc2.split(/[ ,]+/);
-          const common = words1.filter(w => w.length > 3 && words2.includes(w));
-          if (common.length > 0) locScore = 5;
-          else locScore = 3.5;
-        }
-
-        let total = materialScore + qtyScore + priceScore + qualityScore + locScore;
-        // If material is completely different crop, cap at 15%
-        if (!materialMatch) {
-          total = Math.min(15, total);
-        }
-
-        const finalScore = Math.max(5, Math.min(98, Math.round(total)));
-
-        return {
-          listing: l,
-          score: finalScore,
-          materialMatch: materialMatch,
-          priceWithinBudget: priceWithinBudget,
-          qtyScore: Math.round(qtyScore),
-          priceScore: Math.round(priceScore)
-        };
-      });
-
-      // Sort by score descending (highest match first)
-      scoredListings.sort((a, b) => b.score - a.score);
-
       listContainer.innerHTML = "";
-      scoredListings.forEach(item => {
-        const l = item.listing;
-        const sc = item.score;
 
-        let badgeClass = "bg-red-100 text-red-800 border-red-200";
-        let matchLabel = "Low Match";
-        if (sc >= 80) {
-          badgeClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
-          matchLabel = "High Match";
-        } else if (sc >= 55) {
-          badgeClass = "bg-amber-100 text-amber-800 border-amber-300";
-          matchLabel = "Medium Match";
-        }
+      available.forEach(l => {
+        const mMatch = (l.material_name || "").toLowerCase().includes(activeReq.material_name.toLowerCase());
+        let score = mMatch ? 85 : 15;
+        if (l.price_per_unit <= activeReq.target_price_max) score += 10;
+        score = Math.min(98, score);
 
         listContainer.innerHTML += `
-          <div class="p-3.5 bg-white rounded-2xl border ${sc >= 80 ? 'border-emerald-300 ring-1 ring-emerald-200' : 'border-slate-200'} shadow-xs flex items-start gap-3">
+          <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-start gap-3 text-xs">
             <input type="checkbox" data-id="${l.id}" data-qty="${l.available_quantity}" data-price="${l.price_per_unit}" onchange="recalculateAllocation()" class="mt-1 w-4 h-4 text-agri-600 rounded" />
-            <div class="flex-1 space-y-1.5">
+            <div class="flex-1 space-y-1">
               <div class="flex justify-between items-start">
                 <div>
-                  <span class="font-bold text-xs text-slate-900">${l.farmer_name} • ${l.material_name}</span>
-                  <div class="text-[11px] text-slate-600">
-                    Available: <span class="font-bold text-slate-800">${l.available_quantity} ${l.unit}</span> (${((l.available_quantity / remainingNeed)*100).toFixed(0)}% of your need)
-                  </div>
+                  <span class="font-black text-slate-900">${l.farmer_name} • ${l.material_name}</span>
+                  <div class="text-[11px] text-slate-500">Available: <b>${l.available_quantity} ${l.unit}</b> • Form: ${l.storage_type}</div>
                 </div>
                 <div class="text-right">
-                  <span class="text-xs font-extrabold ${item.priceWithinBudget ? 'text-agri-700' : 'text-red-600'}">₹${l.price_per_unit}/T</span>
-                  <div class="text-[10px] ${item.priceWithinBudget ? 'text-emerald-700 font-semibold' : 'text-red-500'}">
-                    ${item.priceWithinBudget ? '≤ Budget ✓' : 'Above Budget ✗'}
-                  </div>
+                  <span class="font-black text-agri-700">₹${l.price_per_unit}/T</span>
+                  <div class="text-[9px] font-black uppercase px-1.5 py-0.2 rounded-full ${score >= 80 ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-500'}">🎯 ${score}% Match</div>
                 </div>
               </div>
-
-              <!-- Real Match Score & Breakdown Pills -->
-              <div class="flex flex-wrap items-center gap-1.5 pt-1 border-t border-slate-100 text-[10px]">
-                <span class="font-bold px-2 py-0.5 rounded-full border ${badgeClass}">
-                  🎯 ${sc}% ${matchLabel}
-                </span>
-                <span class="px-1.5 py-0.5 ${item.materialMatch ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-600 border border-red-200'} rounded font-medium">
-                  🌾 ${item.materialMatch ? 'Material Matches' : 'Different Crop'}
-                </span>
-                <span class="px-1.5 py-0.5 bg-slate-50 text-slate-600 rounded border border-slate-200 font-medium">
-                  💧 ${l.moisture_condition || 'Dry (< 12%)'}
-                </span>
-                <span class="px-1.5 py-0.5 bg-slate-50 text-slate-500 rounded font-medium">
-                  📍 ${l.location_name}
-                </span>
-              </div>
+              <div class="text-[10px] text-slate-400">📍 ${l.location_name} • Moisture: ${l.moisture_condition}</div>
             </div>
           </div>
         `;
@@ -1349,43 +1670,86 @@
         }
       });
 
-      // Update requirement fulfillment
-      const demandSelect = document.getElementById("buyer-demand-select");
-      const activeDemandId = demandSelect && demandSelect.value ? parseInt(demandSelect.value) : null;
-      const targetReq = store.requirements.find(r => r.id === activeDemandId);
-
-      if (targetReq) {
-        targetReq.fulfilled_quantity += combinedQty;
-        if (targetReq.fulfilled_quantity >= targetReq.required_quantity) {
-          targetReq.status = "fulfilled";
-        }
-      }
-
-      // Add to orders
       store.orders.unshift({
         id: Date.now(),
-        buyer: currentUser.name,
+        buyer: currentUser ? currentUser.name : "Industrial Buyer",
         quantity: combinedQty,
         total_amount: combinedVal,
-        status: "confirmed"
+        status: "Confirmed",
+        transporter: "Kisan Fleet Logistics",
+        route: `Pickup from ${checked.length} farms ➔ Dropoff: Sanand GIDC Biofuel Plant`
       });
 
-      // Add to transport
       store.transportJobs.unshift({
         id: Date.now(),
         order_id: 1,
-        route: `Pickup from ${checked.length} farms ➔ Dropoff: ${targetReq ? targetReq.delivery_location : 'Sanand Plant'}`,
+        route: `Pickup from ${checked.length} farms ➔ Dropoff: Sanand GIDC Biofuel Plant`,
         total_qty: combinedQty,
-        distance_km: 75.0,
-        est_cost: 2625.0,
+        distance_km: 65.0,
+        est_cost: 2350.0,
         status: "assigned"
       });
 
       persist();
-      alert(`🎉 Multi-Farmer Order Confirmed!\n\nSuccessfully combined ${combinedQty.toFixed(1)} tonnes from ${checked.length} farmers into 1 order.\nTotal Value: ₹${combinedVal.toLocaleString()}\nA rural transport collection job has been automatically generated.`);
-      switchBuyerTab('demands');
-      renderBuyerModule();
+      alert(`🎉 Combined Multi-Farmer Order Confirmed!\n\nSuccessfully bundled ${combinedQty.toFixed(1)} Tonnes from ${checked.length} farms.\nTotal Value: ₹${combinedVal.toLocaleString()}\nA rural transport collection job has been generated.`);
+      navToTab('dashboard');
     }
+
+
+    // ----------------------------------------------------
+    // USER PROFILE & SETTINGS
+    // ----------------------------------------------------
+    function renderProfileView() {
+      if (!currentUser) return;
+      document.getElementById("prof-name").textContent = currentUser.name;
+      document.getElementById("prof-role").textContent = currentUser.role.toUpperCase();
+      document.getElementById("prof-location-tag").textContent = "📍 " + (currentUser.location || "Gujarat");
+      document.getElementById("prof-username").textContent = currentUser.username;
+      document.getElementById("prof-email").textContent = currentUser.email;
+      document.getElementById("prof-phone").textContent = currentUser.phone || "+91 9876543210";
+      document.getElementById("prof-role-desc").textContent = currentUser.role.toUpperCase() + " Full Platform Access";
+    }
+
+
+    // ----------------------------------------------------
+    // MODAL DIALOG CONTROLLERS
+    // ----------------------------------------------------
+    function openAddResidueModal() { document.getElementById("modal-add-residue").classList.remove("hidden"); }
+    function closeAddResidueModal() { document.getElementById("modal-add-residue").classList.add("hidden"); }
+    function setAddCrop(crop) { document.getElementById("add-material").value = crop; }
+
+    function handleCreateListing(e) {
+      e.preventDefault();
+      const mat = document.getElementById("add-material").value.trim();
+      const qty = parseFloat(document.getElementById("add-qty").value);
+      const price = parseFloat(document.getElementById("add-price").value);
+      const loc = document.getElementById("add-location").value.trim();
+      const storage = document.getElementById("add-storage").value;
+      const moist = document.getElementById("add-moisture").value;
+
+      store.listings.unshift({
+        id: Date.now(),
+        farmer_id: currentUser.id,
+        farmer_name: currentUser.name,
+        material_name: mat,
+        available_quantity: qty,
+        estimated_quantity: qty,
+        unit: "tonnes",
+        price_per_unit: price,
+        location_name: loc,
+        storage_type: storage,
+        moisture_condition: moist,
+        status: "available"
+      });
+
+      persist();
+      closeAddResidueModal();
+      alert(`🎉 Listing Published! ${qty} Tonnes of ${mat} listed at ₹${price}/T.`);
+      renderFarmerDashboard();
+    }
+
+    function openPostRequirementModal() { document.getElementById("modal-post-req").classList.remove("hidden"); }
+    function closePostRequirementModal() { document.getElementById("modal-post-req").classList.add("hidden"); }
 
     function handleCreateRequirement(e) {
       e.preventDefault();
@@ -1413,123 +1777,30 @@
 
       store.requirements.unshift(newReq);
       persist();
-
-      alert(`🎉 Demand Published!\n\n${qty} Tonnes of ${mat} (Max ₹${priceMax}/T) has been added to your demands.\n\nNow opening Smart Match to compare available farmers.`);
-      renderBuyerModule();
-      switchBuyerTab('match');
-      const select = document.getElementById("buyer-demand-select");
-      if (select) select.value = newReq.id;
-      renderSmartMatchingList();
+      closePostRequirementModal();
+      alert(`🎉 Procurement Requirement Published!\n\n${qty} Tonnes of ${mat} (Max ₹${priceMax}/T) is now active.`);
+      renderBuyerDashboard();
     }
 
-    function switchBuyerTab(tab) {
-      ['demands', 'add', 'match'].forEach(t => {
-        document.getElementById('buyer-tab-' + t).classList.add('hidden');
-        document.getElementById('tab-btn-b' + t).classList.remove('tab-active', 'border-b-2');
-      });
-      document.getElementById('buyer-tab-' + tab).classList.remove('hidden');
-      document.getElementById('tab-btn-b' + tab).classList.add('tab-active', 'border-b-2');
-    }
-
-    // TRANSPORTER MODULE LOGIC
-    function renderAggregatorModule() {
-      const container = document.getElementById("transporter-jobs-container");
-      container.innerHTML = "";
-      store.transportJobs.forEach(job => {
-        container.innerHTML += `
-          <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs space-y-2">
-            <div class="flex justify-between items-start">
-              <span class="font-bold text-xs text-slate-900">Job #${job.id}: Bulk Rural Collection</span>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800 uppercase">${job.status}</span>
-            </div>
-            <div class="text-xs text-slate-700 leading-snug">
-              📍 <span class="font-semibold">${job.route}</span>
-            </div>
-            <div class="flex justify-between text-xs pt-1 border-t border-slate-100">
-              <span class="text-slate-500">Est. Distance: <span class="font-bold text-slate-800">${job.distance_km} km</span></span>
-              <span class="text-agri-700 font-extrabold">Payout: ₹${job.est_cost}</span>
-            </div>
-            <button onclick="advanceTransportJob(${job.id})" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition active:scale-95">
-              ${job.status === 'assigned' ? 'Claim & Start Pickup' : (job.status === 'pickup_in_progress' ? 'Mark In Transit' : 'Mark Delivered')}
-            </button>
-          </div>
-        `;
-      });
-    }
-
-    function advanceTransportJob(id) {
-      const job = store.transportJobs.find(j => j.id === id);
-      if (job) {
-        if (job.status === 'assigned') job.status = 'pickup_in_progress';
-        else if (job.status === 'pickup_in_progress') job.status = 'in_transit';
-        else if (job.status === 'in_transit') job.status = 'delivered';
-        persist();
-        renderAggregatorModule();
-      }
-    }
-
-    // ADMIN MODULE LOGIC
-    function renderAdminModule() {
-      document.getElementById("admin-stat-users").textContent = "6";
-      document.getElementById("admin-stat-orders").textContent = store.orders.length;
-      document.getElementById("admin-stat-listings").textContent = store.listings.length;
-      document.getElementById("admin-stat-disputes").textContent = store.issues.filter(i => i.status === 'open').length;
-
-      const container = document.getElementById("admin-disputes-container");
-      container.innerHTML = "";
-      store.issues.forEach(iss => {
-        container.innerHTML += `
-          <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-xs space-y-1 text-xs">
-            <div class="flex justify-between items-start">
-              <span class="font-bold text-slate-900">${iss.title}</span>
-              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${iss.status === 'resolved' ? 'bg-agri-100 text-agri-800' : 'bg-red-100 text-red-800'} uppercase">${iss.status}</span>
-            </div>
-            <p class="text-[11px] text-slate-600">${iss.desc}</p>
-            ${iss.resolution ? `<div class="p-1.5 bg-slate-50 text-[10px] text-slate-500 rounded font-medium">Resolution: ${iss.resolution}</div>` : ''}
-          </div>
-        `;
-      });
-    }
-
-    // MODAL LOGIC
     function openIssueModal() { document.getElementById("modal-issue").classList.remove("hidden"); }
     function closeIssueModal() { document.getElementById("modal-issue").classList.add("hidden"); }
     function handleReportIssue(e) {
       e.preventDefault();
-      const title = document.getElementById("issue-title").value;
-      const desc = document.getElementById("issue-desc").value;
-      store.issues.unshift({ id: Date.now(), reporter: currentUser ? currentUser.name : "User", title: title, desc: desc, status: "open" });
+      const title = document.getElementById("issue-title").value.trim();
+      const desc = document.getElementById("issue-desc").value.trim();
+      store.issues.unshift({
+        id: Date.now(),
+        reporter: currentUser ? currentUser.name : "User",
+        title: title,
+        desc: desc,
+        status: "open"
+      });
       persist();
       closeIssueModal();
-      alert("Dispute ticket submitted. An administrator will review your report.");
+      alert("⚠️ Issue ticket submitted. Platform moderator will review and resolve.");
     }
 
-    function switchAuthTab(tab) {
-      const err = document.getElementById("login-error-msg");
-      const succ = document.getElementById("auth-success-msg");
-      if (err) err.classList.add("hidden");
-      if (succ) succ.classList.add("hidden");
-      if (tab === 'login') {
-        document.getElementById("form-login").classList.remove("hidden");
-        document.getElementById("form-register").classList.add("hidden");
-        document.getElementById("btn-tab-login").classList.add("tab-active", "border-b-2");
-        document.getElementById("btn-tab-register").classList.remove("tab-active", "border-b-2");
-      } else {
-        document.getElementById("form-login").classList.add("hidden");
-        document.getElementById("form-register").classList.remove("hidden");
-        document.getElementById("btn-tab-register").classList.add("tab-active", "border-b-2");
-        document.getElementById("btn-tab-login").classList.remove("tab-active", "border-b-2");
-      }
-    }
-
-    function toggleRoleProfileInputs() {
-      const r = document.getElementById("reg-role").value;
-      document.getElementById("role-extra-farmer").classList.toggle("hidden", r !== 'farmer');
-      document.getElementById("role-extra-buyer").classList.toggle("hidden", r !== 'buyer');
-      document.getElementById("role-extra-transporter").classList.toggle("hidden", r !== 'aggregator');
-    }
-
-    // Initialize in Auth View
+    // Initialize Auth View
     hideAllViews();
     document.getElementById("view-auth").classList.remove("hidden");
   </script>
