@@ -83,9 +83,7 @@
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <button onclick="openIssueModal()" title="Report Issue" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center text-sm transition">
-          ⚠️
-        </button>
+
         <button onclick="navToTab('profile')" title="My Profile & Settings" class="w-8 h-8 rounded-xl bg-agri-50 border border-agri-200 text-agri-800 flex items-center justify-center text-sm font-bold transition">
           👤
         </button>
@@ -267,31 +265,29 @@
         <!-- FARMER SUB-NAV TABS (SCROLLABLE PILLS) -->
         <div class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 text-[11px] font-black">
           <button id="f-tab-btn-home" onclick="switchFarmerSubTab('home')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-agri-700 text-white shadow-xs">
-            🏠 Overview
+            🏠 Home
           </button>
           <button id="f-tab-btn-listings" onclick="switchFarmerSubTab('listings')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            🌾 My Listings
+            🌾 My Crop Waste
           </button>
           <button id="f-tab-btn-demands" onclick="switchFarmerSubTab('demands')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            📋 Buyer Demands
+            📋 Buyer Needs
           </button>
           <button id="f-tab-btn-matches" onclick="switchFarmerSubTab('matches')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            🎯 Matches
+            🎯 Best Matches
           </button>
           <button id="f-tab-btn-orders" onclick="switchFarmerSubTab('orders')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            📦 My Orders
+            📦 Orders
           </button>
           <button id="f-tab-btn-tracking" onclick="switchFarmerSubTab('tracking')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            🚛 Tracking
+            🚛 Live Truck
           </button>
           <button id="f-tab-btn-earnings" onclick="switchFarmerSubTab('earnings')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            💰 Earnings
+            💰 My Income
           </button>
-          <button id="f-tab-btn-profile" onclick="switchFarmerSubTab('profile')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            👤 Farm Profile
-          </button>
+
           <button id="f-tab-btn-help" onclick="switchFarmerSubTab('help')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            ⚠️ Help &amp; Issues
+            ❓ Help
           </button>
         </div>
 
@@ -927,68 +923,81 @@
       <!-- VIEW 8: USER PROFILE & SETTINGS SECTION    -->
       <!-- ========================================== -->
       <section id="view-profile" class="space-y-4 hidden">
-        <!-- Profile Card -->
-        <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-xs text-center space-y-2">
-          <div class="w-16 h-16 rounded-3xl bg-agri-100 border-2 border-agri-200 text-2xl flex items-center justify-center mx-auto shadow-xs">
-            👤
+        <!-- Farmer Profile Header Card -->
+        <div class="bg-gradient-to-br from-emerald-50 to-agri-50 p-5 rounded-3xl border border-emerald-200/80 shadow-xs text-center space-y-2">
+          <div class="w-16 h-16 rounded-3xl bg-white border-2 border-agri-300 text-3xl flex items-center justify-center mx-auto shadow-xs">
+            👨‍🌾
           </div>
           <div>
-            <h2 id="prof-name" class="font-black text-base text-slate-900">User Name</h2>
-            <div id="prof-role" class="text-xs font-extrabold text-agri-700 uppercase tracking-wider mt-0.5">FARMER</div>
+            <h2 id="prof-name" class="font-black text-lg text-slate-900 leading-tight">Ramesh Patel</h2>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase tracking-wider mt-1">
+              🌾 Verified Agricultural Producer
+            </div>
           </div>
-          <div id="prof-location-tag" class="text-xs text-slate-500 font-medium">📍 Farm Location</div>
+          <div id="prof-location-tag" class="text-xs text-agri-900 font-bold">📍 Sanand Taluka, Ahmedabad District</div>
         </div>
 
-        <!-- Account Info -->
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-2 text-xs">
-          <h3 class="font-black text-slate-800 uppercase tracking-wider text-[11px]">Account Details</h3>
-          <div class="flex justify-between py-1.5 border-b border-slate-100">
-            <span class="text-slate-500">Username:</span>
-            <span id="prof-username" class="font-bold text-slate-800">ramesh123</span>
+        <!-- Farmer Personal & Farm Details Form -->
+        <form onsubmit="handleSaveGlobalProfile(event)" class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3.5 text-xs">
+          <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+            <h3 class="font-black text-slate-900 text-xs uppercase tracking-wider">Farmer &amp; Land Details</h3>
+            <span class="text-[10px] font-bold text-agri-700 bg-agri-50 px-2 py-0.5 rounded-lg border border-agri-200">Official Records</span>
           </div>
-          <div class="flex justify-between py-1.5 border-b border-slate-100">
-            <span class="text-slate-500">Email:</span>
-            <span id="prof-email" class="font-bold text-slate-800">ramesh@example.com</span>
-          </div>
-          <div class="flex justify-between py-1.5 border-b border-slate-100">
-            <span class="text-slate-500">Phone:</span>
-            <span id="prof-phone" class="font-bold text-slate-800">+91 9876543210</span>
-          </div>
-          <div class="flex justify-between py-1.5">
-            <span class="text-slate-500">Role Permissions:</span>
-            <span id="prof-role-desc" class="font-bold text-agri-700">Role-Scoped Access</span>
-          </div>
-        </div>
 
-        <!-- Preferences & App Info -->
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-2 text-xs">
-          <h3 class="font-black text-slate-800 uppercase tracking-wider text-[11px]">Application Preferences</h3>
-          <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
-            <span class="text-slate-600">Theme</span>
-            <span class="px-2 py-0.5 rounded-full bg-agri-100 text-agri-800 font-bold text-[10px]">Clean Light Theme</span>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Full Name *</label>
+            <input type="text" id="prof-input-name" required class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
           </div>
-          <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
-            <span class="text-slate-600">Backend Connection</span>
-            <span id="prof-sync-badge" class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">🟢 Live System Ready</span>
-          </div>
-          <div class="flex justify-between items-center py-1.5">
-            <span class="text-slate-600">Platform Version</span>
-            <span class="text-slate-400 font-medium">v5.0 (Full Functional Release)</span>
-          </div>
-        </div>
 
-        <!-- Support & Logout Buttons -->
-        <div class="space-y-2 pt-2">
-          <button onclick="openIssueModal()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-2xl text-xs transition flex items-center justify-center gap-2">
-            <span>⚠️</span>
-            <span>Report a Dispute or Issue</span>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Mobile Number *</label>
+              <input type="tel" id="prof-input-phone" required class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Email Address</label>
+              <input type="email" id="prof-input-email" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Village / Taluka *</label>
+              <input type="text" id="prof-input-village" required class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">District *</label>
+              <input type="text" id="prof-input-district" required class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">State *</label>
+              <input type="text" id="prof-input-state" required class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Preferred Language</label>
+              <select id="prof-input-lang" class="w-full px-2.5 py-2 border border-slate-300 rounded-xl bg-white font-medium">
+                <option value="English">English</option>
+                <option value="ગુજરાતી">ગુજરાતી (Gujarati)</option>
+                <option value="हिन्दी">हिन्दी (Hindi)</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-2.5 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-xs shadow-sm transition active:scale-95">
+            💾 Save Profile Details
           </button>
+        </form>
+
+        <!-- Logout Button -->
+        <div class="pt-1">
           <button onclick="handleLogout()" class="w-full py-3 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 font-black rounded-2xl text-xs transition flex items-center justify-center gap-2">
             <span>🚪</span>
             <span>Sign Out of Account</span>
           </button>
-        </div>
-      </section>
+        </div></section>
 
     </main>
 
@@ -1682,6 +1691,16 @@ div>
     }
 
     function renderAuthenticatedState() {
+      // Hide "My Sales" / Activity in bottom bar for Farmer
+      const actBtn = document.getElementById("nav-btn-activity");
+      if (actBtn) {
+        if (currentUser.role === 'farmer') {
+          actBtn.classList.add("hidden");
+        } else {
+          actBtn.classList.remove("hidden");
+        }
+      }
+
       document.getElementById("top-bar").classList.remove("hidden");
       document.getElementById("bottom-nav").classList.remove("hidden");
       document.getElementById("user-display-name").textContent = currentUser.name;
@@ -1779,7 +1798,7 @@ div>
 
     function switchFarmerSubTab(tabName) {
       currentFarmerSubTab = tabName;
-      const tabs = ['home', 'listings', 'demands', 'matches', 'orders', 'tracking', 'earnings', 'profile', 'help'];
+      const tabs = ['home', 'listings', 'demands', 'matches', 'orders', 'tracking', 'earnings', 'help'];
       tabs.forEach(t => {
         const btn = document.getElementById(`f-tab-btn-${t}`);
         const sec = document.getElementById(`farmer-sub-${t}`);
@@ -2420,7 +2439,7 @@ div>
       renderFarmerHomeKPIs();
     }
 
-    // 7. COLLECTION & DELIVERY TRACKING (FEATURE 7)
+    // 7. COLLECTION & DELIVERY TRACKING (FEATURE 7) - ATTRACTIVE VISUAL TIMELINE
     async function renderFarmerTracking() {
       const container = document.getElementById("farmer-tracking-container");
       if (!container) return;
@@ -2429,52 +2448,175 @@ div>
 
       container.innerHTML = "";
       if (trackingOrders.length === 0) {
-        container.innerHTML = `<div class="p-6 bg-white rounded-2xl border border-dashed border-slate-300 text-center text-xs text-slate-500 shadow-xs">No active collection trips scheduled.</div>`;
+        container.innerHTML = `<div class="p-6 bg-white rounded-2xl border border-dashed border-slate-300 text-center text-xs text-slate-500 shadow-xs">No active collection trips scheduled. When a buyer order is confirmed, the assigned truck and driver tracking will show here.</div>`;
         return;
       }
 
       trackingOrders.forEach(o => {
         const isCompleted = o.status === 'completed';
         const isInTransit = o.status === 'in_transit';
+        const isCollected = o.status === 'collected';
         const isScheduled = o.status === 'confirmed' || o.status === 'pickup_scheduled';
 
+        // Calculate active step number (1 to 6)
+        let step = 1;
+        let stepTitle = "Transporter Assigned";
+        let stepDesc = `Kisan Fleet vehicle ${o.vehicle_no || 'GJ-01-AX-4821'} is assigned for collection.`;
+        let stepIcon = "🚛";
+        let progressWidth = "15%";
+
+        if (o.status === 'confirmed' || o.status === 'pickup_scheduled') {
+          step = 2;
+          stepTitle = "Pickup Scheduled at Farm";
+          stepDesc = `Truck scheduled to arrive at your farm ${o.pickup_time || 'Today at 02:30 PM'}.`;
+          stepIcon = "🕒";
+          progressWidth = "32%";
+        } else if (o.status === 'collected') {
+          step = 3;
+          stepTitle = "Waste Collected from Farm";
+          stepDesc = `Driver loaded ${o.quantity || o.total_quantity} Tonnes of ${o.material_name} onto the truck.`;
+          stepIcon = "🌾";
+          progressWidth = "50%";
+        } else if (o.status === 'in_transit') {
+          step = 4;
+          stepTitle = "Truck on Highway (In Transit)";
+          stepDesc = `Driver Vikram Singh is transporting the batch to ${o.delivery_address}.`;
+          stepIcon = "🛣️";
+          progressWidth = "70%";
+        } else if (o.status === 'delivered') {
+          step = 5;
+          stepTitle = "Delivered at Biofuel Plant";
+          stepDesc = "Truck reached destination gate. Quality and weighbridge inspection in progress.";
+          stepIcon = "🏭";
+          progressWidth = "88%";
+        } else if (o.status === 'completed') {
+          step = 6;
+          stepTitle = "Completed & Verified";
+          stepDesc = "Batch accepted. Weighbridge slip confirmed and payment recorded.";
+          stepIcon = "✅";
+          progressWidth = "100%";
+        }
+
         container.innerHTML += `
-          <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-3 text-xs">
+          <div class="p-4 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-3.5 text-xs">
+            <!-- Header -->
             <div class="flex justify-between items-start">
               <div>
-                <span class="font-black text-slate-900 text-sm">Trip Tracking: Order #${o.id}</span>
-                <div class="text-[11px] text-slate-600 mt-0.5">Cargo: <b>${o.quantity || o.total_quantity} Tonnes ${o.material_name}</b></div>
+                <div class="flex items-center gap-2">
+                  <span class="font-black text-slate-900 text-sm">Trip #${o.id}</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${isCompleted ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'}">
+                    ${isCompleted ? 'Completed' : 'Live Trip'}
+                  </span>
+                </div>
+                <div class="text-[11px] text-slate-600 mt-1">Cargo: <b class="text-slate-900">${o.quantity || o.total_quantity} Tonnes ${o.material_name}</b></div>
               </div>
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${isCompleted ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'}">
-                ${o.status}
-              </span>
-            </div>
-
-            <!-- Assigned Transporter Card -->
-            <div class="p-3 bg-agri-50/60 rounded-xl border border-agri-200/70 space-y-1 text-[11px]">
-              <div class="flex justify-between">
-                <span class="font-bold text-agri-900">🚛 ${o.transporter_name || 'Kisan Fleet Logistics'}</span>
-                <span class="font-black text-agri-800">${o.vehicle_no || 'GJ-01-AX-4821'}</span>
-              </div>
-              <div class="text-[10px] text-slate-600">👤 Driver: <b>${o.driver_name || 'Vikram Singh'}</b> • 📞 ${o.driver_phone || '+91 98251 44321'}</div>
-              <div class="text-[10px] text-agri-800 font-semibold">🕒 Scheduled Farm Pickup: <b>${o.pickup_time || 'Today at 02:30 PM'}</b></div>
-            </div>
-
-            <!-- 6-Stage Tracking Timeline -->
-            <div class="space-y-1.5 pt-1">
-              <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Live Status Progression</span>
-              <div class="grid grid-cols-6 gap-1 text-center text-[9px]">
-                <div class="p-1 rounded-lg ${['confirmed','pickup_scheduled','collected','in_transit','delivered','completed'].includes(o.status) ? 'bg-emerald-600 text-white font-black' : 'bg-slate-100 text-slate-400'}">1. Assigned</div>
-                <div class="p-1 rounded-lg ${['pickup_scheduled','collected','in_transit','delivered','completed'].includes(o.status) ? 'bg-emerald-600 text-white font-black' : 'bg-slate-100 text-slate-400'}">2. Scheduled</div>
-                <div class="p-1 rounded-lg ${['collected','in_transit','delivered','completed'].includes(o.status) ? 'bg-emerald-600 text-white font-black' : 'bg-slate-100 text-slate-400'}">3. Collected</div>
-                <div class="p-1 rounded-lg ${['in_transit','delivered','completed'].includes(o.status) ? 'bg-emerald-600 text-white font-black' : 'bg-slate-100 text-slate-400'}">4. In Transit</div>
-                <div class="p-1 rounded-lg ${['delivered','completed'].includes(o.status) ? 'bg-emerald-600 text-white font-black' : 'bg-slate-100 text-slate-400'}">5. Delivered</div>
-                <div class="p-1 rounded-lg ${o.status === 'completed' ? 'bg-emerald-600 text-white font-black' : 'bg-slate-100 text-slate-400'}">6. Done</div>
+              <div class="text-right">
+                <span class="text-xs font-black text-agri-700">₹${(o.total_amount || 0).toLocaleString()}</span>
+                <div class="text-[9px] text-slate-400">Order Value</div>
               </div>
             </div>
 
-            <div class="p-2 bg-slate-50 rounded-xl text-[10px] text-slate-500">
-              📍 <b>Route:</b> ${o.collection_location || 'Sanand Farm'} ➔ ${o.delivery_address}
+            <!-- Attractive Connected Visual Progress Stepper -->
+            <div class="p-3.5 bg-gradient-to-br from-emerald-50/50 to-agri-50/30 rounded-2xl border border-emerald-200/70 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-black text-slate-800 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full ${isCompleted ? 'bg-emerald-600' : 'bg-emerald-500 animate-ping'}"></span>
+                  Truck Progression Status
+                </span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isCompleted ? 'bg-emerald-100 text-emerald-800' : 'bg-agri-100 text-agri-800'}">
+                  Stage ${step} of 6
+                </span>
+              </div>
+
+              <!-- Connected Horizontal Stepper -->
+              <div class="relative pt-1 pb-1">
+                <!-- Background gray line -->
+                <div class="absolute left-4 right-4 top-4 h-1 bg-slate-200 rounded-full z-0"></div>
+                <!-- Active green line -->
+                <div class="absolute left-4 top-4 h-1 bg-emerald-600 rounded-full transition-all duration-500 z-0" style="width: ${progressWidth};"></div>
+
+                <!-- 6 Step Circles -->
+                <div class="relative z-10 flex justify-between items-center text-center">
+                  <!-- 1. Assigned -->
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shadow-xs transition ${step >= 1 ? 'bg-emerald-600 text-white' : 'bg-white border-2 border-slate-300 text-slate-400'}">
+                      ${step > 1 ? '✓' : '1'}
+                    </div>
+                    <span class="text-[8px] font-bold mt-1 ${step >= 1 ? 'text-slate-800 font-black' : 'text-slate-400'}">Assigned</span>
+                  </div>
+
+                  <!-- 2. Scheduled -->
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shadow-xs transition ${step >= 2 ? 'bg-emerald-600 text-white' : 'bg-white border-2 border-slate-300 text-slate-400'}">
+                      ${step > 2 ? '✓' : '2'}
+                    </div>
+                    <span class="text-[8px] font-bold mt-1 ${step >= 2 ? 'text-slate-800 font-black' : 'text-slate-400'}">Scheduled</span>
+                  </div>
+
+                  <!-- 3. Collected -->
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shadow-xs transition ${step >= 3 ? 'bg-emerald-600 text-white' : 'bg-white border-2 border-slate-300 text-slate-400'}">
+                      ${step > 3 ? '✓' : '3'}
+                    </div>
+                    <span class="text-[8px] font-bold mt-1 ${step >= 3 ? 'text-slate-800 font-black' : 'text-slate-400'}">Collected</span>
+                  </div>
+
+                  <!-- 4. In Transit -->
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shadow-xs transition ${step >= 4 ? 'bg-emerald-600 text-white' : 'bg-white border-2 border-slate-300 text-slate-400'}">
+                      ${step > 4 ? '✓' : '4'}
+                    </div>
+                    <span class="text-[8px] font-bold mt-1 ${step >= 4 ? 'text-slate-800 font-black' : 'text-slate-400'}">In Transit</span>
+                  </div>
+
+                  <!-- 5. Delivered -->
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shadow-xs transition ${step >= 5 ? 'bg-emerald-600 text-white' : 'bg-white border-2 border-slate-300 text-slate-400'}">
+                      ${step > 5 ? '✓' : '5'}
+                    </div>
+                    <span class="text-[8px] font-bold mt-1 ${step >= 5 ? 'text-slate-800 font-black' : 'text-slate-400'}">Delivered</span>
+                  </div>
+
+                  <!-- 6. Done -->
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shadow-xs transition ${step >= 6 ? 'bg-emerald-600 text-white' : 'bg-white border-2 border-slate-300 text-slate-400'}">
+                      ${step >= 6 ? '✓' : '6'}
+                    </div>
+                    <span class="text-[8px] font-bold mt-1 ${step >= 6 ? 'text-slate-800 font-black' : 'text-slate-400'}">Done</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Active Status Info Banner -->
+              <div class="p-2.5 bg-white rounded-xl border border-emerald-200 flex items-center gap-2.5 shadow-2xs">
+                <span class="text-xl">${stepIcon}</span>
+                <div class="flex-1">
+                  <div class="font-black text-slate-900 text-xs">${stepTitle}</div>
+                  <div class="text-[10px] text-slate-500">${stepDesc}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Driver & Transporter Card -->
+            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center text-xs">
+              <div>
+                <div class="font-black text-slate-900 flex items-center gap-1.5">
+                  <span>🚛</span>
+                  <span>${o.transporter_name || 'Kisan Fleet Logistics'}</span>
+                  <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-200 text-slate-700">${o.vehicle_no || 'GJ-01-AX-4821'}</span>
+                </div>
+                <div class="text-[11px] text-slate-600 mt-1">Driver: <b>${o.driver_name || 'Vikram Singh'}</b></div>
+                <div class="text-[10px] text-slate-400">Scheduled Pickup: <b>${o.pickup_time || 'Today at 02:30 PM'}</b></div>
+              </div>
+              <a href="tel:${o.driver_phone || '9825144321'}" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-[11px] shadow-xs flex items-center gap-1">
+                <span>📞</span>
+                <span>Call</span>
+              </a>
+            </div>
+
+            <div class="p-2.5 bg-slate-50 rounded-xl text-[10px] text-slate-600 space-y-0.5">
+              <div>📍 <b>Pickup Farm:</b> ${o.collection_location || 'Sanand Farm, Ahmedabad'}</div>
+              <div>🏭 <b>Delivery Destination:</b> ${o.delivery_address}</div>
             </div>
           </div>
         `;
@@ -3425,13 +3567,57 @@ div>
     function renderProfileView() {
       if (!currentUser) return;
       document.getElementById("prof-name").textContent = currentUser.name;
-      document.getElementById("prof-role").textContent = currentUser.role.toUpperCase();
-      document.getElementById("prof-location-tag").textContent = "📍 " + (currentUser.location || "Gujarat");
-      document.getElementById("prof-username").textContent = currentUser.username;
-      document.getElementById("prof-email").textContent = currentUser.email;
-      document.getElementById("prof-phone").textContent = currentUser.phone || "+91 9876543210";
-      document.getElementById("prof-role-desc").textContent = currentUser.role.toUpperCase() + " (Scoped Permissions)";
-      updateBackendStatusUI(isBackendLive);
+      document.getElementById("prof-location-tag").textContent = "📍 " + (currentUser.location || "Sanand Taluka, Ahmedabad District");
+      
+      const inName = document.getElementById("prof-input-name");
+      if (inName) inName.value = currentUser.name || "";
+      const inPhone = document.getElementById("prof-input-phone");
+      if (inPhone) inPhone.value = currentUser.phone || "+91 98250 12345";
+      const inEmail = document.getElementById("prof-input-email");
+      if (inEmail) inEmail.value = currentUser.email || "ramesh@kisan.in";
+      const inVill = document.getElementById("prof-input-village");
+      if (inVill) inVill.value = currentUser.village || "Sanand";
+      const inDist = document.getElementById("prof-input-district");
+      if (inDist) inDist.value = currentUser.district || "Ahmedabad";
+      const inState = document.getElementById("prof-input-state");
+      if (inState) inState.value = currentUser.state || "Gujarat";
+      const inLang = document.getElementById("prof-input-lang");
+      if (inLang) inLang.value = currentUser.preferred_language || "English";
+    }
+
+    async function handleSaveGlobalProfile(e) {
+      e.preventDefault();
+      const name = document.getElementById("prof-input-name").value.trim();
+      const phone = document.getElementById("prof-input-phone").value.trim();
+      const email = document.getElementById("prof-input-email").value.trim();
+      const village = document.getElementById("prof-input-village").value.trim();
+      const district = document.getElementById("prof-input-district").value.trim();
+      const state = document.getElementById("prof-input-state").value.trim();
+      const lang = document.getElementById("prof-input-lang").value;
+
+      currentUser.name = name;
+      currentUser.phone = phone;
+      currentUser.email = email;
+      currentUser.village = village;
+      currentUser.district = district;
+      currentUser.state = state;
+      currentUser.location = `${village}, ${district}`;
+      currentUser.preferred_language = lang;
+
+      const u = store.users.find(x => x.id === currentUser.id);
+      if (u) Object.assign(u, currentUser);
+      persist();
+
+      document.getElementById("prof-name").textContent = name;
+      document.getElementById("prof-location-tag").textContent = `📍 ${village} Taluka, ${district} District`;
+      const fGreet = document.getElementById("farmer-dash-greeting");
+      if (fGreet) fGreet.textContent = name + " 👋";
+      const fLoc = document.getElementById("farmer-dash-location");
+      if (fLoc) fLoc.textContent = `📍 ${village} Taluka, ${district} District`;
+      const fLang = document.getElementById("farmer-lang-pill");
+      if (fLang) fLang.textContent = lang;
+
+      alert("🎉 Farm Profile details updated successfully!");
     }
 
     // ====================================================
