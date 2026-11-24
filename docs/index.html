@@ -5940,7 +5940,7 @@ Individual dispatch requests sent to farmers.`);
     async function renderAggregatorProfile() {
       if (!currentUser) return;
       document.getElementById("aprof-name").textContent = currentUser.name;
-      document.getElementById("aprof-badge-id").textContent = currentUser.profile_id || "AGY-TRN-3001";
+      document.getElementById("aprof-badge-id").textContent = "AGY-TRN-3001";
       document.getElementById("aprof-location-tag").textContent = "📍 " + (currentUser.location || "Ahmedabad District Fleet Hub");
 
       document.getElementById("aprof-disp-name").textContent = currentUser.name;
