@@ -5571,9 +5571,7 @@ Individual dispatch requests sent to farmers.`);
           job.notes = "Accepted by " + currentUser.name;
           persist();
         }
-        alert("🎉 Transport Job Accepted!
-
-The job has moved to your Active Trips. You can now proceed to the farm for collection.");
+        alert("🎉 Transport Job Accepted!\\n\\nThe job has moved to your Active Trips. You can now proceed to the farm for collection.");
         switchAggregatorTab('active');
       } catch(err) {
         alert(`Failed to accept job: ${err.message}`);
@@ -5894,10 +5892,7 @@ The job has moved to your Active Trips. You can now proceed to the farm for coll
 
         persist();
         closePickupModal();
-        alert(`🚜 Pickup Confirmed!
-
-Recorded ${actual} Tonnes collected from ${job.farmer_name}.
-Material is now in transit to ${job.buyer_name}.`);
+        alert("🚜 Pickup Confirmed!\\n\\nRecorded " + actual + " Tonnes collected from " + job.farmer_name + ".\\nMaterial is now in transit to " + job.buyer_name + ".");
         renderAggregatorActiveTrips();
         renderAggregatorDashboard();
       } catch(err) {
@@ -5932,10 +5927,7 @@ Material is now in transit to ${job.buyer_name}.`);
         }
 
         persist();
-        alert(`🏁 Material Delivered!
-
-Delivered to ${job.buyer_name}.
-Buyer has been notified. Final order completion is pending Buyer weighbridge verification.`);
+        alert("🏁 Material Delivered!\\n\\nDelivered to " + job.buyer_name + ".\\nBuyer has been notified. Final order completion is pending Buyer weighbridge verification.");
         renderAggregatorActiveTrips();
         renderAggregatorDashboard();
       } catch(err) {
