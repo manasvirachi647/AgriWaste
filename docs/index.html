@@ -167,6 +167,22 @@
           <span>My Orders</span>
         </button>
       </div>
+
+      <!-- Aggregator Drawer Menu (Home, Assigned Jobs, Active Trips) -->
+      <div id="aggregator-drawer-menu" class="space-y-1 hidden">
+        <button onclick="handleAggregatorDrawerNav('home')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-blue-50 hover:text-blue-700 transition">
+          <span class="text-base">🏠</span>
+          <span>Home</span>
+        </button>
+        <button onclick="handleAggregatorDrawerNav('assigned')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-blue-50 hover:text-blue-700 transition">
+          <span class="text-base">📋</span>
+          <span>Assigned Jobs</span>
+        </button>
+        <button onclick="handleAggregatorDrawerNav('active')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-blue-50 hover:text-blue-700 transition">
+          <span class="text-base">🚛</span>
+          <span>Active Trips</span>
+        </button>
+      </div>
     </div>
 
     <!-- Drawer Footer -->
@@ -942,23 +958,10 @@
             </div>
           </div>
 
-          <!-- 3. Primary Quick Actions -->
-          <div class="grid grid-cols-2 gap-2 text-xs font-black">
-            <button onclick="switchAggregatorTab('assigned')" class="p-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl shadow-xs flex items-center justify-center gap-2 transition active:scale-95">
-              <span class="text-base">📋</span>
-              <span>Review Assignments</span>
-            </button>
-            <button onclick="switchAggregatorTab('active')" class="p-3.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-800 rounded-2xl shadow-xs flex items-center justify-center gap-2 transition active:scale-95">
-              <span class="text-base">🚛</span>
-              <span>Manage Active Trips</span>
-            </button>
-          </div>
-
           <!-- 4. Active Trips Summary -->
           <div class="space-y-2">
-            <div class="flex justify-between items-center px-1">
+            <div class="px-1">
               <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Active Trips Summary</h3>
-              <button onclick="switchAggregatorTab('active')" class="text-[11px] font-bold text-blue-700 hover:underline">View All Active →</button>
             </div>
             <div id="aggregator-active-summary-container" class="space-y-2.5">
               <!-- Dynamically populated -->
@@ -1926,6 +1929,11 @@ div>
       switchBuyerTab(subTab);
     };
 
+    window.handleAggregatorDrawerNav = function(subTab) {
+      window.closeFarmerDrawer();
+      switchAggregatorTab(subTab);
+    };
+
     window.openIssueModal = function() {
       const m = document.getElementById("modal-issue");
       if (m) {
@@ -2770,7 +2778,22 @@ div>
 
         switchBuyerTab('home');
       } else if (currentUser.role === 'aggregator') {
-        if (hamBtn) hamBtn.classList.add("hidden");
+        if (hamBtn) hamBtn.classList.remove("hidden");
+
+        const fMenu = document.getElementById("farmer-drawer-menu");
+        const bMenu = document.getElementById("buyer-drawer-menu");
+        const aMenu = document.getElementById("aggregator-drawer-menu");
+        if (fMenu) fMenu.classList.add("hidden");
+        if (bMenu) bMenu.classList.add("hidden");
+        if (aMenu) aMenu.classList.remove("hidden");
+
+        const dAvatar = document.getElementById("drawer-user-avatar");
+        if (dAvatar) dAvatar.textContent = "🚛";
+        const dName = document.getElementById("drawer-farmer-name");
+        if (dName) dName.textContent = currentUser.name || "Harpreet Singh";
+        const dLoc = document.getElementById("drawer-farmer-location");
+        if (dLoc) dLoc.textContent = "📍 " + (currentUser.location || "Ahmedabad District Fleet Hub");
+
         if (botNav) {
           botNav.innerHTML = `
             <button id="anav-home" onclick="switchAggregatorTab('home')" class="flex flex-col items-center text-blue-700 transition">
@@ -2784,10 +2807,6 @@ div>
             <button id="anav-active" onclick="switchAggregatorTab('active')" class="flex flex-col items-center text-slate-400 hover:text-blue-700 transition">
               <span class="text-base">🚛</span>
               <span class="text-[9px] mt-0.5 font-bold">Active Trips</span>
-            </button>
-            <button id="anav-profile" onclick="switchAggregatorTab('profile')" class="flex flex-col items-center text-slate-400 hover:text-blue-700 transition">
-              <span class="text-base">👤</span>
-              <span class="text-[9px] mt-0.5 font-bold">Profile</span>
             </button>
           `;
           botNav.classList.remove("hidden");
