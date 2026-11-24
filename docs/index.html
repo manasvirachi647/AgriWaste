@@ -183,6 +183,30 @@
           <span>Active Trips</span>
         </button>
       </div>
+
+      <!-- Admin Drawer Menu (Dashboard, Users, Marketplace, Orders & Transport, Issues & Disputes) -->
+      <div id="admin-drawer-menu" class="space-y-1 hidden">
+        <button onclick="handleAdminDrawerNav('dashboard')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-purple-50 hover:text-purple-700 transition">
+          <span class="text-base">🏠</span>
+          <span>Dashboard</span>
+        </button>
+        <button onclick="handleAdminDrawerNav('users')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-purple-50 hover:text-purple-700 transition">
+          <span class="text-base">👥</span>
+          <span>Users</span>
+        </button>
+        <button onclick="handleAdminDrawerNav('marketplace')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-purple-50 hover:text-purple-700 transition">
+          <span class="text-base">🌾</span>
+          <span>Marketplace</span>
+        </button>
+        <button onclick="handleAdminDrawerNav('orders')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-purple-50 hover:text-purple-700 transition">
+          <span class="text-base">📦</span>
+          <span>Orders &amp; Transport</span>
+        </button>
+        <button onclick="handleAdminDrawerNav('issues')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-purple-50 hover:text-purple-700 transition">
+          <span class="text-base">⚠️</span>
+          <span>Issues &amp; Disputes</span>
+        </button>
+      </div>
     </div>
 
     <!-- Drawer Footer -->
@@ -1136,73 +1160,320 @@
 
 
       <!-- ========================================== -->
-      <!-- VIEW 5: ROLE 4 - ADMIN DASHBOARD           -->
+            <!-- ========================================== -->
+      <!-- VIEW 5: ROLE 4 - COMPLETE ADMIN SECTION   -->
       <!-- ========================================== -->
       <section id="view-admin" class="space-y-4 hidden">
-        <!-- 1. Header & Overview -->
-        <div class="bg-gradient-to-br from-purple-50 to-indigo-100/70 p-4 rounded-3xl border border-purple-200 shadow-xs">
-          <div class="flex items-start justify-between">
-            <div>
-              <span class="text-[11px] font-bold text-purple-800">Platform Moderation &amp; Operations</span>
-              <h2 id="admin-dash-greeting" class="text-lg font-black text-slate-900 leading-tight">Admin Console 🛡️</h2>
-              <div class="text-xs text-purple-900 font-semibold mt-1">Platform Operations • System State: Healthy</div>
+
+        <!-- SUBSECTION 1: ADMIN DASHBOARD (DYNAMIC OVERVIEW & KPIS) -->
+        <div id="admin-sub-dashboard" class="space-y-4">
+          <!-- 1. Header Card -->
+          <div class="bg-gradient-to-br from-purple-50 to-indigo-100/70 p-4 rounded-3xl border border-purple-200 shadow-xs">
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="text-[11px] font-bold text-purple-800">Platform Operations &amp; Moderation</span>
+                <h2 id="admin-dash-greeting" class="text-lg font-black text-slate-900 leading-tight">Admin Console 🛡️</h2>
+                <div class="text-xs text-purple-900 font-semibold mt-1">Platform Operations • System State: Healthy</div>
+                <div class="mt-1.5">
+                  <span class="inline-block px-2.5 py-0.5 bg-white border border-purple-300 rounded-lg text-[10px] font-black text-purple-800 shadow-2xs">
+                    Profile ID: AGY-ADM-4001
+                  </span>
+                </div>
+              </div>
+              <span class="text-3xl bg-white p-2 rounded-2xl shadow-xs">🛡️</span>
             </div>
-            <span class="text-3xl bg-white p-2 rounded-2xl shadow-xs">🛡️</span>
+          </div>
+
+          <!-- 2. Dynamic Platform KPI Cards (10 Actual Records) -->
+          <div class="space-y-1.5">
+            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider px-1">Platform Statistics (Real-time DB)</h3>
+            <div class="grid grid-cols-2 gap-2 text-center text-xs">
+              <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+                <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Total Users</div>
+                <div id="admin-kpi-users" class="text-lg font-black text-slate-900 mt-0.5">0</div>
+              </div>
+              <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+                <div class="text-[9px] font-black text-agri-600 uppercase tracking-wider">Total Farmers</div>
+                <div id="admin-kpi-farmers" class="text-lg font-black text-agri-700 mt-0.5">0</div>
+              </div>
+              <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+                <div class="text-[9px] font-black text-harvest-600 uppercase tracking-wider">Total Buyers</div>
+                <div id="admin-kpi-buyers" class="text-lg font-black text-harvest-700 mt-0.5">0</div>
+              </div>
+              <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+                <div class="text-[9px] font-black text-blue-600 uppercase tracking-wider">Total Aggregators</div>
+                <div id="admin-kpi-aggregators" class="text-lg font-black text-blue-700 mt-0.5">0</div>
+              </div>
+              <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+                <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Active Listings</div>
+                <div id="admin-kpi-listings" class="text-lg font-black text-agri-700 mt-0.5">0</div>
+              </div>
+              <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+                <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Active Demands</div>
+                <div id="admin-kpi-requirements" class="text-lg font-black text-harvest-700 mt-0.5">0</div>
+              </div>
+              <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+                <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Total Orders</div>
+                <div id="admin-kpi-orders" class="text-lg font-black text-purple-700 mt-0.5">0</div>
+              </div>
+              <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+                <div class="text-[9px] font-black text-emerald-600 uppercase tracking-wider">Completed Orders</div>
+                <div id="admin-kpi-orders-completed" class="text-lg font-black text-emerald-700 mt-0.5">0</div>
+              </div>
+              <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+                <div class="text-[9px] font-black text-amber-600 uppercase tracking-wider">Pending Orders</div>
+                <div id="admin-kpi-orders-pending" class="text-lg font-black text-amber-600 mt-0.5">0</div>
+              </div>
+              <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
+                <div class="text-[9px] font-black text-red-600 uppercase tracking-wider">Open Disputes</div>
+                <div id="admin-kpi-disputes" class="text-lg font-black text-red-600 mt-0.5">0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Recent Platform Activity Log -->
+          <div class="space-y-2">
+            <div class="flex justify-between items-center px-1">
+              <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Recent Platform Activity</h3>
+              <span class="text-[10px] text-slate-400 font-bold">Live Activity Feed</span>
+            </div>
+            <div id="admin-recent-activity-container" class="space-y-2">
+              <!-- Dynamically populated -->
+            </div>
           </div>
         </div>
 
-        <!-- 2. Top Metric Cards (KPIs) -->
-        <div class="grid grid-cols-2 gap-2 text-center text-xs">
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Total Registered Users</div>
-            <div id="admin-stat-users" class="text-lg font-black text-slate-900 mt-0.5">0</div>
+        <!-- SUBSECTION 2: USER MANAGEMENT -->
+        <div id="admin-sub-users" class="space-y-4 hidden">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-black text-slate-900 leading-tight">Registered Users Management</h2>
+              <p class="text-[11px] text-slate-500 font-medium">Audit registered platform accounts &amp; enforce access</p>
+            </div>
+            <span id="badge-users-total" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-purple-100 text-purple-800">0 Users</span>
           </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Active Listings</div>
-            <div id="admin-stat-listings" class="text-lg font-black text-agri-700 mt-0.5">0</div>
+
+          <!-- Role Filter Tabs -->
+          <div class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs">
+            <button onclick="setAdminUserRoleFilter('all')" id="btn-u-filter-all" class="px-3 py-1.5 rounded-xl font-bold bg-purple-700 text-white shadow-xs whitespace-nowrap">All Roles</button>
+            <button onclick="setAdminUserRoleFilter('farmer')" id="btn-u-filter-farmer" class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Farmers</button>
+            <button onclick="setAdminUserRoleFilter('buyer')" id="btn-u-filter-buyer" class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Buyers</button>
+            <button onclick="setAdminUserRoleFilter('aggregator')" id="btn-u-filter-aggregator" class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Aggregators</button>
+            <button onclick="setAdminUserRoleFilter('admin')" id="btn-u-filter-admin" class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Admins</button>
           </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Orders Completed</div>
-            <div id="admin-stat-orders" class="text-lg font-black text-emerald-700 mt-0.5">0</div>
+
+          <!-- Search Bar -->
+          <div class="relative">
+            <input type="text" id="admin-user-search-input" oninput="renderAdminUsers()" placeholder="Search users by name, username, email, phone..." class="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-xl text-xs placeholder:text-slate-400 focus:outline-none focus:border-purple-600" />
+            <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
           </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Open Disputes</div>
-            <div id="admin-stat-disputes" class="text-lg font-black text-red-600 mt-0.5">0</div>
+
+          <!-- Users List Container -->
+          <div id="admin-users-list-container" class="space-y-2.5">
+            <!-- Dynamically populated -->
           </div>
         </div>
 
-        <!-- 3. User & Listing Management Tabs -->
-        <div class="space-y-2">
-          <div class="flex border-b border-slate-200 text-xs font-bold">
-            <button onclick="switchAdminTab('users')" id="admin-tab-btn-users" class="flex-1 py-2 text-center tab-active border-b-2">Registered Users</button>
-            <button onclick="switchAdminTab('listings')" id="admin-tab-btn-listings" class="flex-1 py-2 text-center text-slate-400">Listings Management</button>
-            <button onclick="switchAdminTab('txns')" id="admin-tab-btn-txns" class="flex-1 py-2 text-center text-slate-400">Transactions</button>
+        <!-- SUBSECTION 3: MARKETPLACE AUDIT (FARMER LISTINGS & BUYER DEMANDS) -->
+        <div id="admin-sub-marketplace" class="space-y-4 hidden">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-black text-slate-900 leading-tight">Marketplace &amp; Listings Moderation</h2>
+              <p class="text-[11px] text-slate-500 font-medium">Audit crop residue listings and buyer procurement requirements</p>
+            </div>
           </div>
 
-          <!-- Users List -->
-          <div id="admin-tab-users" class="space-y-2">
-            <div id="admin-users-list" class="space-y-2"></div>
+          <!-- Marketplace Subtabs -->
+          <div class="flex border-b border-slate-200 text-xs font-black">
+            <button onclick="switchAdminMarketplaceSubtab('listings')" id="admin-market-subtab-listings" class="flex-1 py-2 text-center border-b-2 border-purple-700 text-purple-700">🌾 Farmer Listings</button>
+            <button onclick="switchAdminMarketplaceSubtab('demands')" id="admin-market-subtab-demands" class="flex-1 py-2 text-center text-slate-400 hover:text-slate-700">📋 Buyer Demands</button>
           </div>
 
-          <!-- Listings Audit -->
-          <div id="admin-tab-listings" class="space-y-2 hidden">
-            <div id="admin-listings-audit-list" class="space-y-2"></div>
+          <!-- Listings Pane -->
+          <div id="admin-pane-listings" class="space-y-3">
+            <div class="flex gap-2">
+              <input type="text" id="admin-listing-search" oninput="renderAdminListings()" placeholder="Search residue listings..." class="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs" />
+              <select id="admin-listing-status-filter" onchange="renderAdminListings()" class="px-2.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
+                <option value="all">All Status</option>
+                <option value="available">Active / Available</option>
+                <option value="reserved">Reserved</option>
+                <option value="cancelled">Inactive / Cancelled</option>
+              </select>
+            </div>
+            <div id="admin-listings-list-container" class="space-y-2.5">
+              <!-- Dynamically populated -->
+            </div>
           </div>
 
-          <!-- Transactions Monitoring -->
-          <div id="admin-tab-txns" class="space-y-2 hidden">
-            <div id="admin-transactions-list" class="space-y-2"></div>
+          <!-- Demands Pane -->
+          <div id="admin-pane-demands" class="space-y-3 hidden">
+            <div class="flex gap-2">
+              <input type="text" id="admin-demand-search" oninput="renderAdminDemands()" placeholder="Search buyer demands..." class="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs" />
+              <select id="admin-demand-status-filter" onchange="renderAdminDemands()" class="px-2.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
+                <option value="all">All Status</option>
+                <option value="open">Active / Open</option>
+                <option value="fulfilled">Fulfilled</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div id="admin-demands-list-container" class="space-y-2.5">
+              <!-- Dynamically populated -->
+            </div>
           </div>
         </div>
 
-        <!-- 4. Open Disputes Desk -->
-        <div class="space-y-2 pt-2 border-t border-slate-200">
-          <div class="flex justify-between items-center px-1">
-            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Dispute Tickets &amp; Issues</h3>
-            <span class="text-[10px] text-red-600 font-bold">Escalation Desk</span>
+        <!-- SUBSECTION 4: ORDERS, SETTLEMENTS & TRANSPORT MANAGEMENT -->
+        <div id="admin-sub-orders" class="space-y-4 hidden">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-black text-slate-900 leading-tight">Orders &amp; Transport Logistics</h2>
+              <p class="text-[11px] text-slate-500 font-medium">Multi-farmer allocation tracking &amp; aggregator job dispatch</p>
+            </div>
           </div>
-          <div id="admin-disputes-container" class="space-y-2"></div>
+
+          <!-- Orders/Transport Subtabs -->
+          <div class="flex border-b border-slate-200 text-xs font-black">
+            <button onclick="switchAdminOrdersSubtab('orders')" id="admin-orders-subtab-orders" class="flex-1 py-2 text-center border-b-2 border-purple-700 text-purple-700">📦 Orders &amp; Contributions</button>
+            <button onclick="switchAdminOrdersSubtab('transport')" id="admin-orders-subtab-transport" class="flex-1 py-2 text-center text-slate-400 hover:text-slate-700">🚛 Transport Jobs</button>
+          </div>
+
+          <!-- Orders Pane -->
+          <div id="admin-pane-orders" class="space-y-3">
+            <div class="flex gap-2">
+              <input type="text" id="admin-order-search" oninput="renderAdminOrders()" placeholder="Search order ID, buyer, farmer..." class="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs" />
+              <select id="admin-order-status-filter" onchange="renderAdminOrders()" class="px-2.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700">
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="in_transit">In Transit</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+            <div id="admin-orders-list-container" class="space-y-3">
+              <!-- Dynamically populated with multi-farmer contributions -->
+            </div>
+          </div>
+
+          <!-- Transport Jobs Pane -->
+          <div id="admin-pane-transport" class="space-y-3 hidden">
+            <div class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs">
+              <button onclick="setAdminTransportFilter('all')" id="btn-t-filter-all" class="px-3 py-1.5 rounded-xl font-bold bg-purple-700 text-white shadow-xs whitespace-nowrap">All Trips</button>
+              <button onclick="setAdminTransportFilter('unassigned')" id="btn-t-filter-unassigned" class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">⚠️ Needs Aggregator</button>
+              <button onclick="setAdminTransportFilter('active')" id="btn-t-filter-active" class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">In Transit</button>
+              <button onclick="setAdminTransportFilter('completed')" id="btn-t-filter-completed" class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Completed</button>
+            </div>
+            <div id="admin-transport-jobs-container" class="space-y-3">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
         </div>
+
+        <!-- SUBSECTION 5: ISSUES & DISPUTES ESCALATION DESK -->
+        <div id="admin-sub-issues" class="space-y-4 hidden">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-black text-slate-900 leading-tight">Disputes &amp; Support Escalation</h2>
+              <p class="text-[11px] text-slate-500 font-medium">Investigate complaints, quality disputes &amp; record resolutions</p>
+            </div>
+            <span id="badge-disputes-count" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-red-100 text-red-800">0 Open</span>
+          </div>
+
+          <!-- Status Filter Tabs -->
+          <div class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs">
+            <button onclick="setAdminIssueFilter('all')" id="btn-iss-all" class="px-3 py-1.5 rounded-xl font-bold bg-purple-700 text-white shadow-xs whitespace-nowrap">All Tickets</button>
+            <button onclick="setAdminIssueFilter('open')" id="btn-iss-open" class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Open</button>
+            <button onclick="setAdminIssueFilter('under_review')" id="btn-iss-review" class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Under Review</button>
+            <button onclick="setAdminIssueFilter('resolved')" id="btn-iss-resolved" class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Resolved</button>
+          </div>
+
+          <div id="admin-issues-list-container" class="space-y-3">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- SUBSECTION 6: ADMIN PROFILE & SECURITY SETTINGS -->
+        <div id="admin-sub-profile" class="space-y-4 hidden">
+          <!-- Profile Header Card -->
+          <div class="bg-gradient-to-br from-purple-50 to-indigo-100/70 p-5 rounded-3xl border border-purple-200 shadow-xs text-center space-y-2">
+            <div class="w-16 h-16 rounded-3xl bg-white border-2 border-purple-300 text-3xl flex items-center justify-center mx-auto shadow-xs">
+              🛡️
+            </div>
+            <div>
+              <h2 id="admprof-disp-name-head" class="font-black text-lg text-slate-900 leading-tight">System Administrator</h2>
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 text-[10px] font-black uppercase tracking-wider mt-1">
+                🛡️ Verified Platform Administrator
+              </div>
+              <div class="mt-1.5">
+                <span class="inline-block px-3 py-1 bg-white border border-purple-300 rounded-xl text-xs font-black text-purple-800 shadow-2xs">
+                  Profile ID: AGY-ADM-4001
+                </span>
+              </div>
+            </div>
+            <div class="text-xs text-purple-900 font-bold">📍 Platform Headquarters, Gandhinagar</div>
+          </div>
+
+          <!-- Personal Details Card -->
+          <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3 text-xs">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+              <h3 class="font-black text-slate-900 text-xs uppercase tracking-wider">Account &amp; Security Credentials</h3>
+              <button onclick="toggleAdminProfileEdit()" id="btn-edit-admin-prof" class="text-purple-700 font-bold hover:underline">Edit Profile</button>
+            </div>
+
+            <!-- View Mode -->
+            <div id="admprof-view-mode" class="grid grid-cols-2 gap-3 py-1">
+              <div class="p-2.5 bg-slate-50 rounded-xl">
+                <span class="text-[10px] text-slate-400 block font-semibold">Full Name</span>
+                <span id="admprof-disp-name" class="font-bold text-slate-800 text-xs">System Administrator</span>
+              </div>
+              <div class="p-2.5 bg-slate-50 rounded-xl">
+                <span class="text-[10px] text-slate-400 block font-semibold">Username</span>
+                <span id="admprof-disp-username" class="font-bold text-slate-800 text-xs">admin</span>
+              </div>
+              <div class="p-2.5 bg-slate-50 rounded-xl">
+                <span class="text-[10px] text-slate-400 block font-semibold">Mobile Number</span>
+                <span id="admprof-disp-phone" class="font-bold text-slate-800 text-xs">+91 98765 43213</span>
+              </div>
+              <div class="p-2.5 bg-slate-50 rounded-xl">
+                <span class="text-[10px] text-slate-400 block font-semibold">Email Address</span>
+                <span id="admprof-disp-email" class="font-bold text-slate-800 text-xs">admin@agriwaste.com</span>
+              </div>
+              <div class="p-2.5 bg-purple-50/60 rounded-xl border border-purple-100 col-span-2">
+                <span class="text-[10px] text-purple-700 block font-semibold">Administrative Role</span>
+                <span class="font-black text-purple-900 text-xs">Super Administrator (Full Platform Moderation)</span>
+              </div>
+            </div>
+
+            <!-- Edit Mode Form -->
+            <form id="admprof-edit-form" onsubmit="handleSaveAdminProfile(event)" class="space-y-3 hidden">
+              <div>
+                <label class="block text-[10px] font-bold text-slate-600 mb-0.5">Full Name *</label>
+                <input type="text" id="admprof-input-name" required class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs" />
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-600 mb-0.5">Mobile Number (10 digits) *</label>
+                  <input type="tel" id="admprof-input-phone" required maxlength="10" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-600 mb-0.5">Email Address *</label>
+                  <input type="email" id="admprof-input-email" required class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs" />
+                </div>
+              </div>
+              <p class="text-[10px] text-slate-400">Note: Administrative role assignment is strictly locked and cannot be self-modified.</p>
+              <div class="flex gap-2 pt-1">
+                <button type="submit" class="flex-1 py-2 bg-purple-700 hover:bg-purple-800 text-white font-bold rounded-xl text-xs">Save Profile Changes</button>
+                <button type="button" onclick="toggleAdminProfileEdit()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Sign Out -->
+          <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs">
+            <button onclick="handleLogout()" class="w-full py-2.5 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-black rounded-xl transition flex items-center justify-center gap-1.5">
+              <span>🚪</span><span>Sign Out of Account</span>
+            </button>
+          </div>
+        </div>
+
       </section>
 
 
@@ -1790,6 +2061,54 @@ div>
     </div>
   </div>
 
+    <!-- MODAL: ADMIN USER DETAILS -->
+  <div id="modal-admin-user-detail" class="fixed inset-0 bg-black/50 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-md p-5 space-y-3.5 max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+        <h3 class="font-black text-sm text-slate-900 flex items-center gap-1.5">
+          <span>👤</span> User Account Record
+        </h3>
+        <button onclick="closeAdminUserModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center">&times;</button>
+      </div>
+      <div id="admin-user-detail-content" class="space-y-3 text-xs">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADMIN ASSIGN AGGREGATOR TO TRANSPORT JOB -->
+  <div id="modal-admin-assign-aggregator" class="fixed inset-0 bg-black/50 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-md p-5 space-y-3.5 max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+        <h3 class="font-black text-sm text-slate-900 flex items-center gap-1.5">
+          <span>🚛</span> Assign Aggregator to Trip
+        </h3>
+        <button onclick="closeAdminAssignModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center">&times;</button>
+      </div>
+      <div id="admin-assign-job-summary" class="p-3 bg-purple-50 rounded-2xl border border-purple-100 text-xs space-y-1">
+        <!-- Populated via openAdminAssignModal -->
+      </div>
+      <form onsubmit="handleConfirmAssignAggregator(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="admin-assign-job-id" />
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Select Active Transport Partner *</label>
+          <select id="admin-select-aggregator" required class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-bold text-slate-800 text-xs">
+            <!-- Dynamically populated with active aggregators -->
+          </select>
+        </div>
+        <p class="text-[10px] text-slate-400">The assigned transport partner will receive this trip dispatch in their active account.</p>
+        <div class="flex gap-2 pt-1">
+          <button type="submit" class="flex-1 py-2.5 bg-purple-700 hover:bg-purple-800 text-white font-bold rounded-xl text-xs transition active:scale-95 shadow-xs">
+            Confirm Assignment
+          </button>
+          <button type="button" onclick="closeAdminAssignModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL: CONFIRM PICKUP & RECORD ACTUAL QUANTITY (AGGREGATOR) -->
   <div id="modal-pickup-confirmation" class="fixed inset-0 bg-black/50 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
     <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-md p-5 space-y-3.5 max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl">
@@ -1934,6 +2253,11 @@ div>
       switchAggregatorTab(subTab);
     };
 
+        window.handleAdminDrawerNav = function(subTab) {
+      window.closeFarmerDrawer();
+      switchAdminSection(subTab);
+    };
+
     window.openIssueModal = function() {
       const m = document.getElementById("modal-issue");
       if (m) {
@@ -1996,23 +2320,28 @@ div>
           buyer: "Gujarat BioPower Ltd",
           buyer_phone: "+91 98251 98765",
           farmer_id: 1,
-          farmer_name: "Ramesh Patel",
-          material_name: "Wheat Straw",
-          quantity: 2.0,
-          total_quantity: 2.0,
+          farmer_name: "Ramesh Patel (Lead Supplier)",
+          material_name: "Rice Husk (Multi-Farmer Pool)",
+          quantity: 10.0,
+          total_quantity: 10.0,
           unit: "tonnes",
-          agreed_price: 1800,
-          total_amount: 3600,
-          collection_location: "Sanand Farm, Ahmedabad",
+          agreed_price: 2335,
+          total_amount: 23350,
+          collection_location: "Multi-point Rural Corridor (Sanand - Bavla - Dholka)",
           delivery_address: "Sanand GIDC Biofuel Plant",
           status: "in_transit",
           transporter_name: "Kisan Fleet Logistics",
-          driver_name: "Vikram Singh",
-          driver_phone: "+91 98251 44321",
+          driver_name: "Harpreet Singh",
+          driver_phone: "+91 98765 43212",
           vehicle_no: "GJ-01-AX-4821",
           pickup_time: "Today at 02:30 PM",
           date: "2026-11-24",
-          payment_status: "pending"
+          payment_status: "pending",
+          contributions: [
+            { farmer_name: "Ramesh Patel", quantity: 2.0, price_per_unit: 2400, location: "Sanand Farm, Ahmedabad", status: "collected" },
+            { farmer_name: "Suresh Chaudhary", quantity: 3.0, price_per_unit: 2350, location: "Bavla Farm, Ahmedabad", status: "in_transit" },
+            { farmer_name: "Mahesh Desai", quantity: 5.0, price_per_unit: 2300, location: "Dholka Farm, Ahmedabad", status: "collected" }
+          ]
         },
         {
           id: 102,
@@ -2815,6 +3144,31 @@ div>
           botNav.classList.remove("hidden");
         }
         switchAggregatorTab('home');
+      } else if (currentUser.role === 'admin') {
+        if (hamBtn) hamBtn.classList.remove("hidden");
+
+        const fMenu = document.getElementById("farmer-drawer-menu");
+        const bMenu = document.getElementById("buyer-drawer-menu");
+        const aMenu = document.getElementById("aggregator-drawer-menu");
+        const admMenu = document.getElementById("admin-drawer-menu");
+        if (fMenu) fMenu.classList.add("hidden");
+        if (bMenu) bMenu.classList.add("hidden");
+        if (aMenu) aMenu.classList.add("hidden");
+        if (admMenu) admMenu.classList.remove("hidden");
+
+        const dAvatar = document.getElementById("drawer-user-avatar");
+        if (dAvatar) dAvatar.textContent = "🛡️";
+        const dName = document.getElementById("drawer-farmer-name");
+        if (dName) dName.textContent = currentUser.name || "System Administrator";
+        const dLoc = document.getElementById("drawer-farmer-location");
+        if (dLoc) dLoc.textContent = "📍 Platform Headquarters, Gandhinagar";
+
+        if (botNav) {
+          botNav.classList.add("hidden");
+        }
+        hideAllViews();
+        document.getElementById("view-admin").classList.remove("hidden");
+        switchAdminSection('dashboard');
       } else {
         if (hamBtn) hamBtn.classList.add("hidden");
         if (botNav) botNav.classList.remove("hidden");
@@ -2868,6 +3222,10 @@ div>
           switchBuyerTab('profile');
         } else if (currentUser && currentUser.role === 'aggregator') {
           switchAggregatorTab('profile');
+        } else if (currentUser && currentUser.role === 'admin') {
+          hideAllViews();
+          document.getElementById("view-admin").classList.remove("hidden");
+          switchAdminSection('profile');
         } else {
           document.getElementById("view-profile").classList.remove("hidden");
           renderProfileView();
@@ -6076,117 +6434,1034 @@ Individual dispatch requests sent to farmers.`);
     window.handleSaveAggregatorProfile = handleSaveAggregatorProfile;
 
     // ====================================================
-    // ROLE 4: ADMIN DASHBOARD
+        // ====================================================
+    // ROLE 4: COMPLETE ADMIN PORTAL & PLATFORM MODERATION
     // ====================================================
+    let activeAdminSection = 'dashboard';
+    let activeAdminUserFilter = 'all';
+    let activeAdminMarketSubtab = 'listings';
+    let activeAdminOrdersSubtab = 'orders';
+    let activeAdminTransportFilter = 'all';
+    let activeAdminIssueFilter = 'all';
+
+    function switchAdminSection(section) {
+      activeAdminSection = section;
+      hideAllViews();
+      document.getElementById("view-admin").classList.remove("hidden");
+
+      const sections = ['dashboard', 'users', 'marketplace', 'orders', 'issues', 'profile'];
+      sections.forEach(s => {
+        const el = document.getElementById("admin-sub-" + s);
+        if (el) el.classList.add("hidden");
+      });
+
+      const targetEl = document.getElementById("admin-sub-" + section);
+      if (targetEl) targetEl.classList.remove("hidden");
+
+      if (section === 'dashboard') {
+        renderAdminDashboard();
+      } else if (section === 'users') {
+        renderAdminUsers();
+      } else if (section === 'marketplace') {
+        renderAdminMarketplace();
+      } else if (section === 'orders') {
+        renderAdminOrders();
+      } else if (section === 'issues') {
+        renderAdminIssues();
+      } else if (section === 'profile') {
+        renderAdminProfile();
+      }
+    }
+    window.switchAdminSection = switchAdminSection;
+
+    // --- SUBSECTION 1: DASHBOARD & KPIS ---
     async function renderAdminDashboard() {
       let stats = null;
-      let users = [];
-      let txns = [];
-      let disputes = [];
+      let activity = [];
 
       try {
         if (isBackendLive && authToken) {
           stats = await apiRequest('/admin/stats');
-          users = await apiRequest('/admin/users');
-          txns = await apiRequest('/admin/transactions');
-          disputes = await apiRequest('/issues');
+          activity = stats.recent_activity || [];
         } else {
+          const totalU = store.users.length;
+          const farmers = store.users.filter(u => u.role === 'farmer').length;
+          const buyers = store.users.filter(u => u.role === 'buyer').length;
+          const aggs = store.users.filter(u => u.role === 'aggregator').length;
+          const activeL = store.listings.filter(l => l.status === 'available').length;
+          const activeR = store.requirements.filter(r => r.status === 'open').length;
+          const totalO = store.orders.length;
+          const compO = store.orders.filter(o => o.status === 'completed').length;
+          const pendO = store.orders.filter(o => o.status !== 'completed' && o.status !== 'cancelled').length;
+          const openD = store.issues.filter(i => i.status === 'open' || i.status === 'under_review').length;
+
           stats = {
-            users: { total: store.users.length, farmers: 2, buyers: 1, transporters: 1 },
-            marketplace: { active_listings: store.listings.filter(l => l.status === 'available').length, orders: store.orders.length },
-            moderation: { open_disputes: store.issues.filter(i => i.status === 'open').length }
+            users: { total: totalU, farmers, buyers, transporters: aggs },
+            marketplace: { active_listings: activeL, active_requirements: activeR, orders: totalO, completed_orders: compO, pending_orders: pendO },
+            moderation: { open_disputes: openD }
           };
-          users = store.users;
-          txns = store.orders;
-          disputes = store.issues;
+
+          activity = [
+            { type: 'order', title: 'Order #101: 2.0 T Wheat Straw (In Transit)', timestamp: '2026-11-24T14:30:00Z' },
+            { type: 'listing', title: 'Listing #1: Rice Husk (2.0 T) - Sanand', timestamp: '2026-11-24T11:00:00Z' },
+            { type: 'user', title: 'New Transporter: Harpreet Singh (Kisan Fleet)', timestamp: '2026-11-23T16:00:00Z' },
+            { type: 'issue', title: 'Dispute #1: Moisture reading resolution recorded', timestamp: '2026-11-22T12:00:00Z' }
+          ];
         }
       } catch(e) {
-        users = store.users;
-        txns = store.orders;
-        disputes = store.issues;
+        console.warn("Failed fetching admin stats:", e);
       }
 
       if (stats) {
-        document.getElementById("admin-stat-users").textContent = stats.users.total;
-        document.getElementById("admin-stat-listings").textContent = stats.marketplace.active_listings ?? stats.marketplace.total_listings ?? 0;
-        document.getElementById("admin-stat-orders").textContent = stats.marketplace.orders ?? 0;
-        document.getElementById("admin-stat-disputes").textContent = stats.moderation.open_disputes ?? 0;
+        document.getElementById("admin-kpi-users").textContent = stats.users.total || 0;
+        document.getElementById("admin-kpi-farmers").textContent = stats.users.farmers || 0;
+        document.getElementById("admin-kpi-buyers").textContent = stats.users.buyers || 0;
+        document.getElementById("admin-kpi-aggregators").textContent = stats.users.transporters || 0;
+        document.getElementById("admin-kpi-listings").textContent = stats.marketplace.active_listings || 0;
+        document.getElementById("admin-kpi-requirements").textContent = stats.marketplace.active_requirements ?? store.requirements.filter(r => r.status === 'open').length;
+        document.getElementById("admin-kpi-orders").textContent = stats.marketplace.orders || 0;
+        document.getElementById("admin-kpi-orders-completed").textContent = stats.marketplace.completed_orders || 0;
+        document.getElementById("admin-kpi-orders-pending").textContent = stats.marketplace.pending_orders || 0;
+        document.getElementById("admin-kpi-disputes").textContent = stats.moderation.open_disputes || 0;
       }
 
-      // Users List
-      const usersList = document.getElementById("admin-users-list");
-      usersList.innerHTML = "";
-      users.forEach(u => {
-        usersList.innerHTML += `
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
-            <div>
-              <div class="font-black text-slate-900">${u.full_name || u.name} (@${u.username})</div>
-              <div class="text-[10px] text-slate-500">${u.email} • 📞 ${u.phone_number || u.phone || 'N/A'}</div>
-            </div>
-            <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">${u.role}</span>
-          </div>
-        `;
-      });
-
-      // Transactions
-      const txnsList = document.getElementById("admin-transactions-list");
-      txnsList.innerHTML = "";
-      txns.forEach(o => {
-        txnsList.innerHTML += `
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
-            <div>
-              <span class="font-black text-slate-900">Order #${o.id} - ${o.status}</span>
-              <div class="text-[10px] text-slate-500">${o.total_quantity || o.quantity} Tonnes • Delivery: ${o.delivery_address || 'Plant'}</div>
-            </div>
-            <span class="font-black text-agri-700">₹${(o.total_amount || 0).toLocaleString()}</span>
-          </div>
-        `;
-      });
-
-      // Disputes
-      const disContainer = document.getElementById("admin-disputes-container");
-      disContainer.innerHTML = "";
-      disputes.forEach(iss => {
-        disContainer.innerHTML += `
-          <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1 text-xs">
-            <div class="flex justify-between items-start">
-              <span class="font-black text-slate-900">${iss.title}</span>
-              <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${iss.status === 'resolved' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${iss.status}</span>
-            </div>
-            <p class="text-[11px] text-slate-600">${iss.description || iss.desc}</p>
-            ${iss.resolution_notes || iss.resolution ? `<div class="p-2 bg-slate-50 text-[10px] text-slate-500 rounded-xl font-semibold">Resolution: ${iss.resolution_notes || iss.resolution}</div>` : (
-              iss.status === 'open' ? `<button onclick="handleResolveIssueAdmin(${iss.id})" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px]">Mark Resolved</button>` : ''
-            )}
-          </div>
-        `;
-      });
-    }
-
-    async function handleResolveIssueAdmin(issueId) {
-      const notes = prompt("Enter resolution notes for this dispute ticket:", "Inspected and verified within commercial specification tolerance.");
-      if (!notes) return;
-      try {
-        if (isBackendLive && authToken) {
-          await apiRequest(`/issues/${issueId}/resolve`, 'PATCH', {
-            status: 'resolved',
-            resolution_notes: notes
+      const actCont = document.getElementById("admin-recent-activity-container");
+      if (actCont) {
+        actCont.innerHTML = "";
+        if (!activity || activity.length === 0) {
+          actCont.innerHTML = `<div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-center text-xs text-slate-400 font-medium">No recent platform activity recorded.</div>`;
+        } else {
+          activity.slice(0, 5).forEach(act => {
+            const icon = act.type === 'order' ? '📦' : (act.type === 'listing' ? '🌾' : (act.type === 'user' ? '👤' : '⚠️'));
+            const dateStr = act.timestamp ? new Date(act.timestamp).toLocaleDateString("en-IN", { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recent';
+            actCont.innerHTML += `
+              <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-base">${icon}</span>
+                  <div>
+                    <div class="font-bold text-slate-900">${act.title}</div>
+                    <div class="text-[10px] text-slate-400">${dateStr}</div>
+                  </div>
+                </div>
+                <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 uppercase">${act.type}</span>
+              </div>
+            `;
           });
         }
-        alert("Dispute ticket resolved.");
-        renderAdminDashboard();
-      } catch(err) {
-        alert(`Error: ${err.message}`);
       }
     }
 
-    function switchAdminTab(tab) {
-      ['users', 'listings', 'txns'].forEach(t => {
-        document.getElementById("admin-tab-" + t).classList.add("hidden");
-        document.getElementById("admin-tab-btn-" + t).classList.remove("tab-active", "border-b-2");
+    // --- SUBSECTION 2: USER MANAGEMENT ---
+    function setAdminUserRoleFilter(role) {
+      activeAdminUserFilter = role;
+      ['all', 'farmer', 'buyer', 'aggregator', 'admin'].forEach(r => {
+        const btn = document.getElementById("btn-u-filter-" + r);
+        if (btn) {
+          if (r === role) {
+            btn.className = "px-3 py-1.5 rounded-xl font-bold bg-purple-700 text-white shadow-xs whitespace-nowrap";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap";
+          }
+        }
       });
-      document.getElementById("admin-tab-" + tab).classList.remove("hidden");
-      document.getElementById("admin-tab-btn-" + tab).classList.add("tab-active", "border-b-2");
+      renderAdminUsers();
     }
+    window.setAdminUserRoleFilter = setAdminUserRoleFilter;
+
+    async function renderAdminUsers() {
+      let users = [];
+      try {
+        if (isBackendLive && authToken) {
+          users = await apiRequest('/admin/users');
+        } else {
+          users = store.users;
+        }
+      } catch(e) {
+        users = store.users;
+      }
+
+      const totalBadge = document.getElementById("badge-users-total");
+      if (totalBadge) totalBadge.textContent = users.length + " Users";
+
+      const query = (document.getElementById("admin-user-search-input")?.value || "").toLowerCase().trim();
+      let filtered = users;
+      if (activeAdminUserFilter !== 'all') {
+        filtered = filtered.filter(u => u.role === activeAdminUserFilter);
+      }
+      if (query) {
+        filtered = filtered.filter(u => 
+          (u.name && u.name.toLowerCase().includes(query)) ||
+          (u.full_name && u.full_name.toLowerCase().includes(query)) ||
+          (u.username && u.username.toLowerCase().includes(query)) ||
+          (u.email && u.email.toLowerCase().includes(query)) ||
+          (u.phone && u.phone.includes(query)) ||
+          (u.phone_number && u.phone_number.includes(query))
+        );
+      }
+
+      const cont = document.getElementById("admin-users-list-container");
+      if (!cont) return;
+      cont.innerHTML = "";
+
+      if (filtered.length === 0) {
+        cont.innerHTML = `<div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center text-xs text-slate-400 font-medium">No registered users matching this filter.</div>`;
+        return;
+      }
+
+      filtered.forEach(u => {
+        const role = u.role || 'farmer';
+        const roleColor = role === 'farmer' ? 'bg-agri-100 text-agri-800' : (role === 'buyer' ? 'bg-harvest-100 text-harvest-800' : (role === 'aggregator' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'));
+        const isActive = u.is_active !== false;
+        const statusBadge = isActive ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800">Active</span>' : '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-red-100 text-red-800">Deactivated</span>';
+        const displayName = u.full_name || u.name || u.username;
+        const isSelf = currentUser && (currentUser.id === u.id || currentUser.username === u.username);
+
+        cont.innerHTML += `
+          <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2 text-xs">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-black text-slate-900">${displayName}</span>
+                  <span class="text-[10px] text-slate-400 font-medium">(@${u.username})</span>
+                </div>
+                <div class="text-[10px] text-slate-500 mt-0.5">${u.email} • 📞 ${u.phone || u.phone_number || 'N/A'}</div>
+              </div>
+              <div class="flex flex-col items-end gap-1">
+                <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${roleColor}">${role}</span>
+                ${statusBadge}
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <span class="text-[10px] font-bold text-slate-400">ID: ${u.profile_id || 'AGY-USR-' + u.id}</span>
+              <div class="flex items-center gap-2">
+                <button onclick="openAdminUserModal(${u.id})" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg transition text-[10px]">View Details</button>
+                ${isSelf ? '<span class="text-[10px] text-slate-400 italic">Self Account</span>' : `
+                  <button onclick="handleToggleUserStatus(${u.id}, ${!isActive})" class="px-2.5 py-1 font-bold rounded-lg text-[10px] transition ${isActive ? 'bg-red-50 hover:bg-red-100 text-red-700' : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700'}">
+                    ${isActive ? 'Deactivate' : 'Activate'}
+                  </button>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    async function handleToggleUserStatus(userId, newActiveStatus) {
+      const u = store.users.find(x => x.id === userId);
+      const name = u ? (u.full_name || u.name || u.username) : "this user";
+      const actionText = newActiveStatus ? "activate" : "deactivate";
+
+      if (!confirm(`Are you sure you want to ${actionText} the account for ${name}?\n\nDeactivated accounts will not be able to log in or post orders/listings.`)) {
+        return;
+      }
+
+      try {
+        if (isBackendLive && authToken) {
+          await apiRequest(`/admin/users/${userId}/status?is_active=${newActiveStatus}`, 'PATCH');
+        }
+        if (u) {
+          u.is_active = newActiveStatus;
+          saveStoreToLocal();
+        }
+        alert(`Account successfully ${newActiveStatus ? 'activated' : 'deactivated'}.`);
+        renderAdminUsers();
+      } catch(err) {
+        alert("Error updating user status: " + err.message);
+      }
+    }
+    window.handleToggleUserStatus = handleToggleUserStatus;
+
+    function openAdminUserModal(userId) {
+      const u = store.users.find(x => x.id === userId);
+      if (!u) return;
+      const modal = document.getElementById("modal-admin-user-detail");
+      const cont = document.getElementById("admin-user-detail-content");
+      if (!modal || !cont) return;
+
+      cont.innerHTML = `
+        <div class="p-3 bg-purple-50 rounded-2xl border border-purple-100 flex items-center justify-between">
+          <div>
+            <div class="text-sm font-black text-purple-900">${u.full_name || u.name}</div>
+            <div class="text-[10px] text-purple-700 font-bold">@${u.username} • Role: ${u.role.toUpperCase()}</div>
+          </div>
+          <span class="px-2.5 py-1 bg-white border border-purple-200 rounded-xl text-[10px] font-black text-purple-800">
+            ${u.profile_id || 'AGY-USR-' + u.id}
+          </span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div class="p-2.5 bg-slate-50 rounded-xl">
+            <span class="text-[10px] text-slate-400 block font-semibold">Email</span>
+            <span class="font-bold text-slate-800">${u.email}</span>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl">
+            <span class="text-[10px] text-slate-400 block font-semibold">Phone</span>
+            <span class="font-bold text-slate-800">${u.phone || u.phone_number || 'N/A'}</span>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl col-span-2">
+            <span class="text-[10px] text-slate-400 block font-semibold">Operating Hub / Address</span>
+            <span class="font-bold text-slate-800">${u.location || u.address || u.farm_village || 'Sanand Taluka, Ahmedabad'}</span>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl">
+            <span class="text-[10px] text-slate-400 block font-semibold">District / State</span>
+            <span class="font-bold text-slate-800">${u.district || 'Ahmedabad'}, ${u.state || 'Gujarat'}</span>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl">
+            <span class="text-[10px] text-slate-400 block font-semibold">Account Status</span>
+            <span class="font-black ${u.is_active !== false ? 'text-emerald-700' : 'text-red-600'}">${u.is_active !== false ? 'Active Account' : 'Suspended / Deactivated'}</span>
+          </div>
+        </div>
+        <button onclick="closeAdminUserModal()" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs mt-2">Close Details</button>
+      `;
+      modal.classList.remove("hidden");
+    }
+    window.openAdminUserModal = openAdminUserModal;
+
+    function closeAdminUserModal() {
+      const modal = document.getElementById("modal-admin-user-detail");
+      if (modal) modal.classList.add("hidden");
+    }
+    window.closeAdminUserModal = closeAdminUserModal;
+
+    // --- SUBSECTION 3: MARKETPLACE AUDIT ---
+    function switchAdminMarketplaceSubtab(subtab) {
+      activeAdminMarketSubtab = subtab;
+      const pList = document.getElementById("admin-pane-listings");
+      const pDem = document.getElementById("admin-pane-demands");
+      const btnList = document.getElementById("admin-market-subtab-listings");
+      const btnDem = document.getElementById("admin-market-subtab-demands");
+
+      if (subtab === 'listings') {
+        if (pList) pList.classList.remove("hidden");
+        if (pDem) pDem.classList.add("hidden");
+        if (btnList) btnList.className = "flex-1 py-2 text-center border-b-2 border-purple-700 text-purple-700 font-black";
+        if (btnDem) btnDem.className = "flex-1 py-2 text-center text-slate-400 hover:text-slate-700 font-black";
+        renderAdminListings();
+      } else {
+        if (pList) pList.classList.add("hidden");
+        if (pDem) pDem.classList.remove("hidden");
+        if (btnList) btnList.className = "flex-1 py-2 text-center text-slate-400 hover:text-slate-700 font-black";
+        if (btnDem) btnDem.className = "flex-1 py-2 text-center border-b-2 border-purple-700 text-purple-700 font-black";
+        renderAdminDemands();
+      }
+    }
+    window.switchAdminMarketplaceSubtab = switchAdminMarketplaceSubtab;
+
+    function renderAdminMarketplace() {
+      switchAdminMarketplaceSubtab(activeAdminMarketSubtab);
+    }
+
+    async function renderAdminListings() {
+      let listings = [];
+      try {
+        if (isBackendLive && authToken) {
+          listings = await apiRequest('/admin/listings');
+        } else {
+          listings = store.listings;
+        }
+      } catch(e) {
+        listings = store.listings;
+      }
+
+      const query = (document.getElementById("admin-listing-search")?.value || "").toLowerCase().trim();
+      const stFilter = document.getElementById("admin-listing-status-filter")?.value || "all";
+
+      let filtered = listings;
+      if (stFilter !== 'all') {
+        filtered = filtered.filter(l => l.status === stFilter);
+      }
+      if (query) {
+        filtered = filtered.filter(l => 
+          (l.material_name && l.material_name.toLowerCase().includes(query)) ||
+          (l.farmer_name && l.farmer_name.toLowerCase().includes(query)) ||
+          (l.location_name && l.location_name.toLowerCase().includes(query))
+        );
+      }
+
+      const cont = document.getElementById("admin-listings-list-container");
+      if (!cont) return;
+      cont.innerHTML = "";
+
+      if (filtered.length === 0) {
+        cont.innerHTML = `<div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center text-xs text-slate-400 font-medium">No listings found matching criteria.</div>`;
+        return;
+      }
+
+      filtered.forEach(l => {
+        const isAvail = l.status === 'available';
+        const stBadge = isAvail ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800">Active Available</span>' : `<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-slate-100 text-slate-600 uppercase">${l.status}</span>`;
+
+        cont.innerHTML += `
+          <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2 text-xs">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="font-black text-slate-900 text-sm">${l.material_name}</span>
+                <span class="text-[10px] text-slate-400 ml-1">#LST-${l.id}</span>
+                <div class="text-[10px] text-slate-500 mt-0.5">Farmer: <b>${l.farmer_name || 'Ramesh Patel'}</b> • 📍 ${l.location_name || 'Sanand, Ahmedabad'}</div>
+              </div>
+              ${stBadge}
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 bg-slate-50 p-2.5 rounded-xl text-center">
+              <div>
+                <div class="text-[9px] text-slate-400 font-bold uppercase">Quantity</div>
+                <div class="font-black text-slate-900 text-xs mt-0.5">${l.available_quantity || l.estimated_quantity} ${l.unit || 'T'}</div>
+              </div>
+              <div>
+                <div class="text-[9px] text-slate-400 font-bold uppercase">Price Rate</div>
+                <div class="font-black text-agri-700 text-xs mt-0.5">₹${(l.price_per_unit || 0).toLocaleString()}/T</div>
+              </div>
+              <div>
+                <div class="text-[9px] text-slate-400 font-bold uppercase">Moisture</div>
+                <div class="font-bold text-slate-700 text-[11px] mt-0.5">${l.moisture_condition || '< 12%'}</div>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-1 border-t border-slate-100 text-[10px]">
+              <span class="text-slate-400">Storage: ${l.storage_type || 'Dry covered shed'}</span>
+              <button onclick="handleModerateListing(${l.id}, '${l.status}')" class="px-2.5 py-1 font-bold rounded-lg ${isAvail ? 'bg-red-50 hover:bg-red-100 text-red-700' : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700'} transition">
+                ${isAvail ? 'Deactivate Listing' : 'Reactivate Listing'}
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    async function handleModerateListing(listingId, currentStatus) {
+      const isCurrentlyAvail = currentStatus === 'available';
+      const newStatus = isCurrentlyAvail ? 'cancelled' : 'available';
+      const reason = prompt(`Enter reason for ${isCurrentlyAvail ? 'deactivating' : 'reactivating'} this listing:`, isCurrentlyAvail ? "Seasonal verification check" : "Verified farm availability");
+      if (reason === null) return;
+
+      try {
+        if (isBackendLive && authToken) {
+          await apiRequest(`/admin/listings/${listingId}/status`, 'PATCH', { status: newStatus, reason });
+        }
+        const item = store.listings.find(x => x.id === listingId);
+        if (item) {
+          item.status = newStatus;
+          saveStoreToLocal();
+        }
+        alert(`Listing #${listingId} marked as ${newStatus}.`);
+        renderAdminListings();
+      } catch(err) {
+        alert("Error moderating listing: " + err.message);
+      }
+    }
+    window.handleModerateListing = handleModerateListing;
+
+    async function renderAdminDemands() {
+      let demands = [];
+      try {
+        if (isBackendLive && authToken) {
+          demands = await apiRequest('/admin/requirements');
+        } else {
+          demands = store.requirements;
+        }
+      } catch(e) {
+        demands = store.requirements;
+      }
+
+      const query = (document.getElementById("admin-demand-search")?.value || "").toLowerCase().trim();
+      const stFilter = document.getElementById("admin-demand-status-filter")?.value || "all";
+
+      let filtered = demands;
+      if (stFilter !== 'all') {
+        filtered = filtered.filter(r => r.status === stFilter);
+      }
+      if (query) {
+        filtered = filtered.filter(r => 
+          (r.material_name && r.material_name.toLowerCase().includes(query)) ||
+          (r.buyer_name && r.buyer_name.toLowerCase().includes(query)) ||
+          (r.delivery_location && r.delivery_location.toLowerCase().includes(query))
+        );
+      }
+
+      const cont = document.getElementById("admin-demands-list-container");
+      if (!cont) return;
+      cont.innerHTML = "";
+
+      if (filtered.length === 0) {
+        cont.innerHTML = `<div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center text-xs text-slate-400 font-medium">No buyer demands found matching criteria.</div>`;
+        return;
+      }
+
+      filtered.forEach(r => {
+        const isOpen = r.status === 'open';
+        const stBadge = isOpen ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800">Open Demand</span>' : `<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-slate-100 text-slate-600 uppercase">${r.status}</span>`;
+
+        cont.innerHTML += `
+          <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2 text-xs">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="font-black text-slate-900 text-sm">${r.material_name}</span>
+                <span class="text-[10px] text-slate-400 ml-1">#REQ-${r.id}</span>
+                <div class="text-[10px] text-slate-500 mt-0.5">Buyer: <b>${r.buyer_name || 'Gujarat BioPower Ltd'}</b></div>
+              </div>
+              ${stBadge}
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 bg-slate-50 p-2.5 rounded-xl text-center">
+              <div>
+                <div class="text-[9px] text-slate-400 font-bold uppercase">Required Quantity</div>
+                <div class="font-black text-slate-900 text-xs mt-0.5">${r.required_quantity} ${r.unit || 'T'}</div>
+              </div>
+              <div>
+                <div class="text-[9px] text-slate-400 font-bold uppercase">Target Budget</div>
+                <div class="font-black text-harvest-700 text-xs mt-0.5">₹${(r.target_price_max || 0).toLocaleString()}/T</div>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-1 border-t border-slate-100 text-[10px]">
+              <span class="text-slate-400">📍 ${r.delivery_location || 'Sanand GIDC'}</span>
+              <button onclick="handleModerateDemand(${r.id}, '${r.status}')" class="px-2.5 py-1 font-bold rounded-lg ${isOpen ? 'bg-red-50 hover:bg-red-100 text-red-700' : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700'} transition">
+                ${isOpen ? 'Deactivate Demand' : 'Reactivate Demand'}
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    async function handleModerateDemand(reqId, currentStatus) {
+      const isCurrentlyOpen = currentStatus === 'open';
+      const newStatus = isCurrentlyOpen ? 'cancelled' : 'open';
+      const reason = prompt(`Enter reason for ${isCurrentlyOpen ? 'deactivating' : 'reactivating'} this requirement:`, isCurrentlyOpen ? "Procurement cycle closed" : "Reopened for supply offers");
+      if (reason === null) return;
+
+      try {
+        if (isBackendLive && authToken) {
+          await apiRequest(`/admin/requirements/${reqId}/status`, 'PATCH', { status: newStatus, reason });
+        }
+        const item = store.requirements.find(x => x.id === reqId);
+        if (item) {
+          item.status = newStatus;
+          saveStoreToLocal();
+        }
+        alert(`Requirement #${reqId} marked as ${newStatus}.`);
+        renderAdminDemands();
+      } catch(err) {
+        alert("Error moderating requirement: " + err.message);
+      }
+    }
+    window.handleModerateDemand = handleModerateDemand;
+
+    // --- SUBSECTION 4: ORDERS & MULTI-FARMER CONTRIBUTIONS & TRANSPORT ---
+    function switchAdminOrdersSubtab(subtab) {
+      activeAdminOrdersSubtab = subtab;
+      const pOrd = document.getElementById("admin-pane-orders");
+      const pTrn = document.getElementById("admin-pane-transport");
+      const btnOrd = document.getElementById("admin-orders-subtab-orders");
+      const btnTrn = document.getElementById("admin-orders-subtab-transport");
+
+      if (subtab === 'orders') {
+        if (pOrd) pOrd.classList.remove("hidden");
+        if (pTrn) pTrn.classList.add("hidden");
+        if (btnOrd) btnOrd.className = "flex-1 py-2 text-center border-b-2 border-purple-700 text-purple-700 font-black";
+        if (btnTrn) btnTrn.className = "flex-1 py-2 text-center text-slate-400 hover:text-slate-700 font-black";
+        renderAdminOrdersList();
+      } else {
+        if (pOrd) pOrd.classList.add("hidden");
+        if (pTrn) pTrn.classList.remove("hidden");
+        if (btnOrd) btnOrd.className = "flex-1 py-2 text-center text-slate-400 hover:text-slate-700 font-black";
+        if (btnTrn) btnTrn.className = "flex-1 py-2 text-center border-b-2 border-purple-700 text-purple-700 font-black";
+        renderAdminTransportList();
+      }
+    }
+    window.switchAdminOrdersSubtab = switchAdminOrdersSubtab;
+
+    function renderAdminOrders() {
+      switchAdminOrdersSubtab(activeAdminOrdersSubtab);
+    }
+
+    async function renderAdminOrdersList() {
+      let orders = [];
+      try {
+        if (isBackendLive && authToken) {
+          orders = await apiRequest('/admin/orders');
+        } else {
+          orders = store.orders;
+        }
+      } catch(e) {
+        orders = store.orders;
+      }
+
+      const query = (document.getElementById("admin-order-search")?.value || "").toLowerCase().trim();
+      const stFilter = document.getElementById("admin-order-status-filter")?.value || "all";
+
+      let filtered = orders;
+      if (stFilter !== 'all') {
+        filtered = filtered.filter(o => o.status === stFilter);
+      }
+      if (query) {
+        filtered = filtered.filter(o => 
+          (o.id && String(o.id).includes(query)) ||
+          (o.order_number && o.order_number.toLowerCase().includes(query)) ||
+          (o.buyer_name && o.buyer_name.toLowerCase().includes(query)) ||
+          (o.farmer_name && o.farmer_name.toLowerCase().includes(query)) ||
+          (o.delivery_address && o.delivery_address.toLowerCase().includes(query))
+        );
+      }
+
+      const cont = document.getElementById("admin-orders-list-container");
+      if (!cont) return;
+      cont.innerHTML = "";
+
+      if (filtered.length === 0) {
+        cont.innerHTML = `<div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center text-xs text-slate-400 font-medium">No orders found matching criteria.</div>`;
+        return;
+      }
+
+      filtered.forEach(o => {
+        const isComp = o.status === 'completed';
+        const stBadge = isComp ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800">Delivered &amp; Completed</span>' : `<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-100 text-amber-800 uppercase">${o.status}</span>`;
+        const payStatus = o.payment_status === 'completed' ? '<span class="text-emerald-700 font-black">Completed</span>' : '<span class="text-amber-700 font-bold">Pending Escrow Release</span>';
+
+        // Multi-farmer contributions breakdown
+        const contributions = o.contributions || [
+          { farmer_name: o.farmer_name || "Ramesh Patel", quantity: o.total_quantity || o.quantity || 2.0, price_per_unit: o.agreed_price || 1800, location: o.collection_location || "Sanand Farm", status: o.status }
+        ];
+
+        let contribHtml = "";
+        contributions.forEach((c, idx) => {
+          contribHtml += `
+            <div class="p-2 bg-slate-50 rounded-xl flex items-center justify-between text-[11px] border border-slate-100">
+              <div>
+                <span class="font-bold text-slate-800">Farmer ${idx + 1}: ${c.farmer_name}</span>
+                <div class="text-[9px] text-slate-400">📍 ${c.location || 'Sanand Taluka'} • Rate: ₹${(c.price_per_unit || 2400).toLocaleString()}/T</div>
+              </div>
+              <div class="text-right">
+                <span class="font-black text-purple-900">${c.quantity} Tonnes</span>
+                <span class="block text-[9px] text-slate-500 font-medium capitalize">${c.status || 'Supplied'}</span>
+              </div>
+            </div>
+          `;
+        });
+
+        cont.innerHTML += `
+          <div class="p-4 bg-white rounded-3xl border border-slate-200 shadow-xs space-y-3 text-xs">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="font-black text-slate-900 text-sm">Order #${o.id || o.order_number}</span>
+                <div class="text-[10px] text-slate-500 mt-0.5">Buyer: <b>${o.buyer_name || o.buyer || 'Gujarat BioPower Ltd'}</b></div>
+              </div>
+              ${stBadge}
+            </div>
+
+            <!-- Material & Order Summary -->
+            <div class="grid grid-cols-2 gap-2 bg-purple-50/60 p-2.5 rounded-2xl border border-purple-100 text-center">
+              <div>
+                <span class="text-[9px] text-purple-700 font-bold uppercase block">Material &amp; Total Volume</span>
+                <span class="font-black text-purple-950 text-xs">${o.material_name || 'Agri Biomass'} • ${o.total_quantity || o.quantity} Tonnes</span>
+              </div>
+              <div>
+                <span class="text-[9px] text-purple-700 font-bold uppercase block">Total Agreed Value</span>
+                <span class="font-black text-agri-700 text-xs">₹${(o.total_amount || 0).toLocaleString()}</span>
+              </div>
+            </div>
+
+            <!-- Multi-Farmer Breakdown -->
+            <div class="space-y-1.5">
+              <div class="text-[10px] font-black text-slate-700 uppercase tracking-wider flex items-center gap-1">
+                <span>🌾</span> Contributing Farmers (${contributions.length})
+              </div>
+              <div class="space-y-1">
+                ${contribHtml}
+              </div>
+            </div>
+
+            <!-- Logistics & Settlement Info -->
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px]">
+              <div>
+                <span class="text-slate-400 block">Delivery: ${o.delivery_address || 'Sanand GIDC'}</span>
+                <span class="text-slate-400 block">Fleet: ${o.transporter_name || 'Kisan Fleet Logistics'}</span>
+              </div>
+              <div class="text-right">
+                <span class="text-slate-400 block font-semibold">Payment Status</span>
+                ${payStatus}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function setAdminTransportFilter(filter) {
+      activeAdminTransportFilter = filter;
+      ['all', 'unassigned', 'active', 'completed'].forEach(f => {
+        const btn = document.getElementById("btn-t-filter-" + f);
+        if (btn) {
+          if (f === filter) {
+            btn.className = "px-3 py-1.5 rounded-xl font-bold bg-purple-700 text-white shadow-xs whitespace-nowrap";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap";
+          }
+        }
+      });
+      renderAdminTransportList();
+    }
+    window.setAdminTransportFilter = setAdminTransportFilter;
+
+    async function renderAdminTransportList() {
+      let jobs = [];
+      try {
+        if (isBackendLive && authToken) {
+          jobs = await apiRequest('/admin/transport-jobs');
+        } else {
+          jobs = store.transportJobs;
+        }
+      } catch(e) {
+        jobs = store.transportJobs;
+      }
+
+      let filtered = jobs;
+      if (activeAdminTransportFilter === 'unassigned') {
+        filtered = filtered.filter(j => !j.aggregator_id || j.status === 'rejected');
+      } else if (activeAdminTransportFilter === 'active') {
+        filtered = filtered.filter(j => j.status === 'assigned' || j.status === 'accepted' || j.status === 'picked_up' || j.status === 'in_transit');
+      } else if (activeAdminTransportFilter === 'completed') {
+        filtered = filtered.filter(j => j.status === 'delivered' || j.status === 'completed');
+      }
+
+      const cont = document.getElementById("admin-transport-jobs-container");
+      if (!cont) return;
+      cont.innerHTML = "";
+
+      if (filtered.length === 0) {
+        cont.innerHTML = `<div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center text-xs text-slate-400 font-medium">No transport jobs in this category.</div>`;
+        return;
+      }
+
+      filtered.forEach(j => {
+        const isCompleted = j.status === 'completed' || j.status === 'delivered';
+        const isUnassigned = !j.aggregator_id || j.status === 'rejected';
+        const stBadge = isCompleted ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800">Delivered</span>' : (isUnassigned ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-red-100 text-red-800">⚠️ Needs Aggregator</span>' : `<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-blue-100 text-blue-800 uppercase">${j.status}</span>`);
+
+        cont.innerHTML += `
+          <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2.5 text-xs">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="font-black text-slate-900 text-sm">Transport Job #TRN-${j.id}</span>
+                <span class="text-[10px] text-slate-400 ml-1">Order #${j.order_id || j.order_number}</span>
+                <div class="text-[10px] text-slate-500 mt-0.5">${j.waste_type || 'Biomass'} • <b>${j.expected_quantity || 2.0} Tonnes</b></div>
+              </div>
+              ${stBadge}
+            </div>
+
+            <!-- Route Details -->
+            <div class="p-2.5 bg-slate-50 rounded-xl space-y-1 text-[11px]">
+              <div class="flex items-start gap-1.5">
+                <span class="text-agri-700 font-bold">📍 Pickup:</span>
+                <span class="text-slate-800 font-medium">${j.pickup_location || 'Sanand Farm, Ahmedabad'} (Farmer: ${j.farmer_name || 'Ramesh Patel'})</span>
+              </div>
+              <div class="flex items-start gap-1.5">
+                <span class="text-blue-700 font-bold">🏭 Dropoff:</span>
+                <span class="text-slate-800 font-medium">${j.delivery_location || 'Sanand GIDC Biofuel Plant'} (Buyer: ${j.buyer_name || 'Gujarat BioPower'})</span>
+              </div>
+            </div>
+
+            <!-- Discrepancy Note if present -->
+            ${j.discrepancy_flag ? `
+              <div class="p-2 bg-amber-50 border border-amber-200 rounded-xl text-[10px] text-amber-800 font-bold">
+                ⚠️ Discrepancy Recorded: Collected ${j.actual_quantity} T vs Expected ${j.expected_quantity} T
+              </div>
+            ` : ''}
+
+            <!-- Aggregator Assignment Footer -->
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <div>
+                <span class="text-[9px] text-slate-400 block font-semibold">Assigned Partner</span>
+                <span class="font-bold text-slate-800">${j.aggregator_name || (j.aggregator_id ? 'Harpreet Singh (Kisan Fleet)' : '<span class="text-red-600">Unassigned</span>')}</span>
+              </div>
+              <button onclick="openAdminAssignModal(${j.id})" class="px-3 py-1.5 bg-purple-700 hover:bg-purple-800 text-white font-bold rounded-xl text-[10px] shadow-xs active:scale-95 transition">
+                ${j.aggregator_id ? 'Reassign Aggregator' : 'Assign Aggregator'}
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function openAdminAssignModal(jobId) {
+      const modal = document.getElementById("modal-admin-assign-aggregator");
+      const summary = document.getElementById("admin-assign-job-summary");
+      const select = document.getElementById("admin-select-aggregator");
+      const idInput = document.getElementById("admin-assign-job-id");
+      if (!modal || !summary || !select || !idInput) return;
+
+      idInput.value = jobId;
+      const job = store.transportJobs.find(x => x.id === jobId) || { id: jobId, waste_type: "Crop Residue", expected_quantity: 2.0 };
+
+      summary.innerHTML = `
+        <div class="font-bold text-purple-900">Trip #TRN-${jobId} • ${job.waste_type} (${job.expected_quantity} T)</div>
+        <div class="text-[10px] text-purple-700">Pickup: ${job.pickup_location || 'Sanand Farm'} ➔ Dropoff: ${job.delivery_location || 'Sanand GIDC Plant'}</div>
+      `;
+
+      // Populate active aggregators
+      const aggregators = store.users.filter(u => u.role === 'aggregator' && u.is_active !== false);
+      select.innerHTML = "";
+      if (aggregators.length === 0) {
+        select.innerHTML = `<option value="">No active aggregators available</option>`;
+      } else {
+        aggregators.forEach(a => {
+          select.innerHTML += `<option value="${a.id}">${a.name || a.full_name} (${a.fleet || a.vehicle_type || 'Fleet Partner'})</option>`;
+        });
+      }
+
+      modal.classList.remove("hidden");
+    }
+    window.openAdminAssignModal = openAdminAssignModal;
+
+    function closeAdminAssignModal() {
+      const modal = document.getElementById("modal-admin-assign-aggregator");
+      if (modal) modal.classList.add("hidden");
+    }
+    window.closeAdminAssignModal = closeAdminAssignModal;
+
+    async function handleConfirmAssignAggregator(e) {
+      e.preventDefault();
+      const jobId = parseInt(document.getElementById("admin-assign-job-id")?.value);
+      const aggId = parseInt(document.getElementById("admin-select-aggregator")?.value);
+      if (!jobId || !aggId) {
+        alert("Please select a valid aggregator.");
+        return;
+      }
+
+      try {
+        if (isBackendLive && authToken) {
+          await apiRequest(`/admin/transport-jobs/${jobId}/assign`, 'POST', { aggregator_id: aggId });
+        }
+        const job = store.transportJobs.find(x => x.id === jobId);
+        const agg = store.users.find(x => x.id === aggId);
+        if (job) {
+          job.aggregator_id = aggId;
+          job.aggregator_name = agg ? (agg.name || agg.full_name) : "Harpreet Singh";
+          job.status = "assigned";
+          saveStoreToLocal();
+        }
+        alert(`Trip #TRN-${jobId} successfully assigned to ${agg ? agg.name : 'Aggregator'}. Dispatch sent.`);
+        closeAdminAssignModal();
+        renderAdminTransportList();
+      } catch(err) {
+        alert("Error assigning aggregator: " + err.message);
+      }
+    }
+    window.handleConfirmAssignAggregator = handleConfirmAssignAggregator;
+
+    // --- SUBSECTION 5: ISSUES & DISPUTES ESCALATION ---
+    function setAdminIssueFilter(filter) {
+      activeAdminIssueFilter = filter;
+      ['all', 'open', 'review', 'resolved'].forEach(f => {
+        const btn = document.getElementById("btn-iss-" + f);
+        if (btn) {
+          const map = { all: 'all', open: 'open', review: 'under_review', resolved: 'resolved' };
+          if (map[f] === filter) {
+            btn.className = "px-3 py-1.5 rounded-xl font-bold bg-purple-700 text-white shadow-xs whitespace-nowrap";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap";
+          }
+        }
+      });
+      renderAdminIssues();
+    }
+    window.setAdminIssueFilter = setAdminIssueFilter;
+
+    async function renderAdminIssues() {
+      let issues = [];
+      try {
+        if (isBackendLive && authToken) {
+          issues = await apiRequest('/admin/disputes');
+        } else {
+          issues = store.issues;
+        }
+      } catch(e) {
+        issues = store.issues;
+      }
+
+      const openCount = issues.filter(i => i.status === 'open' || i.status === 'under_review').length;
+      const badge = document.getElementById("badge-disputes-count");
+      if (badge) badge.textContent = openCount + " Open";
+
+      let filtered = issues;
+      if (activeAdminIssueFilter !== 'all') {
+        filtered = filtered.filter(i => i.status === activeAdminIssueFilter);
+      }
+
+      const cont = document.getElementById("admin-issues-list-container");
+      if (!cont) return;
+      cont.innerHTML = "";
+
+      if (filtered.length === 0) {
+        cont.innerHTML = `<div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center text-xs text-slate-400 font-medium">No dispute tickets under this status.</div>`;
+        return;
+      }
+
+      filtered.forEach(iss => {
+        const isRes = iss.status === 'resolved' || iss.status === 'closed';
+        const isRev = iss.status === 'under_review' || iss.status === 'investigating';
+        const stBadge = isRes ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800">Resolved</span>' : (isRev ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-100 text-amber-800">Under Review</span>' : '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-red-100 text-red-800">Open Escalation</span>');
+
+        cont.innerHTML += `
+          <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2 text-xs">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="font-black text-slate-900 text-sm">${iss.title}</span>
+                <div class="text-[10px] text-slate-500 mt-0.5">Reported by: <b>${iss.reporter || 'Ramesh Patel'}</b> (${iss.role || 'farmer'}) • Order ${iss.order_id || '#100'}</div>
+              </div>
+              ${stBadge}
+            </div>
+
+            <p class="text-[11px] text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">${iss.description || iss.desc}</p>
+
+            ${iss.resolution_notes || iss.resolution ? `
+              <div class="p-2.5 bg-emerald-50 border border-emerald-100 text-[10px] text-emerald-900 rounded-xl space-y-0.5">
+                <span class="font-bold block">✓ Admin Resolution Note:</span>
+                <span>${iss.resolution_notes || iss.resolution}</span>
+              </div>
+            ` : ''}
+
+            <!-- Action buttons -->
+            ${!isRes ? `
+              <div class="pt-1 border-t border-slate-100 flex items-center justify-end gap-2 text-[10px]">
+                ${!isRev ? `
+                  <button onclick="handleAdminIssueStatus(${iss.id}, 'under_review')" class="px-3 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold rounded-lg transition">
+                    Mark Under Review
+                  </button>
+                ` : ''}
+                <button onclick="handleAdminIssueStatus(${iss.id}, 'resolved')" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition shadow-xs">
+                  Resolve Dispute
+                </button>
+                <button onclick="handleAdminIssueStatus(${iss.id}, 'closed')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-lg transition">
+                  Reject
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      });
+    }
+
+    async function handleAdminIssueStatus(issueId, newStatus) {
+      let notes = "";
+      if (newStatus === 'resolved') {
+        notes = prompt("Enter formal resolution notes for this dispute ticket:", "Reviewed weighbridge calibration; adjusted settlement with mutual buyer & farmer consent.");
+        if (notes === null) return;
+      } else if (newStatus === 'closed') {
+        notes = prompt("Enter rejection reason for this dispute ticket:", "Complaint dismissed following documentary verification.");
+        if (notes === null) return;
+      } else if (newStatus === 'under_review') {
+        notes = "Dispatched field verification agent to plant site.";
+      }
+
+      try {
+        if (isBackendLive && authToken) {
+          await apiRequest(`/admin/issues/${issueId}`, 'PATCH', { status: newStatus, resolution_notes: notes });
+        }
+        const iss = store.issues.find(x => x.id === issueId);
+        if (iss) {
+          iss.status = newStatus;
+          iss.resolution_notes = notes;
+          saveStoreToLocal();
+        }
+        alert(`Dispute #${issueId} status updated to ${newStatus}.`);
+        renderAdminIssues();
+      } catch(err) {
+        alert("Error updating dispute: " + err.message);
+      }
+    }
+    window.handleAdminIssueStatus = handleAdminIssueStatus;
+
+    // --- SUBSECTION 6: ADMIN PROFILE ---
+    function renderAdminProfile() {
+      const u = (currentUser && currentUser.role === 'admin') ? currentUser : (store.users.find(x => x.role === 'admin') || defaultUsers[3]);
+      
+      const headName = document.getElementById("admprof-disp-name-head");
+      if (headName) headName.textContent = u.name || u.full_name || "System Administrator";
+
+      const dName = document.getElementById("admprof-disp-name");
+      if (dName) dName.textContent = u.name || u.full_name || "System Administrator";
+
+      const dUser = document.getElementById("admprof-disp-username");
+      if (dUser) dUser.textContent = u.username || "admin";
+
+      const dPhone = document.getElementById("admprof-disp-phone");
+      if (dPhone) dPhone.textContent = u.phone || u.phone_number || "+91 98765 43213";
+
+      const dEmail = document.getElementById("admprof-disp-email");
+      if (dEmail) dEmail.textContent = u.email || "admin@agriwaste.com";
+    }
+
+    function toggleAdminProfileEdit() {
+      const vMode = document.getElementById("admprof-view-mode");
+      const eForm = document.getElementById("admprof-edit-form");
+      const btn = document.getElementById("btn-edit-admin-prof");
+      if (!vMode || !eForm) return;
+
+      if (eForm.classList.contains("hidden")) {
+        const u = (currentUser && currentUser.role === 'admin') ? currentUser : (store.users.find(x => x.role === 'admin') || defaultUsers[3]);
+        document.getElementById("admprof-input-name").value = u.name || u.full_name || "";
+        document.getElementById("admprof-input-phone").value = (u.phone || u.phone_number || "").replace(/[^0-9]/g, "").slice(-10);
+        document.getElementById("admprof-input-email").value = u.email || "";
+
+        vMode.classList.add("hidden");
+        eForm.classList.remove("hidden");
+        if (btn) btn.textContent = "Cancel Edit";
+      } else {
+        eForm.classList.add("hidden");
+        vMode.classList.remove("hidden");
+        if (btn) btn.textContent = "Edit Profile";
+      }
+    }
+    window.toggleAdminProfileEdit = toggleAdminProfileEdit;
+
+    async function handleSaveAdminProfile(e) {
+      e.preventDefault();
+      const name = document.getElementById("admprof-input-name").value.trim();
+      const phone = document.getElementById("admprof-input-phone").value.trim();
+      const email = document.getElementById("admprof-input-email").value.trim();
+
+      if (!/^[0-9]{10}$/.test(phone)) {
+        alert("Please enter a valid 10-digit mobile number.");
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      try {
+        if (isBackendLive && authToken) {
+          await apiRequest('/admin/profile', 'PATCH', {
+            full_name: name,
+            phone_number: phone,
+            email: email
+          });
+        }
+        if (currentUser) {
+          currentUser.name = name;
+          currentUser.full_name = name;
+          currentUser.phone = phone;
+          currentUser.phone_number = phone;
+          currentUser.email = email;
+          localStorage.setItem("agriwaste_current_user", JSON.stringify(currentUser));
+        }
+        const adm = store.users.find(x => x.role === 'admin');
+        if (adm) {
+          adm.name = name;
+          adm.phone = phone;
+          adm.email = email;
+          saveStoreToLocal();
+        }
+        alert("Admin profile updated successfully.");
+        toggleAdminProfileEdit();
+        renderAdminProfile();
+      } catch(err) {
+        alert("Error saving profile: " + err.message);
+      }
+    }
+    window.handleSaveAdminProfile = handleSaveAdminProfile;
 
     // ====================================================
     // LIVE MARKETPLACE FEED
