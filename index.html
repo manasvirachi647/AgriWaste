@@ -109,7 +109,53 @@
           </p>
         </div>
 
-        <!-- AUTH TABS -->
+                <!-- 1-CLICK ROLE-BASED DEMO LOGIN -->
+        <div class="bg-gradient-to-br from-emerald-50/80 to-agri-50 p-4 rounded-3xl border border-emerald-200/80 shadow-xs space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black text-slate-800 flex items-center gap-1.5">
+              ⚡ 1-Click Role-Based Demo Login
+            </span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white text-agri-700 border border-agri-200 shadow-2xs">
+              Instant Access
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <button type="button" onclick="quickDemoLogin('farmer')" class="p-2.5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-agri-500 rounded-2xl text-left transition shadow-2xs flex items-center gap-2 group">
+              <span class="text-2xl group-hover:scale-110 transition">👨‍🌾</span>
+              <div>
+                <div class="font-black text-slate-900 leading-tight">Farmer Demo</div>
+                <div class="text-[10px] text-slate-500">Ramesh Patel • Sanand</div>
+              </div>
+            </button>
+
+            <button type="button" onclick="quickDemoLogin('buyer')" class="p-2.5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-harvest-500 rounded-2xl text-left transition shadow-2xs flex items-center gap-2 group">
+              <span class="text-2xl group-hover:scale-110 transition">🏭</span>
+              <div>
+                <div class="font-black text-slate-900 leading-tight">Buyer Demo</div>
+                <div class="text-[10px] text-slate-500">Gujarat BioPower Ltd</div>
+              </div>
+            </button>
+
+            <button type="button" onclick="quickDemoLogin('aggregator')" class="p-2.5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-blue-500 rounded-2xl text-left transition shadow-2xs flex items-center gap-2 group">
+              <span class="text-2xl group-hover:scale-110 transition">🚛</span>
+              <div>
+                <div class="font-black text-slate-900 leading-tight">Transporter Demo</div>
+                <div class="text-[10px] text-slate-500">Kisan Fleet Logistics</div>
+              </div>
+            </button>
+
+            <button type="button" onclick="quickDemoLogin('admin')" class="p-2.5 bg-white hover:bg-slate-50 border border-purple-200 hover:border-purple-500 rounded-2xl text-left transition shadow-2xs flex items-center gap-2 group">
+              <span class="text-2xl group-hover:scale-110 transition">🛡️</span>
+              <div>
+                <div class="font-black text-purple-900 leading-tight">Admin Portal</div>
+                <div class="text-[10px] text-slate-500">Platform Moderator</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+<!-- AUTH TABS -->
         <div class="flex border-b border-slate-200 text-xs font-bold">
           <button id="btn-tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2.5 text-center tab-active border-b-2">Sign In</button>
           <button id="btn-tab-register" onclick="switchAuthTab('register')" class="flex-1 py-2.5 text-center text-slate-400 hover:text-slate-700">Create Account</button>
@@ -1433,6 +1479,23 @@ div>
           renderAuthenticatedState();
           return;
         } catch(e){}
+      }
+    }
+
+    
+    function quickDemoLogin(role) {
+      let user = null;
+      if (role === 'farmer') user = store.users.find(u => u.username === 'ramesh123') || defaultUsers[0];
+      else if (role === 'buyer') user = store.users.find(u => u.username === 'gujarat_bio') || defaultUsers[1];
+      else if (role === 'aggregator') user = store.users.find(u => u.username === 'kisan_trans') || defaultUsers[2];
+      else if (role === 'admin') user = store.users.find(u => u.username === 'admin') || defaultUsers[3];
+
+      if (user) {
+        currentUser = { ...user };
+        authToken = "demo-token-" + user.username;
+        localStorage.setItem("agriwaste_current_user", JSON.stringify(currentUser));
+        localStorage.setItem("agriwaste_auth_token", authToken);
+        renderAuthenticatedState();
       }
     }
 
