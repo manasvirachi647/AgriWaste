@@ -47,7 +47,8 @@ def get_orders(
     List orders based on user role:
     - Buyers see their own orders.
     - Farmers see orders where they contributed items.
-    - Transporters / Admins see all platform orders.
+    - Aggregators see orders where they are assigned to the transport job or unassigned transport jobs.
+    - Admins see all platform orders.
     """
     query = db.query(Order)
     
@@ -55,6 +56,10 @@ def get_orders(
         query = query.filter(Order.buyer_id == current_user.id)
     elif current_user.role == UserRole.FARMER:
         query = query.join(OrderItem).filter(OrderItem.farmer_id == current_user.id).distinct()
+    elif current_user.role == UserRole.AGGREGATOR:
+        query = query.join(TransportJob).filter(
+            (TransportJob.aggregator_id == current_user.id) | (TransportJob.aggregator_id.is_(None))
+        ).distinct()
     
     if status_filter:
         query = query.filter(Order.status == status_filter)
@@ -64,7 +69,7 @@ def get_orders(
 
 @router.get("/{order_id}", response_model=OrderResponse)
 def get_order(order_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    """Get single order details."""
+    """Get single order details with role-based access verification."""
     order = db.query(Order).filter(Order.id == order_id).first()
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
@@ -72,6 +77,14 @@ def get_order(order_id: int, db: Session = Depends(get_db), current_user: User =
     # Ownership verification
     if current_user.role == UserRole.BUYER and order.buyer_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to view this order")
+    elif current_user.role == UserRole.FARMER:
+        farmer_item = any(item.farmer_id == current_user.id for item in order.items)
+        if not farmer_item and current_user.role != UserRole.ADMIN:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to view this order")
+    elif current_user.role == UserRole.AGGREGATOR:
+        assigned = any(job.aggregator_id == current_user.id or job.aggregator_id is None for job in order.transport_jobs)
+        if not assigned and current_user.role != UserRole.ADMIN:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to view this order")
     
     return order
 
@@ -83,10 +96,29 @@ def update_order_status(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Advance order through lifecycle statuses."""
+    """
+    Advance order through lifecycle statuses with role verification:
+    - Buyer may cancel a requested order.
+    - Aggregator / Admin can advance collection and transit statuses.
+    - Admin has full moderation rights.
+    """
     order = db.query(Order).filter(Order.id == order_id).first()
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
+
+    if current_user.role == UserRole.BUYER:
+        if order.buyer_id != current_user.id:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to update this order")
+        if payload.status != OrderStatus.CANCELLED:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Buyers can only cancel requested orders")
+    elif current_user.role == UserRole.AGGREGATOR:
+        assigned = any(job.aggregator_id == current_user.id for job in order.transport_jobs)
+        if not assigned and current_user.role != UserRole.ADMIN:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to update this order's status")
+    elif current_user.role == UserRole.FARMER:
+        farmer_item = any(item.farmer_id == current_user.id for item in order.items)
+        if not farmer_item and current_user.role != UserRole.ADMIN:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to update this order")
 
     order.status = payload.status
     db.commit()

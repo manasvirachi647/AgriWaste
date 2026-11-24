@@ -13,6 +13,8 @@ from app.routers.deps import get_current_user, require_role
 router = APIRouter(prefix="/issues", tags=["Dispute & Issue Reporting"])
 
 
+from app.models.order import Order
+
 @router.post("", response_model=IssueResponse, status_code=status.HTTP_201_CREATED)
 def report_issue(
     payload: IssueCreate,
@@ -21,7 +23,23 @@ def report_issue(
 ):
     """
     Week 7: Report a dispute, weight mismatch, or delivery issue.
+    Validates association with the reporter's order if order_id is provided.
     """
+    if payload.order_id:
+        order = db.query(Order).filter(Order.id == payload.order_id).first()
+        if not order:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Referenced order does not exist")
+        # Ensure user has a relationship to this order if not admin
+        if current_user.role != UserRole.ADMIN:
+            is_buyer = order.buyer_id == current_user.id
+            is_farmer = any(item.farmer_id == current_user.id for item in order.items)
+            is_transporter = any(job.aggregator_id == current_user.id for job in order.transport_jobs)
+            if not (is_buyer or is_farmer or is_transporter):
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Not authorized to file a dispute on an order you are not a party to"
+                )
+
     issue = IssueReport(
         reporter_id=current_user.id,
         order_id=payload.order_id,

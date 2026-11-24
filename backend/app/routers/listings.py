@@ -124,9 +124,39 @@ def delete_listing(
     if listing.farmer_id != current_user.id and current_user.role != UserRole.ADMIN:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete this listing")
 
-    db.delete(listing)
+    if listing.order_items:
+        # If orders are already linked to this listing, soft-cancel it to maintain transaction history
+        listing.status = ListingStatus.CANCELLED
+        listing.available_quantity = 0.0
+    else:
+        db.delete(listing)
     db.commit()
     return None
+
+
+@router.patch("/{listing_id}/quantity", response_model=WasteListingResponse)
+def update_listing_quantity(
+    listing_id: int,
+    quantity: float = Query(..., ge=0, description="Updated available quantity"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Directly update available quantity of a listing."""
+    listing = db.query(WasteListing).filter(WasteListing.id == listing_id).first()
+    if not listing:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Listing not found")
+    
+    if listing.farmer_id != current_user.id and current_user.role != UserRole.ADMIN:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to edit this listing")
+
+    listing.available_quantity = quantity
+    if quantity == 0:
+        listing.status = ListingStatus.RESERVED
+    elif listing.status == ListingStatus.RESERVED and quantity > 0:
+        listing.status = ListingStatus.AVAILABLE
+    db.commit()
+    db.refresh(listing)
+    return listing
 
 
 @router.get("/{listing_id}/matching-requirements", response_model=List[BuyerRequirementResponse])

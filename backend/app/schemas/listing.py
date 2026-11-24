@@ -26,8 +26,9 @@ class WasteListingCreate(WasteListingBase):
 
 class WasteListingUpdate(BaseModel):
     material_name: Optional[str] = None
-    estimated_quantity: Optional[float] = None
-    price_per_unit: Optional[float] = None
+    estimated_quantity: Optional[float] = Field(None, gt=0)
+    available_quantity: Optional[float] = Field(None, ge=0)
+    price_per_unit: Optional[float] = Field(None, gt=0)
     location_name: Optional[str] = None
     storage_type: Optional[str] = None
     moisture_condition: Optional[str] = None

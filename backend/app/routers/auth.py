@@ -14,7 +14,14 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
 def register(data: RegisterRequest, db: Session = Depends(get_db)):
-    """Register a new user (Farmer, Buyer, Aggregator, or Admin) and return JWT."""
+    """Register a new user (Farmer, Buyer, or Aggregator) and return JWT."""
+    # Prevent public self-registration as Admin
+    if data.role == UserRole.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Public registration as Admin is not permitted. Admin accounts must be provisioned by the system.",
+        )
+
     # Check if username or email already exists
     existing = db.query(User).filter(
         or_(User.username == data.username, User.email == data.email)
@@ -31,16 +38,26 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
                 detail="A user with this email address already exists.",
             )
 
+    # Prevent duplicate mobile/phone numbers if provided
+    if data.phone_number and data.phone_number.strip():
+        clean_phone = data.phone_number.strip()
+        existing_phone = db.query(User).filter(User.phone_number == clean_phone).first()
+        if existing_phone:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="A user with this mobile phone number already exists.",
+            )
+
     # Hash password securely
     hashed_pwd = hash_password(data.password)
 
     # Create user
     new_user = User(
-        username=data.username,
-        email=data.email,
+        username=data.username.strip().lower(),
+        email=data.email.strip().lower(),
         hashed_password=hashed_pwd,
-        full_name=data.full_name,
-        phone_number=data.phone_number,
+        full_name=data.full_name.strip(),
+        phone_number=data.phone_number.strip() if data.phone_number else None,
         role=data.role,
         is_active=True,
     )
@@ -51,22 +68,22 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
     if data.role == UserRole.FARMER:
         farmer_prof = FarmerProfile(
             user_id=new_user.id,
-            farm_village=data.farm_village,
-            district=data.district,
+            farm_village=data.farm_village.strip() if data.farm_village else "Sanand",
+            district=data.district.strip() if data.district else "Ahmedabad",
         )
         db.add(farmer_prof)
     elif data.role == UserRole.BUYER:
         buyer_prof = BuyerProfile(
             user_id=new_user.id,
-            company_name=data.company_name,
-            industry_type=data.industry_type,
+            company_name=data.company_name.strip() if data.company_name else f"{data.full_name} Industries",
+            industry_type=data.industry_type.strip() if data.industry_type else "Biomass / Biofuel",
         )
         db.add(buyer_prof)
     elif data.role == UserRole.AGGREGATOR:
         agg_prof = AggregatorProfile(
             user_id=new_user.id,
-            vehicle_type=data.vehicle_type,
-            operating_district=data.district,
+            vehicle_type=data.vehicle_type.strip() if data.vehicle_type else "Medium Commercial Truck",
+            operating_district=data.district.strip() if data.district else "Ahmedabad",
         )
         db.add(agg_prof)
 
@@ -85,9 +102,14 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=TokenResponse)
 def login(data: LoginRequest, db: Session = Depends(get_db)):
-    """Authenticate with username or email and password, returning a signed JWT."""
+    """Authenticate with username, email, or mobile phone and password, returning a signed JWT."""
+    search_term = data.username_or_email.strip()
     user = db.query(User).filter(
-        or_(User.username == data.username_or_email, User.email == data.username_or_email)
+        or_(
+            User.username == search_term.lower(),
+            User.email == search_term.lower(),
+            User.phone_number == search_term,
+        )
     ).first()
 
     if not user or not verify_password(data.password, user.hashed_password):

@@ -79,12 +79,16 @@ def run_full_platform_verification():
         ), db)
         transporter = db.query(User).filter(User.username == "kisan_trucks").first()
 
-        # Admin
-        auth.register(RegisterRequest(
-            username="platform_admin", email="admin@agriwaste.in", password="Pass123!Safe",
-            full_name="System Admin", role=UserRole.ADMIN
-        ), db)
-        admin_user = db.query(User).filter(User.username == "platform_admin").first()
+        # Admin (system-provisioned directly; public self-registration is blocked)
+        from app.core.security import hash_password
+        admin_user = User(
+            username="platform_admin", email="admin@agriwaste.in",
+            hashed_password=hash_password("Pass123!Safe"),
+            full_name="System Admin", role=UserRole.ADMIN, is_active=True
+        )
+        db.add(admin_user)
+        db.commit()
+        db.refresh(admin_user)
 
         print(" Users created: 3 Farmers, 1 Buyer, 1 Transporter, 1 Admin.", flush=True)
 

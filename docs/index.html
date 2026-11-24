@@ -14,819 +14,27 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-          },
-          colors: {
-            agri: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              200: '#bbf7d0',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-              800: '#166534',
-              900: '#14532d',
-            },
-            harvest: {
-              50: '#fffbeb',
-              100: '#fef3c7',
-              500: '#f59e0b',
-              600: '#d97706',
-              700: '#b45309',
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-    .safe-top {
-      padding-top: env(safe-area-inset-top, 0px);
-    }
-    .safe-bottom {
-      padding-bottom: env(safe-area-inset-bottom, 20px);
-    }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .tab-active {
-      color: #15803d;
-      font-weight: 700;
-      border-color: #15803d;
-    }
-  </style>
-</head>
-<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
-
-  <!-- MAIN APP CONTAINER -->
-  <div id="app" class="flex-1 flex flex-col w-full max-w-md mx-auto bg-slate-50 min-h-screen shadow-xl relative safe-top pb-16">
-    
-    <!-- TOP STATUS & APP BAR -->
-    <header id="top-bar" class="hidden bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 sticky top-0 z-30 flex items-center justify-between shadow-2xs">
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-xl bg-agri-100 flex items-center justify-center text-agri-700 font-black text-base shadow-xs">🌾</div>
-        <div>
-          <h1 id="user-display-name" class="font-black text-sm text-slate-900 leading-tight">AgriWaste User</h1>
-          <div class="flex items-center gap-1.5 mt-0.5">
-            <span id="user-role-badge" class="text-[9px] font-black px-1.5 py-0.2 rounded-full bg-agri-100 text-agri-800 uppercase tracking-wider">Farmer</span>
-            <span id="user-location-badge" class="text-[10px] text-slate-500 font-medium">📍 Sanand</span>
-          </div>
-        </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <button onclick="openIssueModal()" title="Report Issue" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center text-sm transition">
-          ⚠️
-        </button>
-        <button onclick="navToTab('profile')" title="My Profile & Settings" class="w-8 h-8 rounded-xl bg-agri-50 border border-agri-200 text-agri-800 flex items-center justify-center text-sm font-bold transition">
-          👤
-        </button>
-      </div>
-    </header>
-
-    <!-- VIEWS CONTAINER -->
-    <main class="flex-1 overflow-y-auto no-scrollbar p-4 space-y-4">
-
-      <!-- ========================================== -->
-      <!-- VIEW 1: AUTHENTICATION / SIGN IN & SIGN UP -->
-      <!-- ========================================== -->
-      <section id="view-auth" class="space-y-4 pt-4">
-        <div class="text-center py-4">
-          <div class="w-16 h-16 bg-agri-100 text-agri-700 rounded-3xl flex items-center justify-center text-3xl mx-auto shadow-sm mb-3">
-            🌾
-          </div>
-          <h2 class="text-2xl font-black text-slate-900 tracking-tight">AgriWaste Exchange</h2>
-          <p class="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
-            Agricultural Residue Monetization & Industrial Aggregation Platform
-          </p>
-        </div>
-
-        <!-- AUTH TABS -->
-        <div class="flex border-b border-slate-200 text-xs font-bold">
-          <button id="btn-tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2.5 text-center tab-active border-b-2">Sign In</button>
-          <button id="btn-tab-register" onclick="switchAuthTab('register')" class="flex-1 py-2.5 text-center text-slate-400 hover:text-slate-700">Create Account</button>
-        </div>
-
-        <!-- NOTIFICATION BANNERS -->
-        <div id="login-error-msg" class="hidden p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl font-medium"></div>
-        <div id="auth-success-msg" class="hidden p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl font-medium"></div>
-
-        <!-- SIGN IN FORM -->
-        <form id="form-login" onsubmit="handleManualLogin(event)" class="space-y-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Username, Email, or Mobile</label>
-            <input type="text" id="login-username" required placeholder="e.g. ramesh123 or ramesh@example.com" class="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
-            <input type="password" id="login-password" required placeholder="Enter your password" class="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white" />
-          </div>
-          <button type="submit" class="w-full py-3 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-xs shadow-sm transition active:scale-95">
-            Sign In to Dashboard
-          </button>
-        </form>
-
-        <!-- REGISTER FORM -->
-        <form id="form-register" onsubmit="handleManualRegister(event)" class="space-y-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hidden">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Select Your Role *</label>
-            <select id="reg-role" onchange="toggleRoleProfileInputs()" class="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white font-bold text-slate-800">
-              <option value="farmer">👨‍🌾 Farmer / Producer</option>
-              <option value="buyer">🏭 Industrial Buyer (Biofuel / Mill)</option>
-              <option value="aggregator">🚛 Aggregator / Transporter</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Full Name *</label>
-            <input type="text" id="reg-name" required placeholder="e.g. Ramesh Patel" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">Username *</label>
-              <input type="text" id="reg-username" required placeholder="ramesh123" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">Mobile No.</label>
-              <input type="tel" id="reg-phone" placeholder="9876543210" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-            </div>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Email Address *</label>
-            <input type="email" id="reg-email" required placeholder="ramesh@example.com" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Password (min 6 chars) *</label>
-            <input type="password" id="reg-password" required minlength="6" placeholder="Choose a secure password" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
-          </div>
-
-          <!-- Dynamic Role Fields -->
-          <div id="role-extra-farmer" class="p-2.5 bg-agri-50 border border-agri-200 rounded-xl space-y-2 text-xs">
-            <span class="font-bold text-agri-900 block">🌾 Farm Location</span>
-            <input type="text" id="reg-village" placeholder="Village / Taluka (e.g. Sanand)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
-            <input type="text" id="reg-district" placeholder="District (e.g. Ahmedabad)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
-          </div>
-
-          <div id="role-extra-buyer" class="p-2.5 bg-harvest-50 border border-harvest-200 rounded-xl space-y-2 text-xs hidden">
-            <span class="font-bold text-harvest-800 block">🏭 Industry Details</span>
-            <input type="text" id="reg-company" placeholder="Company Name (e.g. Gujarat BioPower Ltd)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
-            <input type="text" id="reg-industry" placeholder="Industry Type (e.g. Bio-Energy, Paper)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
-          </div>
-
-          <div id="role-extra-transporter" class="p-2.5 bg-blue-50 border border-blue-200 rounded-xl space-y-2 text-xs hidden">
-            <span class="font-bold text-blue-900 block">🚛 Fleet Details</span>
-            <input type="text" id="reg-vehicle" placeholder="Vehicle Fleet (e.g. 10T Truck, Tractor Trolley)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
-          </div>
-
-          <button type="submit" class="w-full py-3 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-xs shadow-sm transition active:scale-95">
-            Register & Open My Dashboard
-          </button>
-        </form>
-      </section>
-
-
-      <!-- ========================================== -->
-      <!-- VIEW 2: ROLE 1 - FARMER DASHBOARD          -->
-      <!-- ========================================== -->
-      <section id="view-farmer" class="space-y-4 hidden">
-        <!-- 1. Greeting & Farm Location -->
-        <div class="bg-gradient-to-br from-agri-50 to-emerald-100/70 p-4 rounded-3xl border border-agri-200 shadow-xs">
-          <div class="flex items-start justify-between">
-            <div>
-              <span class="text-[11px] font-bold text-agri-800">Namaste &amp; Welcome,</span>
-              <h2 id="farmer-dash-greeting" class="text-lg font-black text-slate-900 leading-tight">Ramesh Patel 👋</h2>
-              <div id="farmer-dash-location" class="text-xs text-agri-900 font-semibold mt-1 flex items-center gap-1">
-                📍 Farm Location: Sanand Taluka, Ahmedabad District
-              </div>
-            </div>
-            <span class="text-3xl bg-white p-2 rounded-2xl shadow-xs">👨‍🌾</span>
-          </div>
-        </div>
-
-        <!-- 2. Top Metric Cards (KPIs) -->
-        <div class="grid grid-cols-3 gap-2 text-center text-xs">
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Active Listings</div>
-            <div id="farmer-stat-listings" class="text-lg font-black text-agri-700 mt-0.5">0</div>
-          </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Available Qty</div>
-            <div id="farmer-stat-tonnes" class="text-lg font-black text-agri-700 mt-0.5">0.0 T</div>
-          </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Potential Earnings</div>
-            <div id="farmer-stat-earnings" class="text-lg font-black text-agri-700 mt-0.5">₹0</div>
-          </div>
-        </div>
-
-        <!-- 3. Large + Add Residue Button -->
-        <button onclick="openAddResidueModal()" class="w-full py-3.5 px-4 bg-agri-700 hover:bg-agri-800 text-white rounded-2xl font-black text-sm shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition active:scale-98">
-          <span class="text-lg">➕</span>
-          <span>+ Add Crop Residue Listing</span>
-        </button>
-
-        <!-- 4. Order and Collection Status -->
-        <div class="space-y-2">
-          <div class="flex justify-between items-center px-1">
-            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Order &amp; Collection Status</h3>
-            <span class="text-[10px] text-agri-700 font-bold">Live Tracking</span>
-          </div>
-          <div id="farmer-collection-status-container" class="space-y-2">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-
-        <!-- 5. Recent Buyer Interests -->
-        <div class="space-y-2">
-          <div class="flex justify-between items-center px-1">
-            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Recent Buyer Interests</h3>
-            <span class="text-[10px] text-harvest-700 font-bold">Biomass Demand</span>
-          </div>
-          <div id="farmer-buyer-interests-container" class="space-y-2">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-
-        <!-- 6. My Active Listings -->
-        <div class="space-y-2">
-          <div class="flex justify-between items-center px-1">
-            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">My Active Surplus</h3>
-            <button onclick="openAddResidueModal()" class="text-[11px] font-bold text-agri-700 hover:underline">+ New Surplus</button>
-          </div>
-          <div id="farmer-listings-container" class="space-y-2">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-      </section>
-
-
-      <!-- ========================================== -->
-      <!-- VIEW 3: ROLE 2 - BUYER DASHBOARD           -->
-      <!-- ========================================== -->
-      <section id="view-buyer" class="space-y-4 hidden">
-        <!-- 1. Greeting & Plant Location -->
-        <div class="bg-gradient-to-br from-harvest-50 to-amber-100/70 p-4 rounded-3xl border border-harvest-200 shadow-xs">
-          <div class="flex items-start justify-between">
-            <div>
-              <span class="text-[11px] font-bold text-harvest-800">Industrial Procurement,</span>
-              <h2 id="buyer-dash-greeting" class="text-lg font-black text-slate-900 leading-tight">Vikram Mehta 👋</h2>
-              <div id="buyer-dash-location" class="text-xs text-harvest-900 font-semibold mt-1 flex items-center gap-1">
-                🏭 Plant: Gujarat BioPower Ltd • Sanand GIDC
-              </div>
-            </div>
-            <span class="text-3xl bg-white p-2 rounded-2xl shadow-xs">🏭</span>
-          </div>
-        </div>
-
-        <!-- 2. Top Metric Cards (KPIs) -->
-        <div class="grid grid-cols-2 gap-2 text-center text-xs">
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Active Requirements</div>
-            <div id="buyer-stat-demands" class="text-lg font-black text-harvest-700 mt-0.5">0</div>
-          </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Total Quantity Required</div>
-            <div id="buyer-stat-needed" class="text-lg font-black text-harvest-700 mt-0.5">0.0 T</div>
-          </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Available Matching Supply</div>
-            <div id="buyer-stat-supply" class="text-lg font-black text-agri-700 mt-0.5">0.0 T</div>
-          </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Est. Procurement Value</div>
-            <div id="buyer-stat-val" class="text-lg font-black text-slate-900 mt-0.5">₹0</div>
-          </div>
-        </div>
-
-        <!-- 3. Large + Post Requirement Button -->
-        <button onclick="openPostRequirementModal()" class="w-full py-3.5 px-4 bg-harvest-600 hover:bg-harvest-700 text-white rounded-2xl font-black text-sm shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition active:scale-98">
-          <span class="text-lg">📋</span>
-          <span>+ Post Procurement Requirement</span>
-        </button>
-
-        <!-- 4. Recommended Suppliers (Smart Matching) -->
-        <div class="space-y-2">
-          <div class="flex justify-between items-center px-1">
-            <div>
-              <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Recommended Suppliers</h3>
-              <p class="text-[10px] text-slate-500 font-medium">Smart Match based on your crop, budget, and quality</p>
-            </div>
-            <button onclick="navToTab('activity')" class="text-[11px] font-bold text-harvest-700 hover:underline">Batch Order →</button>
-          </div>
-          <div id="buyer-recommended-suppliers-container" class="space-y-2">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-
-        <!-- 5. Current Orders -->
-        <div class="space-y-2">
-          <div class="flex justify-between items-center px-1">
-            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Current Orders</h3>
-            <span class="text-[10px] text-slate-400">Logistics Fulfillment</span>
-          </div>
-          <div id="buyer-orders-container" class="space-y-2">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-
-        <!-- 6. Active Requirements List -->
-        <div class="space-y-2">
-          <div class="flex justify-between items-center px-1">
-            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Active Procurement Requirements</h3>
-            <button onclick="openPostRequirementModal()" class="text-[11px] font-bold text-harvest-700 hover:underline">+ New</button>
-          </div>
-          <div id="buyer-demands-container" class="space-y-2">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-      </section>
-
-
-      <!-- ========================================== -->
-      <!-- VIEW 4: ROLE 3 - AGGREGATOR DASHBOARD      -->
-      <!-- ========================================== -->
-      <section id="view-aggregator" class="space-y-4 hidden">
-        <!-- 1. Greeting & Fleet Info -->
-        <div class="bg-gradient-to-br from-blue-50 to-sky-100/70 p-4 rounded-3xl border border-blue-200 shadow-xs">
-          <div class="flex items-start justify-between">
-            <div>
-              <span class="text-[11px] font-bold text-blue-800">Logistics &amp; Fleet Operations,</span>
-              <h2 id="trans-dash-greeting" class="text-lg font-black text-slate-900 leading-tight">Harpreet Singh 👋</h2>
-              <div id="trans-dash-fleet" class="text-xs text-blue-900 font-semibold mt-1 flex items-center gap-1">
-                🚛 Kisan Fleet Logistics • 10T Trucks &amp; Trolleys
-              </div>
-            </div>
-            <span class="text-3xl bg-white p-2 rounded-2xl shadow-xs">🚛</span>
-          </div>
-        </div>
-
-        <!-- 2. Top Metric Cards (KPIs) -->
-        <div class="grid grid-cols-2 gap-2 text-center text-xs">
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Assigned Trips</div>
-            <div id="trans-stat-assigned" class="text-lg font-black text-blue-700 mt-0.5">0</div>
-          </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Today's Pickups</div>
-            <div id="trans-stat-pickups" class="text-lg font-black text-amber-600 mt-0.5">0 Stops</div>
-          </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Pending Deliveries</div>
-            <div id="trans-stat-pending" class="text-lg font-black text-blue-700 mt-0.5">0 Trips</div>
-          </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Completed Trips</div>
-            <div id="trans-stat-completed" class="text-lg font-black text-emerald-700 mt-0.5">0</div>
-          </div>
-        </div>
-
-        <!-- 3. Assigned Collection Trips (Pickup & Delivery Locations + Status Update) -->
-        <div class="space-y-2">
-          <div class="flex justify-between items-center px-1">
-            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Assigned Collection Trips</h3>
-            <span class="text-[10px] text-blue-700 font-bold">Active Dispatch</span>
-          </div>
-          <div id="transporter-jobs-container" class="space-y-3">
-            <!-- Dynamically populated with pickup/dropoff cards and update status actions -->
-          </div>
-        </div>
-
-        <!-- 4. Completed Trips History -->
-        <div class="space-y-2">
-          <div class="flex justify-between items-center px-1">
-            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Completed Trips</h3>
-            <span class="text-[10px] text-slate-400 font-medium">Verified Drops</span>
-          </div>
-          <div id="transporter-completed-container" class="space-y-2">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-      </section>
-
-
-      <!-- ========================================== -->
-      <!-- VIEW 5: ROLE 4 - ADMIN DASHBOARD           -->
-      <!-- ========================================== -->
-      <section id="view-admin" class="space-y-4 hidden">
-        <!-- 1. Header & Overview -->
-        <div class="bg-gradient-to-br from-purple-50 to-indigo-100/70 p-4 rounded-3xl border border-purple-200 shadow-xs">
-          <div class="flex items-start justify-between">
-            <div>
-              <span class="text-[11px] font-bold text-purple-800">Platform Moderation &amp; Operations</span>
-              <h2 id="admin-dash-greeting" class="text-lg font-black text-slate-900 leading-tight">Admin Console 🛡️</h2>
-              <div class="text-xs text-purple-900 font-semibold mt-1">Platform Operations • System State: Healthy</div>
-            </div>
-            <span class="text-3xl bg-white p-2 rounded-2xl shadow-xs">🛡️</span>
-          </div>
-        </div>
-
-        <!-- 2. Top Metric Cards (KPIs) -->
-        <div class="grid grid-cols-2 gap-2 text-center text-xs">
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Total Registered Users</div>
-            <div id="admin-stat-users" class="text-lg font-black text-slate-900 mt-0.5">0</div>
-          </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Active Listings</div>
-            <div id="admin-stat-listings" class="text-lg font-black text-agri-700 mt-0.5">0</div>
-          </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Orders Completed</div>
-            <div id="admin-stat-orders" class="text-lg font-black text-emerald-700 mt-0.5">0</div>
-          </div>
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-            <div class="text-[9px] font-black text-slate-400 uppercase tracking-wider">Open Disputes</div>
-            <div id="admin-stat-disputes" class="text-lg font-black text-red-600 mt-0.5">0</div>
-          </div>
-        </div>
-
-        <!-- 3. User & Listing Management Tabs -->
-        <div class="space-y-2">
-          <div class="flex border-b border-slate-200 text-xs font-bold">
-            <button onclick="switchAdminTab('users')" id="admin-tab-btn-users" class="flex-1 py-2 text-center tab-active border-b-2">Registered Users</button>
-            <button onclick="switchAdminTab('listings')" id="admin-tab-btn-listings" class="flex-1 py-2 text-center text-slate-400">Listings Management</button>
-            <button onclick="switchAdminTab('txns')" id="admin-tab-btn-txns" class="flex-1 py-2 text-center text-slate-400">Transactions</button>
-          </div>
-
-          <!-- Users List -->
-          <div id="admin-tab-users" class="space-y-2">
-            <div id="admin-users-list" class="space-y-2"></div>
-          </div>
-
-          <!-- Listings Audit -->
-          <div id="admin-tab-listings" class="space-y-2 hidden">
-            <div id="admin-listings-audit-list" class="space-y-2"></div>
-          </div>
-
-          <!-- Transactions Monitoring -->
-          <div id="admin-tab-txns" class="space-y-2 hidden">
-            <div id="admin-transactions-list" class="space-y-2"></div>
-          </div>
-        </div>
-
-        <!-- 4. Open Disputes Desk -->
-        <div class="space-y-2 pt-2 border-t border-slate-200">
-          <div class="flex justify-between items-center px-1">
-            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Dispute Tickets &amp; Issues</h3>
-            <span class="text-[10px] text-red-600 font-bold">Escalation Desk</span>
-          </div>
-          <div id="admin-disputes-container" class="space-y-2"></div>
-        </div>
-      </section>
-
-
-      <!-- ========================================== -->
-      <!-- VIEW 6: LIVE RESIDUE MARKETPLACE FEED      -->
-      <!-- ========================================== -->
-      <section id="view-market" class="space-y-3 hidden">
-        <div class="bg-gradient-to-r from-agri-700 to-agri-800 text-white p-4 rounded-3xl shadow-sm space-y-2">
-          <div class="flex items-center justify-between">
-            <div>
-              <span class="text-[10px] font-bold tracking-wider text-agri-200 uppercase">Live Marketplace</span>
-              <h3 class="text-base font-black text-white">Rural Agricultural Waste Exchange</h3>
-            </div>
-            <span class="text-2xl bg-agri-900/40 p-2 rounded-2xl">🛒</span>
-          </div>
-          <p class="text-[11px] text-agri-100">
-            Real-time feed of all farmer residue listings, spot prices, and supplies available across Gujarat.
-          </p>
-          <div class="grid grid-cols-3 gap-2 pt-1 border-t border-agri-600/50 text-center text-[10px]">
-            <div class="bg-agri-900/40 p-1.5 rounded-xl">
-              <div class="text-agri-200">Total Supply</div>
-              <div id="market-stat-supply" class="font-bold text-xs text-white">0.0 T</div>
-            </div>
-            <div class="bg-agri-900/40 p-1.5 rounded-xl">
-              <div class="text-agri-200">Avg. Price</div>
-              <div id="market-stat-avg-price" class="font-bold text-xs text-white">₹0/T</div>
-            </div>
-            <div class="bg-agri-900/40 p-1.5 rounded-xl">
-              <div class="text-agri-200">Active Listings</div>
-              <div id="market-stat-count" class="font-bold text-xs text-white">0</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Filter & Search Toolbar -->
-        <div class="space-y-2">
-          <input type="text" id="market-search-input" oninput="filterMarketListings()" placeholder="🔍 Search crop (e.g. Rice Husk, Wheat Straw, Bagasse...)" class="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-agri-600 shadow-xs" />
-          <div class="flex gap-1.5 overflow-x-auto pb-1 text-[11px] font-bold no-scrollbar">
-            <button onclick="setMarketFilter('all')" id="mf-all" class="market-filter-btn px-3 py-1.5 bg-agri-700 text-white rounded-xl shadow-xs whitespace-nowrap">All Residues</button>
-            <button onclick="setMarketFilter('Rice Husk')" id="mf-rice" class="market-filter-btn px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-xl whitespace-nowrap hover:bg-slate-50">Rice Husk</button>
-            <button onclick="setMarketFilter('Wheat Straw')" id="mf-wheat" class="market-filter-btn px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-xl whitespace-nowrap hover:bg-slate-50">Wheat Straw</button>
-            <button onclick="setMarketFilter('Bagasse')" id="mf-bagasse" class="market-filter-btn px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-xl whitespace-nowrap hover:bg-slate-50">Sugarcane</button>
-            <button onclick="setMarketFilter('Cotton')" id="mf-cotton" class="market-filter-btn px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-xl whitespace-nowrap hover:bg-slate-50">Cotton Stalks</button>
-          </div>
-        </div>
-
-        <!-- Live Listings Grid -->
-        <div id="market-listings-container" class="space-y-2.5 pb-6"></div>
-      </section>
-
-
-      <!-- ========================================== -->
-      <!-- VIEW 7: BATCH ORDERS / ALLOCATION VIEW     -->
-      <!-- ========================================== -->
-      <section id="view-orders" class="space-y-3 hidden">
-        <div class="bg-gradient-to-br from-emerald-600 to-agri-800 text-white p-4 rounded-3xl shadow-xs space-y-1">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-black">Multi-Farmer Order Builder</h3>
-            <span class="text-xl">📦</span>
-          </div>
-          <p class="text-[11px] text-emerald-100">
-            Combine contributions from multiple smallholder farmers into a single coordinated industrial shipment.
-          </p>
-        </div>
-
-        <div id="orders-active-demand-selector" class="space-y-2">
-          <label class="block text-xs font-bold text-slate-700">Select Procurement Requirement:</label>
-          <select id="orders-demand-select" onchange="renderSmartMatchingList()" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-agri-600 shadow-xs">
-          </select>
-        </div>
-
-        <div id="buyer-match-list" class="space-y-2"></div>
-
-        <!-- Allocation summary box -->
-        <div id="buyer-alloc-box" class="p-4 bg-white rounded-2xl border border-slate-300 shadow-xs space-y-2.5">
-          <div class="flex justify-between text-xs font-bold">
-            <span class="text-slate-500">Combined Allocation:</span>
-            <span id="alloc-total-qty" class="text-agri-700 text-sm font-black">0.0 Tonnes</span>
-          </div>
-          <div class="flex justify-between text-xs font-bold">
-            <span class="text-slate-500">Combined Order Value:</span>
-            <span id="alloc-total-val" class="text-slate-900 text-sm font-black">₹0</span>
-          </div>
-          <button onclick="handleExecuteMultiFarmerOrder()" class="w-full py-3 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-xs shadow-md transition active:scale-95">
-            Confirm Combined Multi-Farmer Order
-          </button>
-        </div>
-      </section>
-
-
-      <!-- ========================================== -->
-      <!-- VIEW 8: USER PROFILE & SETTINGS SECTION    -->
-      <!-- ========================================== -->
-      <section id="view-profile" class="space-y-4 hidden">
-        <!-- Profile Card -->
-        <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-xs text-center space-y-2">
-          <div class="w-16 h-16 rounded-3xl bg-agri-100 border-2 border-agri-200 text-2xl flex items-center justify-center mx-auto shadow-xs">
-            👤
-          </div>
-          <div>
-            <h2 id="prof-name" class="font-black text-base text-slate-900">User Name</h2>
-            <div id="prof-role" class="text-xs font-extrabold text-agri-700 uppercase tracking-wider mt-0.5">FARMER</div>
-          </div>
-          <div id="prof-location-tag" class="text-xs text-slate-500 font-medium">📍 Farm Location</div>
-        </div>
-
-        <!-- Account Info -->
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-2 text-xs">
-          <h3 class="font-black text-slate-800 uppercase tracking-wider text-[11px]">Account Details</h3>
-          <div class="flex justify-between py-1.5 border-b border-slate-100">
-            <span class="text-slate-500">Username:</span>
-            <span id="prof-username" class="font-bold text-slate-800">ramesh123</span>
-          </div>
-          <div class="flex justify-between py-1.5 border-b border-slate-100">
-            <span class="text-slate-500">Email:</span>
-            <span id="prof-email" class="font-bold text-slate-800">ramesh@example.com</span>
-          </div>
-          <div class="flex justify-between py-1.5 border-b border-slate-100">
-            <span class="text-slate-500">Phone:</span>
-            <span id="prof-phone" class="font-bold text-slate-800">+91 9876543210</span>
-          </div>
-          <div class="flex justify-between py-1.5">
-            <span class="text-slate-500">Role Authority:</span>
-            <span id="prof-role-desc" class="font-bold text-agri-700">Full Access</span>
-          </div>
-        </div>
-
-        <!-- Preferences & App Info -->
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-2 text-xs">
-          <h3 class="font-black text-slate-800 uppercase tracking-wider text-[11px]">Application Preferences</h3>
-          <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
-            <span class="text-slate-600">Theme</span>
-            <span class="px-2 py-0.5 rounded-full bg-agri-100 text-agri-800 font-bold text-[10px]">Clean Light Theme</span>
-          </div>
-          <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
-            <span class="text-slate-600">Offline Database Sync</span>
-            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">Active (LocalStore)</span>
-          </div>
-          <div class="flex justify-between items-center py-1.5">
-            <span class="text-slate-600">Platform Version</span>
-            <span class="text-slate-400 font-medium">v2.4 (Android Release)</span>
-          </div>
-        </div>
-
-        <!-- Support & Logout Buttons -->
-        <div class="space-y-2 pt-2">
-          <button onclick="openIssueModal()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-2xl text-xs transition flex items-center justify-center gap-2">
-            <span>⚠️</span>
-            <span>Report a Dispute or Issue</span>
-          </button>
-          <button onclick="handleLogout()" class="w-full py-3 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 font-black rounded-2xl text-xs transition flex items-center justify-center gap-2">
-            <span>🚪</span>
-            <span>Sign Out of Account</span>
-          </button>
-        </div>
-      </section>
-
-    </main>
-
-
-    <!-- BOTTOM NAVIGATION (ACCESSIBLE SEPARATELY) -->
-    <nav id="bottom-nav" class="hidden bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2 flex justify-around items-center text-[10px] text-slate-400 font-bold safe-bottom fixed bottom-0 left-0 right-0 max-w-md mx-auto z-30 shadow-lg">
-      <button id="nav-btn-home" onclick="navToTab('dashboard')" class="flex flex-col items-center text-agri-700 transition">
-        <span class="text-lg">🏠</span>
-        <span class="text-[9px] mt-0.5">Dashboard</span>
-      </button>
-      <button id="nav-btn-market" onclick="navToTab('market')" class="flex flex-col items-center hover:text-agri-700 transition">
-        <span class="text-lg">🛒</span>
-        <span class="text-[9px] mt-0.5">Market</span>
-      </button>
-      <button id="nav-btn-activity" onclick="navToTab('activity')" class="flex flex-col items-center hover:text-agri-700 transition">
-        <span class="text-lg">📦</span>
-        <span id="nav-activity-label" class="text-[9px] mt-0.5">Orders</span>
-      </button>
-      <button id="nav-btn-profile" onclick="navToTab('profile')" class="flex flex-col items-center hover:text-agri-700 transition">
-        <span class="text-lg">👤</span>
-        <span class="text-[9px] mt-0.5">Profile</span>
-      </button>
-    </nav>
-  </div>
-
-
-  <!-- MODAL 1: ADD RESIDUE LISTING (FARMER) -->
-  <div id="modal-add-residue" class="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
-    <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-md p-5 space-y-3 max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-        <h3 class="font-black text-sm text-slate-900">🌾 List New Crop Residue</h3>
-        <button onclick="closeAddResidueModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center">&times;</button>
-      </div>
-
-      <form onsubmit="handleCreateListing(event)" class="space-y-3 text-xs">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Crop Residue Material *</label>
-          <div class="flex flex-wrap gap-1.5 mb-2">
-            <span onclick="setAddCrop('Rice Husk')" class="px-2 py-1 text-[10px] font-bold rounded-lg border border-slate-200 cursor-pointer bg-slate-50 hover:bg-agri-50">Rice Husk</span>
-            <span onclick="setAddCrop('Wheat Straw')" class="px-2 py-1 text-[10px] font-bold rounded-lg border border-slate-200 cursor-pointer bg-slate-50 hover:bg-agri-50">Wheat Straw</span>
-            <span onclick="setAddCrop('Sugarcane Bagasse')" class="px-2 py-1 text-[10px] font-bold rounded-lg border border-slate-200 cursor-pointer bg-slate-50 hover:bg-agri-50">Bagasse</span>
-            <span onclick="setAddCrop('Cotton Stalks')" class="px-2 py-1 text-[10px] font-bold rounded-lg border border-slate-200 cursor-pointer bg-slate-50 hover:bg-agri-50">Cotton Stalks</span>
-          </div>
-          <input type="text" id="add-material" required placeholder="Select or type residue name" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Available Qty (Tonnes) *</label>
-            <input type="number" step="0.1" id="add-qty" required placeholder="e.g. 5.0" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Rate (₹ / Tonne) *</label>
-            <input type="number" id="add-price" required placeholder="e.g. 2400" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
-          </div>
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Farm / Pickup Location *</label>
-          <input type="text" id="add-location" required placeholder="Village, Taluka (e.g. Sanand)" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Storage Condition</label>
-            <select id="add-storage" class="w-full px-2.5 py-2 border border-slate-300 rounded-xl bg-white font-medium">
-              <option value="Dry covered shed">Dry covered shed</option>
-              <option value="Baled & stacked">Baled & stacked</option>
-              <option value="Open field">Open field</option>
-            </select>
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Moisture Condition</label>
-            <select id="add-moisture" class="w-full px-2.5 py-2 border border-slate-300 rounded-xl bg-white font-medium">
-              <option value="Dry (< 12%)">Dry (< 12%)</option>
-              <option value="Medium (14%)">Medium (14%)</option>
-              <option value="Fresh harvest">Fresh harvest</option>
-            </select>
-          </div>
-        </div>
-
-        <button type="submit" class="w-full py-3 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl shadow-md transition active:scale-95">
-          Publish Residue Listing
-        </button>
-      </form>
-    </div>
-  </div>
-
-
-  <!-- MODAL 2: POST PROCUREMENT REQUIREMENT (BUYER) -->
-  <div id="modal-post-req" class="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
-    <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-md p-5 space-y-3 max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-        <h3 class="font-black text-sm text-slate-900">🏭 Post Procurement Requirement</h3>
-        <button onclick="closePostRequirementModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center">&times;</button>
-      </div>
-
-      <form onsubmit="handleCreateRequirement(event)" class="space-y-3 text-xs">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Required Biomass Material *</label>
-          <input type="text" id="req-material" list="biomass-types" required placeholder="Select or type e.g. Rice Husk, Wheat Straw" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
-          <datalist id="biomass-types">
-            <option value="Rice Husk">
-            <option value="Wheat Straw">
-            <option value="Sugarcane Bagasse">
-            <option value="Cotton Stalks">
-            <option value="Mustard Stalks">
-          </datalist>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Total Quantity Needed (T) *</label>
-            <input type="number" step="0.1" id="req-qty" required placeholder="e.g. 20.0" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Max Budget (₹/Tonne) *</label>
-            <input type="number" id="req-price-max" required placeholder="e.g. 2500" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Quality / Moisture *</label>
-            <select id="req-moisture" class="w-full px-2.5 py-2 border border-slate-300 rounded-xl bg-white font-medium">
-              <option value="Dry (< 12%)">Dry (< 12%)</option>
-              <option value="Medium (14%)">Medium (14%)</option>
-              <option value="Any">Any Moisture</option>
-            </select>
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Storage Spec</label>
-            <select id="req-storage" class="w-full px-2.5 py-2 border border-slate-300 rounded-xl bg-white font-medium">
-              <option value="Dry covered shed">Dry covered shed</option>
-              <option value="Baled & stacked">Baled & stacked</option>
-              <option value="Any">Any Storage Form</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Plant / Delivery Address *</label>
-          <input type="text" id="req-location" required placeholder="e.g. Sanand GIDC Biofuel Plant, Ahmedabad" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
-        </div>
-
-        <button type="submit" class="w-full py-3 bg-harvest-600 hover:bg-harvest-700 text-white font-black rounded-xl shadow-md transition active:scale-95">
-          Publish Procurement Requirement
-        </button>
-      </form>
-    </div>
-  </div>
-
-
-  <!-- MODAL 3: ISSUE / DISPUTE REPORTING -->
-  <div id="modal-issue" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-3 shadow-2xl">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-        <h3 class="font-black text-sm text-slate-900">⚠️ Report Issue or Dispute</h3>
-        <button onclick="closeIssueModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center">&times;</button>
-      </div>
-      <form onsubmit="handleReportIssue(event)" class="space-y-3 text-xs">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Issue Topic *</label>
-          <input type="text" id="issue-title" required placeholder="e.g. Moisture discrepancy in batch" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
-        </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Details &amp; Evidence *</label>
-          <textarea id="issue-desc" rows="3" required placeholder="Describe the problem, delivery ticket, or weight mismatch..." class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium"></textarea>
-        </div>
-        <button type="submit" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-black rounded-xl shadow-xs transition active:scale-95">
-          Submit to Platform Admin
-        </button>
-      </form>
-    </div>
-  </div>
-
-
-  <!-- ========================================== -->
-  <!-- APPLICATION JAVASCRIPT LOGIC               -->
-  <!-- ========================================== -->
-  <script>
-    // Pre-seeded demo accounts with strict passwords
+    // ====================================================
+    // AGRIWASTE EXCHANGE - API BRIDGE & CLIENT STATE
+    // ====================================================
+    const API_BASE = localStorage.getItem("agriwaste_api_url") || 
+      (window.location.protocol.startsWith('http') && window.location.hostname !== '' ? 
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:8000/api/v1' : 'http://localhost:8000/api/v1') : 
+        'http://10.0.2.2:8000/api/v1');
+
+    let isBackendLive = false;
+    let authToken = localStorage.getItem("agriwaste_jwt_token") || null;
+    let currentUser = null;
+    let activeNavTab = 'dashboard';
+    let activeMarketCategory = 'all';
+
+    // Local in-memory / localStorage fallback store for seamless offline draft mode
     const defaultUsers = [
       { id: 1, username: "ramesh123", email: "ramesh@example.com", phone: "9876543210", password: "password123", name: "Ramesh Patel", role: "farmer", location: "Sanand Taluka, Ahmedabad" },
       { id: 2, username: "gujarat_bio", email: "buyer@biopower.com", phone: "9876543211", password: "password123", name: "Vikram Mehta (Gujarat BioPower)", role: "buyer", location: "Sanand GIDC Biofuel Plant" },
       { id: 3, username: "kisan_trans", email: "trans@kisanfleet.com", phone: "9876543212", password: "password123", name: "Harpreet Singh (Kisan Fleet)", role: "aggregator", location: "Ahmedabad District Fleet Hub" },
       { id: 4, username: "admin", email: "admin@agriwaste.com", phone: "9876543213", password: "adminpassword", name: "System Administrator", role: "admin", location: "Platform Headquarters" }
     ];
-
-    let currentUser = null;
-    let activeNavTab = 'dashboard';
-    let activeMarketCategory = 'all';
 
     let store = {
       users: [...defaultUsers],
@@ -837,70 +45,176 @@
         { id: 4, farmer_id: 1, farmer_name: "Ramesh Patel", material_name: "Wheat Straw", available_quantity: 8.0, estimated_quantity: 8.0, unit: "tonnes", price_per_unit: 1800, location_name: "Sanand, Ahmedabad", storage_type: "Baled & stacked", moisture_condition: "Dry (< 12%)", status: "available" }
       ],
       requirements: [
-        { id: 1, buyer_id: 2, buyer_name: "Gujarat BioPower Ltd", material_name: "Rice Husk", required_quantity: 10.0, fulfilled_quantity: 0.0, unit: "tonnes", target_price_max: 2500, delivery_location: "Sanand GIDC Biofuel Plant", moisture: "Dry (< 12%)", storage: "Dry covered shed", status: "open" },
-        { id: 2, buyer_id: 2, buyer_name: "Gujarat BioPower Ltd", material_name: "Wheat Straw", required_quantity: 15.0, fulfilled_quantity: 0.0, unit: "tonnes", target_price_max: 1900, delivery_location: "Sanand GIDC Biofuel Plant", moisture: "Dry (< 12%)", storage: "Baled & stacked", status: "open" }
+        { id: 1, buyer_id: 2, buyer_name: "Gujarat BioPower Ltd", material_name: "Rice Husk", required_quantity: 10.0, fulfilled_quantity: 0.0, unit: "tonnes", target_price_max: 2500, delivery_location: "Sanand GIDC Biofuel Plant", quality_specifications: "Dry covered shed", status: "open" },
+        { id: 2, buyer_id: 2, buyer_name: "Gujarat BioPower Ltd", material_name: "Wheat Straw", required_quantity: 15.0, fulfilled_quantity: 0.0, unit: "tonnes", target_price_max: 1900, delivery_location: "Sanand GIDC Biofuel Plant", quality_specifications: "Baled & stacked", status: "open" }
       ],
       orders: [
-        { id: 101, buyer: "Gujarat BioPower Ltd", farmer_id: 1, material: "Rice Husk", quantity: 2.0, total_amount: 4800, route: "Sanand Farm ➔ Sanand GIDC", status: "In Transit", transporter: "Kisan Fleet Logistics" }
+        { id: 101, buyer_id: 2, buyer: "Gujarat BioPower Ltd", farmer_id: 1, total_quantity: 2.0, total_amount: 4800, delivery_address: "Sanand GIDC Biofuel Plant", status: "in_transit" }
       ],
       transportJobs: [
-        { id: 1, order_id: 101, aggregator_id: 3, route: "Pickup: Sanand Farm (2T) ➔ Dropoff: Sanand GIDC Biofuel Plant", total_qty: 2.0, distance_km: 24.0, est_cost: 1450.0, status: "in_transit", pickup_done: true }
+        { id: 1, order_id: 101, aggregator_id: 3, dropoff_location: "Sanand GIDC Biofuel Plant", route: "Sanand Farm (2T) ➔ Sanand GIDC", total_qty: 2.0, estimated_distance_km: 24.0, estimated_cost: 1450.0, status: "in_transit" }
       ],
       issues: [
-        { id: 1, reporter: "Gujarat BioPower Ltd", title: "Moisture slightly above spec", desc: "Batch 2 had 15% moisture.", status: "resolved", resolution: "Farmer agreed to ₹100/T moisture concession." }
+        { id: 1, reporter: "Gujarat BioPower Ltd", title: "Moisture slightly above spec", description: "Batch 2 had 15% moisture.", status: "resolved", resolution_notes: "Farmer agreed to ₹100/T moisture concession." }
       ]
     };
 
-    // Load from localStorage if present
-    const saved = localStorage.getItem("agriwaste_store_v3");
-    if (saved) {
-      try { 
-        const parsed = JSON.parse(saved); 
-        store = { ...store, ...parsed };
-        if (!store.users || !store.users.length) store.users = [...defaultUsers];
-      } catch(e){}
-    }
+    try {
+      const saved = localStorage.getItem("agriwaste_store_v3");
+      if (saved) store = { ...store, ...JSON.parse(saved) };
+    } catch(e){}
+
     function persist() {
-      localStorage.setItem("agriwaste_store_v3", JSON.stringify(store));
+      try { localStorage.setItem("agriwaste_store_v3", JSON.stringify(store)); } catch(e){}
     }
 
-    // ----------------------------------------------------
-    // AUTHENTICATION LOGIC
-    // ----------------------------------------------------
-    function handleManualLogin(e) {
+    async function apiRequest(endpoint, method = 'GET', body = null) {
+      const headers = { 'Content-Type': 'application/json' };
+      if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
+      const options = { method, headers };
+      if (body && (method === 'POST' || method === 'PATCH' || method === 'PUT')) {
+        options.body = JSON.stringify(body);
+      }
+      const res = await fetch(`${API_BASE}${endpoint}`, options);
+      if (!res.ok) {
+        let errText = `HTTP ${res.status}`;
+        try {
+          const errJson = await res.json();
+          errText = errJson.detail || errJson.message || JSON.stringify(errJson);
+        } catch(e) {
+          errText = res.statusText || errText;
+        }
+        const err = new Error(errText);
+        err.status = res.status;
+        throw err;
+      }
+      if (res.status === 204) return null;
+      return await res.json();
+    }
+
+    function updateBackendStatusUI(live) {
+      const b = document.getElementById("prof-sync-badge");
+      if (b) {
+        if (live) {
+          b.className = "px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]";
+          b.textContent = "🟢 Live Database Connected";
+        } else {
+          b.className = "px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px]";
+          b.textContent = "🟠 Local Offline Drafts";
+        }
+      }
+    }
+
+    // ====================================================
+    // AUTHENTICATION & SESSION PERSISTENCE
+    // ====================================================
+    async function initApp() {
+      try {
+        const hRes = await fetch(API_BASE.replace('/api/v1', '/health'), { signal: AbortSignal.timeout(2000) });
+        if (hRes.ok) {
+          isBackendLive = true;
+          updateBackendStatusUI(true);
+        }
+      } catch(e) {
+        isBackendLive = false;
+        updateBackendStatusUI(false);
+      }
+
+      // Check session token
+      if (authToken) {
+        try {
+          const me = await apiRequest('/auth/me');
+          if (me && me.id) {
+            currentUser = {
+              id: me.id,
+              name: me.full_name,
+              username: me.username,
+              email: me.email,
+              phone: me.phone_number || "",
+              role: me.role,
+              location: me.district ? `${me.district}, Gujarat` : "Gujarat"
+            };
+            renderAuthenticatedState();
+            return;
+          }
+        } catch(e) {
+          authToken = null;
+          localStorage.removeItem("agriwaste_jwt_token");
+        }
+      }
+
+      const savedUser = localStorage.getItem("agriwaste_current_user");
+      if (savedUser && !authToken) {
+        try {
+          currentUser = JSON.parse(savedUser);
+          renderAuthenticatedState();
+          return;
+        } catch(e){}
+      }
+
+      hideAllViews();
+      document.getElementById("view-auth").classList.remove("hidden");
+    }
+
+    async function handleManualLogin(e) {
       e.preventDefault();
       const errorEl = document.getElementById("login-error-msg");
       errorEl.classList.add("hidden");
 
-      const inputUser = document.getElementById("login-username").value.trim().toLowerCase();
+      const inputUser = document.getElementById("login-username").value.trim();
       const inputPass = document.getElementById("login-password").value;
 
-      if (!store.users) store.users = [...defaultUsers];
-
-      const matchedUser = store.users.find(u => 
-        (u.username && u.username.toLowerCase() === inputUser) ||
-        (u.email && u.email.toLowerCase() === inputUser) ||
-        (u.phone && u.phone.trim() === inputUser)
-      );
-
-      if (!matchedUser) {
-        errorEl.innerHTML = `⚠️ <b>User Not Found!</b> No registered account matching "<i>${inputUser}</i>". Please check details or create a new account.`;
-        errorEl.classList.remove("hidden");
-        return;
+      try {
+        const res = await apiRequest('/auth/login', 'POST', {
+          username_or_email: inputUser,
+          password: inputPass
+        });
+        authToken = res.access_token;
+        localStorage.setItem("agriwaste_jwt_token", authToken);
+        currentUser = {
+          id: res.user.id,
+          name: res.user.full_name,
+          username: res.user.username,
+          email: res.user.email,
+          phone: res.user.phone_number || "",
+          role: res.user.role,
+          location: res.user.district ? `${res.user.district}, Gujarat` : "Gujarat"
+        };
+        localStorage.setItem("agriwaste_current_user", JSON.stringify(currentUser));
+        isBackendLive = true;
+        updateBackendStatusUI(true);
+        document.getElementById("login-password").value = "";
+        renderAuthenticatedState();
+      } catch(err) {
+        if (err.status === 401 || err.status === 403 || err.status === 400) {
+          errorEl.innerHTML = `❌ <b>Login Failed:</b> ${err.message}`;
+          errorEl.classList.remove("hidden");
+          return;
+        }
+        // Fallback for local demo credentials if server is not reachable
+        const matched = store.users.find(u =>
+          (u.username && u.username.toLowerCase() === inputUser.toLowerCase()) ||
+          (u.email && u.email.toLowerCase() === inputUser.toLowerCase()) ||
+          (u.phone && u.phone.trim() === inputUser)
+        );
+        if (!matched) {
+          errorEl.innerHTML = `⚠️ <b>User Not Found:</b> No registered account matching "<i>${inputUser}</i>".`;
+          errorEl.classList.remove("hidden");
+          return;
+        }
+        if (matched.password !== inputPass) {
+          errorEl.innerHTML = `❌ <b>Incorrect Password:</b> Please enter the correct password.`;
+          errorEl.classList.remove("hidden");
+          return;
+        }
+        currentUser = matched;
+        localStorage.setItem("agriwaste_current_user", JSON.stringify(currentUser));
+        document.getElementById("login-password").value = "";
+        renderAuthenticatedState();
       }
-
-      if (matchedUser.password !== inputPass) {
-        errorEl.innerHTML = `❌ <b>Incorrect Password!</b> Password for user <b>${matchedUser.name}</b> is incorrect. Please try again.`;
-        errorEl.classList.remove("hidden");
-        return;
-      }
-
-      currentUser = matchedUser;
-      document.getElementById("login-password").value = "";
-      renderAuthenticatedState();
     }
 
-    function handleManualRegister(e) {
+    async function handleManualRegister(e) {
       e.preventDefault();
       const role = document.getElementById("reg-role").value;
       const name = document.getElementById("reg-name").value.trim();
@@ -909,53 +223,83 @@
       const email = document.getElementById("reg-email").value.trim().toLowerCase();
       const password = document.getElementById("reg-password").value;
 
-      if (!store.users) store.users = [...defaultUsers];
-
-      const existing = store.users.find(u => 
-        (u.username && u.username.toLowerCase() === username) ||
-        (u.email && u.email.toLowerCase() === email)
-      );
-
-      if (existing) {
-        alert(`An account already exists with username "${username}" or email "${email}". Please choose a different username or log in.`);
+      if (role === 'admin') {
+        alert("Public self-registration as Admin is not permitted.");
         return;
       }
 
-      let location = "Sanand, Gujarat";
-      if (role === 'farmer') {
-        const v = document.getElementById("reg-village").value.trim();
-        const d = document.getElementById("reg-district").value.trim();
-        location = v ? (d ? `${v}, ${d}` : v) : "Sanand Taluka, Ahmedabad";
-      } else if (role === 'buyer') {
-        const c = document.getElementById("reg-company").value.trim();
-        const ind = document.getElementById("reg-industry").value.trim();
-        location = c ? `${c} (${ind || 'Biofuel'})` : "Sanand GIDC Biofuel Plant";
-      } else if (role === 'aggregator') {
-        const v = document.getElementById("reg-vehicle").value.trim();
-        location = v ? `Fleet: ${v}` : "Ahmedabad Fleet Hub";
-      }
-
-      const newUser = {
-        id: Date.now(),
-        name: name,
+      let payload = {
         username: username,
-        phone: phone || "9876543210",
         email: email,
         password: password,
-        role: role,
-        location: location
+        full_name: name,
+        phone_number: phone || null,
+        role: role
       };
 
-      store.users.push(newUser);
-      persist();
+      if (role === 'farmer') {
+        payload.farm_village = document.getElementById("reg-village").value.trim() || "Sanand";
+        payload.district = document.getElementById("reg-district").value.trim() || "Ahmedabad";
+      } else if (role === 'buyer') {
+        payload.company_name = document.getElementById("reg-company").value.trim() || `${name} Industries`;
+        payload.industry_type = document.getElementById("reg-industry").value.trim() || "Biomass Biofuel";
+      } else if (role === 'aggregator') {
+        payload.vehicle_type = document.getElementById("reg-vehicle").value.trim() || "Commercial Truck";
+        payload.district = "Ahmedabad";
+      }
 
-      currentUser = newUser;
-      renderAuthenticatedState();
-      alert(`🎉 Account created! Welcome, ${newUser.name}. Navigating to your ${newUser.role.toUpperCase()} Dashboard.`);
+      try {
+        const res = await apiRequest('/auth/register', 'POST', payload);
+        authToken = res.access_token;
+        localStorage.setItem("agriwaste_jwt_token", authToken);
+        currentUser = {
+          id: res.user.id,
+          name: res.user.full_name,
+          username: res.user.username,
+          email: res.user.email,
+          phone: res.user.phone_number || "",
+          role: res.user.role,
+          location: payload.district ? `${payload.district}, Gujarat` : "Gujarat"
+        };
+        localStorage.setItem("agriwaste_current_user", JSON.stringify(currentUser));
+        isBackendLive = true;
+        updateBackendStatusUI(true);
+        alert(`🎉 Account created! Welcome, ${currentUser.name}. Navigating to your ${currentUser.role.toUpperCase()} Dashboard.`);
+        renderAuthenticatedState();
+      } catch(err) {
+        if (err.status) {
+          alert(`Registration Blocked: ${err.message}`);
+          return;
+        }
+        const existing = store.users.find(u => u.username === username || u.email === email);
+        if (existing) {
+          alert(`An account already exists with username "${username}" or email "${email}".`);
+          return;
+        }
+        const newUser = {
+          id: Date.now(),
+          name: name,
+          username: username,
+          phone: phone,
+          email: email,
+          password: password,
+          role: role,
+          location: payload.district || "Gujarat"
+        };
+        store.users.push(newUser);
+        persist();
+        currentUser = newUser;
+        localStorage.setItem("agriwaste_current_user", JSON.stringify(currentUser));
+        alert(`🎉 Account created! Welcome, ${newUser.name}.`);
+        renderAuthenticatedState();
+      }
     }
 
     function handleLogout() {
       currentUser = null;
+      authToken = null;
+      localStorage.removeItem("agriwaste_jwt_token");
+      localStorage.removeItem("agriwaste_current_user");
       document.getElementById("top-bar").classList.add("hidden");
       document.getElementById("bottom-nav").classList.add("hidden");
       document.getElementById("login-password").value = "";
@@ -987,9 +331,6 @@
       document.getElementById("role-extra-transporter").classList.toggle("hidden", r !== 'aggregator');
     }
 
-    // ----------------------------------------------------
-    // NAVIGATION & VIEW SWITCHER
-    // ----------------------------------------------------
     function hideAllViews() {
       ['view-auth', 'view-farmer', 'view-buyer', 'view-aggregator', 'view-admin', 'view-market', 'view-orders', 'view-profile'].forEach(id => {
         const el = document.getElementById(id);
@@ -1004,7 +345,6 @@
       document.getElementById("user-role-badge").textContent = currentUser.role.toUpperCase();
       document.getElementById("user-location-badge").textContent = "📍 " + (currentUser.location || "Gujarat");
 
-      // Custom activity tab label based on role
       const actLabel = document.getElementById("nav-activity-label");
       if (actLabel) {
         if (currentUser.role === 'farmer') actLabel.textContent = "My Sales";
@@ -1020,7 +360,6 @@
       activeNavTab = tabName;
       hideAllViews();
 
-      // Highlight bottom nav buttons
       ['home', 'market', 'activity', 'profile'].forEach(b => {
         const btn = document.getElementById("nav-btn-" + b);
         if (btn) {
@@ -1064,69 +403,81 @@
       }
     }
 
-
-    // ----------------------------------------------------
+    // ====================================================
     // ROLE 1: FARMER DASHBOARD
-    // ----------------------------------------------------
-    function renderFarmerDashboard() {
-      // 1. Greeting & Location
+    // ====================================================
+    async function renderFarmerDashboard() {
+      if (!currentUser) return;
       document.getElementById("farmer-dash-greeting").textContent = currentUser.name + " 👋";
       document.getElementById("farmer-dash-location").textContent = "📍 Farm Location: " + (currentUser.location || "Sanand, Ahmedabad");
 
-      // 2. Metrics (Total Active Listings, Total Qty, Potential Earnings)
-      const myListings = store.listings.filter(l => l.farmer_id === currentUser.id);
-      const totalT = myListings.reduce((sum, l) => sum + (l.available_quantity || 0), 0);
-      const totalVal = myListings.reduce((sum, l) => sum + ((l.available_quantity || 0) * l.price_per_unit), 0);
+      let myListings = [];
+      let myOrders = [];
+      let buyerReqs = [];
 
-      document.getElementById("farmer-stat-listings").textContent = myListings.length;
+      try {
+        if (isBackendLive && authToken) {
+          myListings = await apiRequest('/listings/my');
+          myOrders = await apiRequest('/orders');
+          buyerReqs = await apiRequest('/requirements');
+        } else {
+          myListings = store.listings.filter(l => l.farmer_id === currentUser.id);
+          myOrders = store.orders.filter(o => o.farmer_id === currentUser.id || o.buyer);
+          buyerReqs = store.requirements;
+        }
+      } catch(e) {
+        myListings = store.listings.filter(l => l.farmer_id === currentUser.id);
+        myOrders = store.orders.filter(o => o.farmer_id === currentUser.id || o.buyer);
+        buyerReqs = store.requirements;
+      }
+
+      const activeListings = myListings.filter(l => l.status === 'available');
+      const totalT = activeListings.reduce((sum, l) => sum + (l.available_quantity || 0), 0);
+      const totalVal = activeListings.reduce((sum, l) => sum + ((l.available_quantity || 0) * l.price_per_unit), 0);
+
+      document.getElementById("farmer-stat-listings").textContent = activeListings.length;
       document.getElementById("farmer-stat-tonnes").textContent = totalT.toFixed(1) + " T";
       document.getElementById("farmer-stat-earnings").textContent = "₹" + (totalVal >= 1000 ? (totalVal/1000).toFixed(1) + "k" : totalVal);
 
-      // 3. Order and collection status
+      // Order and collection status
       const colContainer = document.getElementById("farmer-collection-status-container");
       colContainer.innerHTML = "";
-      const farmerOrders = store.orders.filter(o => o.farmer_id === currentUser.id || o.buyer);
-      if (farmerOrders.length === 0) {
+      if (myOrders.length === 0) {
         colContainer.innerHTML = `
           <div class="p-3 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 shadow-xs">
             No active collections in progress. Once a buyer purchases your residue, driver dispatch status will show here.
           </div>
         `;
       } else {
-        farmerOrders.forEach(o => {
+        myOrders.forEach(o => {
           colContainer.innerHTML += `
             <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2 text-xs">
               <div class="flex justify-between items-start">
                 <div>
-                  <span class="font-black text-slate-900">Order #${o.id}: ${o.material || 'Rice Husk'} (${o.quantity} Tonnes)</span>
-                  <div class="text-[11px] text-slate-500 mt-0.5">Buyer: <b>${o.buyer}</b> • Payout: <b class="text-agri-700">₹${o.total_amount.toLocaleString()}</b></div>
+                  <span class="font-black text-slate-900">Order #${o.id}: Total ${o.total_quantity || o.quantity} ${o.unit || 'tonnes'}</span>
+                  <div class="text-[11px] text-slate-500 mt-0.5">Value: <b class="text-agri-700">₹${(o.total_amount || 0).toLocaleString()}</b> • Delivery: 📍 ${o.delivery_address || o.route || 'Plant'}</div>
                 </div>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-800">
                   ${o.status}
                 </span>
-              </div>
-              <div class="flex items-center gap-2 pt-1 border-t border-slate-100 text-[10px] text-slate-600 font-medium">
-                <span>🚛 Transporter: <b>${o.transporter || 'Kisan Fleet Logistics'}</b></span>
-                <span>•</span>
-                <span>Route: <b>${o.route || 'Farm Pickup ➔ Delivery'}</b></span>
               </div>
             </div>
           `;
         });
       }
 
-      // 4. Recent buyer interests
+      // Recent buyer interests
       const biContainer = document.getElementById("farmer-buyer-interests-container");
       biContainer.innerHTML = "";
-      if (store.requirements.length === 0) {
+      if (buyerReqs.length === 0) {
         biContainer.innerHTML = `<div class="p-3 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 shadow-xs">No active buyer demands posted currently.</div>`;
       } else {
-        store.requirements.slice(0, 3).forEach(req => {
+        buyerReqs.slice(0, 3).forEach(req => {
           biContainer.innerHTML += `
             <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
               <div>
-                <span class="font-black text-slate-900">${req.buyer_name}</span>
-                <div class="text-[11px] text-slate-600 mt-0.5">Seeking: <b>${req.required_quantity} T of ${req.material_name}</b></div>
+                <span class="font-black text-slate-900">${req.material_name} Requirement</span>
+                <div class="text-[11px] text-slate-600 mt-0.5">Seeking: <b>${req.required_quantity} T</b> (Fulfilled: ${req.fulfilled_quantity || 0} T)</div>
                 <div class="text-[10px] text-harvest-700 font-bold">Max Budget: ≤ ₹${req.target_price_max}/T • 📍 ${req.delivery_location}</div>
               </div>
               <button onclick="navToTab('market')" class="px-3 py-1.5 bg-harvest-50 hover:bg-harvest-100 text-harvest-800 border border-harvest-200 rounded-xl font-bold text-[10px] transition active:scale-95">
@@ -1137,7 +488,7 @@
         });
       }
 
-      // 5. My Active Listings
+      // My Active Listings
       const listContainer = document.getElementById("farmer-listings-container");
       listContainer.innerHTML = "";
       if (myListings.length === 0) {
@@ -1155,43 +506,125 @@
                   <span class="font-black text-slate-900">${l.material_name}</span>
                   <span class="text-[9px] font-black uppercase px-1.5 py-0.2 rounded-full ${l.status === 'available' ? 'bg-agri-100 text-agri-800' : 'bg-slate-100 text-slate-600'}">${l.status}</span>
                 </div>
-                <div class="text-[11px] text-slate-600 mt-0.5">Supply: <b>${l.available_quantity} ${l.unit}</b> • Rate: <b class="text-agri-700">₹${l.price_per_unit}/T</b></div>
-                <div class="text-[10px] text-slate-400">Form: ${l.storage_type} • Moisture: ${l.moisture_condition}</div>
+                <div class="text-[11px] text-slate-600 mt-0.5">Available: <b>${l.available_quantity} ${l.unit}</b> • Rate: <b class="text-agri-700">₹${l.price_per_unit}/T</b></div>
+                <div class="text-[10px] text-slate-400">Form: ${l.storage_type || 'Dry shed'} • Moisture: ${l.moisture_condition || 'Standard'}</div>
               </div>
-              <span class="text-xl">🌾</span>
+              <div class="flex items-center gap-1.5">
+                <button onclick="handleDeleteListing(${l.id})" class="px-2 py-1 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold border border-red-200 hover:bg-red-100">Cancel</button>
+              </div>
             </div>
           `;
         });
       }
     }
 
+    async function handleCreateListing(e) {
+      e.preventDefault();
+      const mat = document.getElementById("add-material").value.trim();
+      const qty = parseFloat(document.getElementById("add-qty").value);
+      const price = parseFloat(document.getElementById("add-price").value);
+      const loc = document.getElementById("add-location").value.trim();
+      const storage = document.getElementById("add-storage").value;
+      const moist = document.getElementById("add-moisture").value;
 
-    // ----------------------------------------------------
+      const payload = {
+        material_name: mat,
+        estimated_quantity: qty,
+        unit: "tonnes",
+        price_per_unit: price,
+        location_name: loc,
+        storage_type: storage,
+        moisture_condition: moist
+      };
+
+      try {
+        if (isBackendLive && authToken) {
+          await apiRequest('/listings', 'POST', payload);
+        } else {
+          store.listings.unshift({
+            id: Date.now(),
+            farmer_id: currentUser.id,
+            farmer_name: currentUser.name,
+            material_name: mat,
+            available_quantity: qty,
+            estimated_quantity: qty,
+            unit: "tonnes",
+            price_per_unit: price,
+            location_name: loc,
+            storage_type: storage,
+            moisture_condition: moist,
+            status: "available"
+          });
+          persist();
+        }
+        closeAddResidueModal();
+        alert(`🎉 Listing Published! ${qty} Tonnes of ${mat} listed at ₹${price}/T.`);
+        renderFarmerDashboard();
+      } catch(err) {
+        alert(`Failed to publish listing: ${err.message}`);
+      }
+    }
+
+    async function handleDeleteListing(id) {
+      if (!confirm("Are you sure you want to cancel this listing?")) return;
+      try {
+        if (isBackendLive && authToken) {
+          await apiRequest(`/listings/${id}`, 'DELETE');
+        } else {
+          const l = store.listings.find(x => x.id === id);
+          if (l) l.status = 'cancelled';
+          persist();
+        }
+        alert("Listing cancelled successfully.");
+        renderFarmerDashboard();
+      } catch(err) {
+        alert(`Failed to cancel listing: ${err.message}`);
+      }
+    }
+
+    // ====================================================
     // ROLE 2: BUYER DASHBOARD
-    // ----------------------------------------------------
-    function renderBuyerDashboard() {
-      // 1. Greeting & Location
+    // ====================================================
+    async function renderBuyerDashboard() {
+      if (!currentUser) return;
       document.getElementById("buyer-dash-greeting").textContent = currentUser.name + " 👋";
       document.getElementById("buyer-dash-location").textContent = "🏭 Plant: " + (currentUser.location || "Sanand GIDC Biofuel Plant");
 
-      // 2. Metrics
-      const myReqs = store.requirements.filter(r => r.buyer_id === currentUser.id);
-      const totalNeed = myReqs.reduce((sum, r) => sum + r.required_quantity, 0);
+      let myReqs = [];
+      let myOrders = [];
+      let allListings = [];
 
-      // Available matching supply across all farmers
-      const availableListings = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
+      try {
+        if (isBackendLive && authToken) {
+          myReqs = await apiRequest('/requirements/my');
+          myOrders = await apiRequest('/orders');
+          allListings = await apiRequest('/listings');
+        } else {
+          myReqs = store.requirements.filter(r => r.buyer_id === currentUser.id);
+          myOrders = store.orders.filter(o => o.buyer);
+          allListings = store.listings;
+        }
+      } catch(e) {
+        myReqs = store.requirements.filter(r => r.buyer_id === currentUser.id);
+        myOrders = store.orders.filter(o => o.buyer);
+        allListings = store.listings;
+      }
+
+      const activeReqs = myReqs.filter(r => r.status !== 'cancelled');
+      const totalNeed = activeReqs.reduce((sum, r) => sum + r.required_quantity, 0);
+      const availableListings = allListings.filter(l => l.status === 'available' && l.available_quantity > 0);
       const matchingSupplyT = availableListings.reduce((sum, l) => sum + l.available_quantity, 0);
-      const estProcVal = myReqs.reduce((sum, r) => sum + (r.required_quantity * (r.target_price_max || 2400)), 0);
+      const estProcVal = activeReqs.reduce((sum, r) => sum + (r.required_quantity * (r.target_price_max || 2400)), 0);
 
-      document.getElementById("buyer-stat-demands").textContent = myReqs.length;
+      document.getElementById("buyer-stat-demands").textContent = activeReqs.length;
       document.getElementById("buyer-stat-needed").textContent = totalNeed.toFixed(1) + " T";
       document.getElementById("buyer-stat-supply").textContent = matchingSupplyT.toFixed(1) + " T";
       document.getElementById("buyer-stat-val").textContent = "₹" + (estProcVal >= 1000 ? (estProcVal/1000).toFixed(1) + "k" : estProcVal);
 
-      // 3. Recommended Suppliers (Smart Matching)
+      // Recommended Suppliers (Smart Matching)
       const recContainer = document.getElementById("buyer-recommended-suppliers-container");
       recContainer.innerHTML = "";
-      if (myReqs.length === 0) {
+      if (activeReqs.length === 0) {
         recContainer.innerHTML = `
           <div class="p-4 bg-white rounded-2xl border border-dashed border-slate-300 text-center space-y-2 text-xs text-slate-500 shadow-xs">
             <div>📋 Post your procurement requirement first to see smart matching supplier recommendations.</div>
@@ -1199,89 +632,110 @@
           </div>
         `;
       } else {
-        const topReq = myReqs[0];
-        const scored = availableListings.map(l => {
-          let score = 50;
-          const mMatch = (l.material_name || "").toLowerCase().includes(topReq.material_name.toLowerCase());
-          if (mMatch) score += 35;
-          if (l.price_per_unit <= topReq.target_price_max) score += 15;
-          return { listing: l, score: Math.min(98, score) };
-        });
-        scored.sort((a,b) => b.score - a.score);
+        const topReq = activeReqs[0];
+        let matches = [];
+        try {
+          if (isBackendLive && authToken) {
+            matches = await apiRequest(`/matches/requirements/${topReq.id}`);
+          }
+        } catch(e){}
 
-        scored.slice(0, 3).forEach(item => {
-          const l = item.listing;
-          recContainer.innerHTML += `
-            <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
-              <div class="space-y-0.5">
-                <div class="flex items-center gap-1.5">
-                  <span class="font-black text-slate-900">${l.farmer_name}</span>
-                  <span class="px-2 py-0.2 rounded-full text-[9px] font-black uppercase ${item.score >= 80 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">🎯 ${item.score}% Match</span>
+        if (matches.length === 0 && !isBackendLive) {
+          matches = availableListings.map(l => {
+            const mMatch = (l.material_name || "").toLowerCase().includes(topReq.material_name.toLowerCase());
+            let sc = mMatch ? 75 : 15;
+            if (l.price_per_unit <= topReq.target_price_max) sc += 15;
+            return {
+              listing_id: l.id,
+              farmer_name: l.farmer_name || "Local Farmer",
+              material_name: l.material_name,
+              available_quantity: l.available_quantity,
+              unit: l.unit,
+              price_per_unit: l.price_per_unit,
+              location_name: l.location_name,
+              score: sc
+            };
+          }).filter(m => m.score >= 50);
+        }
+
+        if (matches.length === 0) {
+          recContainer.innerHTML = `<div class="p-3 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 shadow-xs">No matching suppliers found for ${topReq.material_name} currently.</div>`;
+        } else {
+          matches.slice(0, 3).forEach(item => {
+            recContainer.innerHTML += `
+              <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
+                <div class="space-y-0.5">
+                  <div class="flex items-center gap-1.5">
+                    <span class="font-black text-slate-900">${item.farmer_name || 'Farmer'}</span>
+                    <span class="px-2 py-0.2 rounded-full text-[9px] font-black uppercase ${item.score >= 80 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">🎯 ${item.score}% Match</span>
+                  </div>
+                  <div class="text-[11px] text-slate-600">Crop: <b>${item.material_name}</b> • Supply: <b>${item.available_quantity} ${item.unit}</b></div>
+                  <div class="text-[10px] text-agri-700 font-bold">Rate: ₹${item.price_per_unit}/T • 📍 ${item.location_name}</div>
                 </div>
-                <div class="text-[11px] text-slate-600">Crop: <b>${l.material_name}</b> • Supply: <b>${l.available_quantity} ${l.unit}</b></div>
-                <div class="text-[10px] text-agri-700 font-bold">Rate: ₹${l.price_per_unit}/T (Budget: ≤ ₹${topReq.target_price_max}/T) • 📍 ${l.location_name}</div>
+                <button onclick="navToTab('activity')" class="px-3 py-1.5 bg-agri-700 hover:bg-agri-800 text-white rounded-xl font-bold text-[10px] shadow-xs transition active:scale-95">
+                  + Order
+                </button>
               </div>
-              <button onclick="navToTab('activity')" class="px-3 py-1.5 bg-agri-700 hover:bg-agri-800 text-white rounded-xl font-bold text-[10px] shadow-xs transition active:scale-95">
-                + Order
-              </button>
-            </div>
-          `;
-        });
+            `;
+          });
+        }
       }
 
-      // 4. Current Orders
+      // Orders
       const orderContainer = document.getElementById("buyer-orders-container");
       orderContainer.innerHTML = "";
-      if (store.orders.length === 0) {
+      if (myOrders.length === 0) {
         orderContainer.innerHTML = `<div class="p-3 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 shadow-xs">No active orders placed yet.</div>`;
       } else {
-        store.orders.forEach(o => {
+        myOrders.forEach(o => {
           orderContainer.innerHTML += `
             <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1.5 text-xs">
               <div class="flex justify-between items-start">
                 <div>
                   <span class="font-black text-slate-900">Order #${o.id}</span>
-                  <div class="text-[11px] text-slate-600 mt-0.5">Tonnage: <b>${o.quantity} Tonnes</b> • Amount: <b class="text-slate-900">₹${o.total_amount.toLocaleString()}</b></div>
+                  <div class="text-[11px] text-slate-600 mt-0.5">Quantity: <b>${o.total_quantity || o.quantity} Tonnes</b> • Amount: <b class="text-slate-900">₹${(o.total_amount || 0).toLocaleString()}</b></div>
                 </div>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800">
                   ${o.status || 'Confirmed'}
                 </span>
               </div>
-              <div class="text-[10px] text-slate-500 pt-1 border-t border-slate-100 flex items-center gap-2">
-                <span>🚛 Transporter: <b>${o.transporter || 'Kisan Fleet Logistics'}</b></span>
-                <span>•</span>
-                <span>${o.route || 'Sanand Plant Dropoff'}</span>
+              <div class="text-[10px] text-slate-500 pt-1 border-t border-slate-100">
+                <span>Dropoff: <b>${o.delivery_address || o.route || 'Sanand Plant'}</b></span>
               </div>
             </div>
           `;
         });
       }
 
-      // 5. Active Requirements List
+      // Requirements
       const demContainer = document.getElementById("buyer-demands-container");
       demContainer.innerHTML = "";
       if (myReqs.length === 0) {
         demContainer.innerHTML = `<div class="p-3 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 shadow-xs">No procurement requirements posted yet.</div>`;
       } else {
         myReqs.forEach(r => {
-          const rem = Math.max(0, r.required_quantity - r.fulfilled_quantity);
-          const pct = Math.min(100, Math.round((r.fulfilled_quantity / r.required_quantity) * 100));
+          const fulfilled = r.fulfilled_quantity || 0;
+          const rem = Math.max(0, r.required_quantity - fulfilled);
+          const pct = Math.min(100, Math.round((fulfilled / r.required_quantity) * 100));
           demContainer.innerHTML += `
             <div class="p-3.5 bg-white rounded-2xl border border-slate-200 border-l-4 border-l-harvest-500 shadow-xs space-y-2 text-xs">
               <div class="flex justify-between items-start">
                 <div>
                   <span class="font-black text-slate-900">${r.material_name} Requirement</span>
                   <div class="text-[11px] text-slate-600 mt-0.5">Budget: <b>≤ ₹${r.target_price_max}/T</b> • Delivery: 📍 ${r.delivery_location}</div>
-                  <div class="text-[10px] text-slate-400">Quality: ${r.moisture || 'Dry (< 12%)'} • ${r.storage || 'Dry shed'}</div>
+                  <div class="text-[10px] text-slate-400">Quality: ${r.quality_specifications || r.moisture || 'Dry (< 12%)'}</div>
                 </div>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-harvest-100 text-harvest-800">${r.status}</span>
+                <div class="text-right">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-harvest-100 text-harvest-800 block">${r.status}</span>
+                  ${r.status === 'open' ? `<button onclick="handleCancelRequirement(${r.id})" class="text-[10px] text-red-600 hover:underline mt-1">Cancel</button>` : ''}
+                </div>
               </div>
               <div>
                 <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
                   <div class="bg-harvest-500 h-2 rounded-full" style="width: ${pct}%"></div>
                 </div>
                 <div class="flex justify-between text-[10px] text-slate-500 mt-1 font-semibold">
-                  <span>Fulfilled: ${r.fulfilled_quantity.toFixed(1)} T (${pct}%)</span>
+                  <span>Fulfilled: ${fulfilled.toFixed(1)} T (${pct}%)</span>
                   <span>Remaining: ${rem.toFixed(1)} T</span>
                 </div>
               </div>
@@ -1291,52 +745,129 @@
       }
     }
 
+    async function handleCreateRequirement(e) {
+      e.preventDefault();
+      const mat = document.getElementById("req-material").value.trim();
+      const qty = parseFloat(document.getElementById("req-qty").value);
+      const priceMax = parseFloat(document.getElementById("req-price-max").value);
+      const moisture = document.getElementById("req-moisture").value;
+      const storage = document.getElementById("req-storage").value;
+      const loc = document.getElementById("req-location").value.trim();
 
-    // ----------------------------------------------------
+      const payload = {
+        material_name: mat,
+        required_quantity: qty,
+        unit: "tonnes",
+        target_price_max: priceMax,
+        delivery_location: loc,
+        quality_specifications: `${moisture}, Storage: ${storage}`
+      };
+
+      try {
+        if (isBackendLive && authToken) {
+          await apiRequest('/requirements', 'POST', payload);
+        } else {
+          store.requirements.unshift({
+            id: Date.now(),
+            buyer_id: currentUser.id,
+            buyer_name: currentUser.name,
+            material_name: mat,
+            required_quantity: qty,
+            fulfilled_quantity: 0.0,
+            unit: "tonnes",
+            target_price_max: priceMax,
+            delivery_location: loc,
+            quality_specifications: `${moisture}, Storage: ${storage}`,
+            status: "open"
+          });
+          persist();
+        }
+        closePostRequirementModal();
+        alert(`🎉 Requirement Published! ${qty} Tonnes of ${mat} needed.`);
+        renderBuyerDashboard();
+      } catch(err) {
+        alert(`Failed to post requirement: ${err.message}`);
+      }
+    }
+
+    async function handleCancelRequirement(id) {
+      if (!confirm("Are you sure you want to cancel this procurement requirement?")) return;
+      try {
+        if (isBackendLive && authToken) {
+          await apiRequest(`/requirements/${id}/cancel`, 'PATCH');
+        } else {
+          const r = store.requirements.find(x => x.id === id);
+          if (r) r.status = 'cancelled';
+          persist();
+        }
+        alert("Requirement cancelled.");
+        renderBuyerDashboard();
+      } catch(err) {
+        alert(`Failed to cancel requirement: ${err.message}`);
+      }
+    }
+
+    // ====================================================
     // ROLE 3: AGGREGATOR / TRANSPORTER DASHBOARD
-    // ----------------------------------------------------
-    function renderAggregatorDashboard() {
-      // 1. Greeting & Fleet
+    // ====================================================
+    async function renderAggregatorDashboard() {
+      if (!currentUser) return;
       document.getElementById("trans-dash-greeting").textContent = currentUser.name + " 👋";
       document.getElementById("trans-dash-fleet").textContent = "🚛 " + (currentUser.location || "Ahmedabad District Fleet Hub");
 
-      // 2. Metrics
-      const assigned = store.transportJobs.filter(j => j.status !== 'delivered');
-      const completed = store.transportJobs.filter(j => j.status === 'delivered');
+      let jobs = [];
+      try {
+        if (isBackendLive && authToken) {
+          jobs = await apiRequest('/transport/jobs');
+        } else {
+          jobs = store.transportJobs;
+        }
+      } catch(e) {
+        jobs = store.transportJobs;
+      }
+
+      const assigned = jobs.filter(j => j.status !== 'delivered');
+      const completed = jobs.filter(j => j.status === 'delivered');
 
       document.getElementById("trans-stat-assigned").textContent = assigned.length;
-      document.getElementById("trans-stat-pickups").textContent = (assigned.length * 3) + " Stops";
+      document.getElementById("trans-stat-pickups").textContent = (assigned.length * 2) + " Stops";
       document.getElementById("trans-stat-pending").textContent = assigned.length + " Trips";
-      document.getElementById("trans-stat-completed").textContent = completed.length + 8; // includes verified base
+      document.getElementById("trans-stat-completed").textContent = completed.length;
 
-      // 3. Assigned Collection Trips (Pickup & Delivery Locations + Status Actions)
       const container = document.getElementById("transporter-jobs-container");
       container.innerHTML = "";
       if (assigned.length === 0) {
         container.innerHTML = `<div class="p-4 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 shadow-xs">No pending collection trips assigned.</div>`;
       } else {
         assigned.forEach(job => {
+          let pickupDesc = job.route || job.dropoff_location;
+          try {
+            if (job.pickup_locations_json) {
+              const parsed = JSON.parse(job.pickup_locations_json);
+              pickupDesc = parsed.map(p => `📍 ${p.location}: ${p.quantity} T ${p.material}`).join('<br/>') + `<br/>➔ 🏭 Dropoff: ${job.dropoff_location}`;
+            }
+          } catch(e){}
+
           container.innerHTML += `
             <div class="p-4 bg-white rounded-3xl border border-slate-200 shadow-xs space-y-3 text-xs">
               <div class="flex justify-between items-start">
                 <div>
                   <span class="font-black text-slate-900 text-sm">Trip #${job.id}: Bulk Collection</span>
-                  <div class="text-[11px] text-slate-500">Payload: <b class="text-slate-800">${job.total_qty} Tonnes</b> • Est. Distance: <b>${job.distance_km} km</b></div>
+                  <div class="text-[11px] text-slate-500">Est. Distance: <b>${job.estimated_distance_km || job.distance_km || 45} km</b></div>
                 </div>
                 <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-800">${job.status}</span>
               </div>
 
-              <!-- Route Stops -->
               <div class="p-2.5 bg-slate-50 rounded-2xl space-y-1.5 text-[11px] border border-slate-100">
-                <div class="font-bold text-slate-700">📍 Pickup &amp; Delivery Locations:</div>
+                <div class="font-bold text-slate-700">📍 Route Locations:</div>
                 <div class="text-slate-600 leading-snug pl-2 border-l-2 border-blue-400">
-                  ${job.route}
+                  ${pickupDesc}
                 </div>
               </div>
 
               <div class="flex justify-between items-center text-xs pt-1 border-t border-slate-100">
-                <span class="text-slate-500">Trip Payout: <b class="text-agri-700 text-sm">₹${job.est_cost}</b></span>
-                <button onclick="advanceTransportJob(${job.id})" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-xs shadow-xs transition active:scale-95">
+                <span class="text-slate-500">Trip Payout: <b class="text-agri-700 text-sm">₹${job.estimated_cost || job.est_cost || 2500}</b></span>
+                <button onclick="advanceTransportJob(${job.id}, '${job.status}')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-xs shadow-xs transition active:scale-95">
                   Update Delivery Status →
                 </button>
               </div>
@@ -1345,110 +876,159 @@
         });
       }
 
-      // 4. Completed Trips History
       const compContainer = document.getElementById("transporter-completed-container");
-      compContainer.innerHTML = `
-        <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1 text-xs">
-          <div class="flex justify-between items-start">
-            <span class="font-black text-slate-800">Trip #98: Dholka ➔ Sanand Plant (Completed)</span>
-            <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Delivered &amp; Paid</span>
-          </div>
-          <div class="text-[11px] text-slate-500">Delivered 10.0 T Paddy Straw • Settlement: <b class="text-agri-700">₹2,887.50</b></div>
-        </div>
-      `;
-    }
-
-    function advanceTransportJob(jobId) {
-      const job = store.transportJobs.find(j => j.id === jobId);
-      if (!job) return;
-
-      if (job.status === 'assigned') {
-        job.status = 'picked_up';
-        alert("Status updated: All farm pickups completed. Goods are loaded.");
-      } else if (job.status === 'picked_up') {
-        job.status = 'in_transit';
-        alert("Status updated: Vehicle in transit to destination plant.");
-      } else if (job.status === 'in_transit') {
-        job.status = 'delivered';
-        alert("🎉 Trip completed! Residue weighed and successfully delivered to plant.");
+      compContainer.innerHTML = "";
+      if (completed.length === 0) {
+        compContainer.innerHTML = `<div class="p-3 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-400">No trips completed yet.</div>`;
       } else {
-        alert("This trip is already marked as delivered.");
+        completed.forEach(j => {
+          compContainer.innerHTML += `
+            <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1 text-xs">
+              <div class="flex justify-between items-start">
+                <span class="font-black text-slate-800">Trip #${j.id}: ${j.dropoff_location}</span>
+                <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Delivered</span>
+              </div>
+              <div class="text-[11px] text-slate-500">Settlement: <b class="text-agri-700">₹${j.estimated_cost || 2500}</b></div>
+            </div>
+          `;
+        });
       }
-      persist();
-      renderAggregatorDashboard();
     }
 
+    async function advanceTransportJob(jobId, currentStatus) {
+      let nextStatus = 'pickup_in_progress';
+      if (currentStatus === 'assigned') nextStatus = 'pickup_in_progress';
+      else if (currentStatus === 'pickup_in_progress') nextStatus = 'in_transit';
+      else if (currentStatus === 'in_transit') nextStatus = 'delivered';
+      else {
+        alert("This trip is already marked as delivered.");
+        return;
+      }
 
-    // ----------------------------------------------------
+      try {
+        if (isBackendLive && authToken) {
+          if (currentStatus === 'assigned') {
+            try { await apiRequest(`/transport/jobs/${jobId}/claim`, 'POST'); } catch(e){}
+          }
+          await apiRequest(`/transport/jobs/${jobId}/status`, 'PATCH', {
+            status: nextStatus,
+            notes: `Status advanced to ${nextStatus}`
+          });
+          alert(`🎉 Trip status advanced to: ${nextStatus.replace('_', ' ').toUpperCase()}`);
+        } else {
+          const job = store.transportJobs.find(j => j.id === jobId);
+          if (job) job.status = nextStatus;
+          persist();
+          alert(`Trip status updated: ${nextStatus}`);
+        }
+        renderAggregatorDashboard();
+      } catch(err) {
+        alert(`Error advancing trip: ${err.message}`);
+      }
+    }
+
+    // ====================================================
     // ROLE 4: ADMIN DASHBOARD
-    // ----------------------------------------------------
-    function renderAdminDashboard() {
-      // 1. Stats
-      document.getElementById("admin-stat-users").textContent = store.users ? store.users.length : 4;
-      document.getElementById("admin-stat-listings").textContent = store.listings.filter(l => l.status === 'available').length;
-      document.getElementById("admin-stat-orders").textContent = store.orders.length + 2;
-      document.getElementById("admin-stat-disputes").textContent = store.issues.filter(i => i.status === 'open').length;
+    // ====================================================
+    async function renderAdminDashboard() {
+      let stats = null;
+      let users = [];
+      let txns = [];
+      let disputes = [];
 
-      // 2. Users Table
+      try {
+        if (isBackendLive && authToken) {
+          stats = await apiRequest('/admin/stats');
+          users = await apiRequest('/admin/users');
+          txns = await apiRequest('/admin/transactions');
+          disputes = await apiRequest('/issues');
+        } else {
+          stats = {
+            users: { total: store.users.length, farmers: 2, buyers: 1, transporters: 1 },
+            marketplace: { active_listings: store.listings.filter(l => l.status === 'available').length, orders: store.orders.length },
+            moderation: { open_disputes: store.issues.filter(i => i.status === 'open').length }
+          };
+          users = store.users;
+          txns = store.orders;
+          disputes = store.issues;
+        }
+      } catch(e) {
+        users = store.users;
+        txns = store.orders;
+        disputes = store.issues;
+      }
+
+      if (stats) {
+        document.getElementById("admin-stat-users").textContent = stats.users.total;
+        document.getElementById("admin-stat-listings").textContent = stats.marketplace.active_listings ?? stats.marketplace.total_listings ?? 0;
+        document.getElementById("admin-stat-orders").textContent = stats.marketplace.orders ?? 0;
+        document.getElementById("admin-stat-disputes").textContent = stats.moderation.open_disputes ?? 0;
+      }
+
+      // Users List
       const usersList = document.getElementById("admin-users-list");
       usersList.innerHTML = "";
-      store.users.forEach(u => {
+      users.forEach(u => {
         usersList.innerHTML += `
           <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
             <div>
-              <div class="font-black text-slate-900">${u.name}</div>
-              <div class="text-[10px] text-slate-500">${u.email} • 📍 ${u.location}</div>
+              <div class="font-black text-slate-900">${u.full_name || u.name} (@${u.username})</div>
+              <div class="text-[10px] text-slate-500">${u.email} • 📞 ${u.phone_number || u.phone || 'N/A'}</div>
             </div>
             <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">${u.role}</span>
           </div>
         `;
       });
 
-      // 3. Listings Audit
-      const listingsList = document.getElementById("admin-listings-audit-list");
-      listingsList.innerHTML = "";
-      store.listings.forEach(l => {
-        listingsList.innerHTML += `
-          <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
-            <div>
-              <span class="font-black text-slate-900">${l.material_name} (${l.available_quantity} ${l.unit})</span>
-              <div class="text-[10px] text-slate-500">Farmer: ${l.farmer_name} • Rate: ₹${l.price_per_unit}/T</div>
-            </div>
-            <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${l.status === 'available' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">${l.status}</span>
-          </div>
-        `;
-      });
-
-      // 4. Transactions List
+      // Transactions
       const txnsList = document.getElementById("admin-transactions-list");
       txnsList.innerHTML = "";
-      store.orders.forEach(o => {
+      txns.forEach(o => {
         txnsList.innerHTML += `
           <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs flex justify-between items-center text-xs">
             <div>
-              <span class="font-black text-slate-900">Order #${o.id} - ${o.buyer}</span>
-              <div class="text-[10px] text-slate-500">${o.quantity} Tonnes • Transporter: ${o.transporter || 'Kisan Fleet'}</div>
+              <span class="font-black text-slate-900">Order #${o.id} - ${o.status}</span>
+              <div class="text-[10px] text-slate-500">${o.total_quantity || o.quantity} Tonnes • Delivery: ${o.delivery_address || 'Plant'}</div>
             </div>
-            <span class="font-black text-agri-700">₹${o.total_amount.toLocaleString()}</span>
+            <span class="font-black text-agri-700">₹${(o.total_amount || 0).toLocaleString()}</span>
           </div>
         `;
       });
 
-      // 5. Disputes
+      // Disputes
       const disContainer = document.getElementById("admin-disputes-container");
       disContainer.innerHTML = "";
-      store.issues.forEach(iss => {
+      disputes.forEach(iss => {
         disContainer.innerHTML += `
           <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-1 text-xs">
             <div class="flex justify-between items-start">
               <span class="font-black text-slate-900">${iss.title}</span>
               <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${iss.status === 'resolved' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${iss.status}</span>
             </div>
-            <p class="text-[11px] text-slate-600">${iss.desc}</p>
-            ${iss.resolution ? `<div class="p-2 bg-slate-50 text-[10px] text-slate-500 rounded-xl font-semibold">Resolution: ${iss.resolution}</div>` : ''}
+            <p class="text-[11px] text-slate-600">${iss.description || iss.desc}</p>
+            ${iss.resolution_notes || iss.resolution ? `<div class="p-2 bg-slate-50 text-[10px] text-slate-500 rounded-xl font-semibold">Resolution: ${iss.resolution_notes || iss.resolution}</div>` : (
+              iss.status === 'open' ? `<button onclick="handleResolveIssueAdmin(${iss.id})" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px]">Mark Resolved</button>` : ''
+            )}
           </div>
         `;
       });
+    }
+
+    async function handleResolveIssueAdmin(issueId) {
+      const notes = prompt("Enter resolution notes for this dispute ticket:", "Inspected and verified within commercial specification tolerance.");
+      if (!notes) return;
+      try {
+        if (isBackendLive && authToken) {
+          await apiRequest(`/issues/${issueId}/resolve`, 'PATCH', {
+            status: 'resolved',
+            resolution_notes: notes
+          });
+        }
+        alert("Dispute ticket resolved.");
+        renderAdminDashboard();
+      } catch(err) {
+        alert(`Error: ${err.message}`);
+      }
     }
 
     function switchAdminTab(t) {
@@ -1460,12 +1040,22 @@
       document.getElementById("admin-tab-btn-" + t).classList.add("tab-active", "border-b-2");
     }
 
-
-    // ----------------------------------------------------
+    // ====================================================
     // LIVE MARKETPLACE FEED
-    // ----------------------------------------------------
-    function renderMarketModule() {
-      const available = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
+    // ====================================================
+    async function renderMarketModule() {
+      let available = [];
+      try {
+        if (isBackendLive) {
+          available = await apiRequest('/listings');
+          available = available.filter(l => l.status === 'available' && l.available_quantity > 0);
+        } else {
+          available = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
+        }
+      } catch(e) {
+        available = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
+      }
+
       const totalT = available.reduce((sum, l) => sum + (l.available_quantity || 0), 0);
       const avgPrice = available.length > 0 ? Math.round(available.reduce((sum, l) => sum + l.price_per_unit, 0) / available.length) : 0;
 
@@ -1473,7 +1063,7 @@
       document.getElementById("market-stat-avg-price").textContent = "₹" + avgPrice.toLocaleString() + "/T";
       document.getElementById("market-stat-count").textContent = available.length;
 
-      filterMarketListings();
+      filterMarketListings(available);
     }
 
     function setMarketFilter(cat) {
@@ -1490,15 +1080,15 @@
       if (activeBtn) {
         activeBtn.className = "market-filter-btn px-3 py-1.5 bg-agri-700 text-white rounded-xl shadow-xs whitespace-nowrap";
       }
-      filterMarketListings();
+      renderMarketModule();
     }
 
-    function filterMarketListings() {
+    function filterMarketListings(itemsList = null) {
       const query = (document.getElementById("market-search-input").value || "").toLowerCase().trim();
       const container = document.getElementById("market-listings-container");
       container.innerHTML = "";
 
-      let items = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
+      let items = itemsList || store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
 
       if (activeMarketCategory !== 'all') {
         items = items.filter(l => l.material_name.toLowerCase().includes(activeMarketCategory.toLowerCase()));
@@ -1507,7 +1097,7 @@
       if (query) {
         items = items.filter(l => 
           l.material_name.toLowerCase().includes(query) ||
-          l.farmer_name.toLowerCase().includes(query) ||
+          (l.farmer_name && l.farmer_name.toLowerCase().includes(query)) ||
           l.location_name.toLowerCase().includes(query)
         );
       }
@@ -1528,7 +1118,7 @@
           <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2">
             <div class="flex justify-between items-start">
               <div>
-                <span class="font-black text-xs text-slate-900">${l.farmer_name}</span>
+                <span class="font-black text-xs text-slate-900">${l.farmer_name || 'Farmer'}</span>
                 <span class="text-[10px] text-slate-400 block">📍 ${l.location_name}</span>
               </div>
               <div class="text-right">
@@ -1541,7 +1131,7 @@
               <span class="text-base">🌾</span>
               <div class="flex-1">
                 <div class="font-extrabold text-slate-800">${l.material_name}</div>
-                <div class="text-[10px] text-slate-500">Supply: <b>${l.available_quantity} ${l.unit}</b> • Form: <b>${l.storage_type}</b></div>
+                <div class="text-[10px] text-slate-500">Supply: <b>${l.available_quantity} ${l.unit}</b> • Form: <b>${l.storage_type || 'Dry shed'}</b></div>
               </div>
             </div>
 
@@ -1560,16 +1150,25 @@
       });
     }
 
-
-    // ----------------------------------------------------
-    // ACTIVITY / BATCH ORDER VIEW
-    // ----------------------------------------------------
-    function renderOrdersAndAllocationView() {
+    // ====================================================
+    // ACTIVITY / BATCH ORDER & MULTI-FARMER ALLOCATION
+    // ====================================================
+    async function renderOrdersAndAllocationView() {
       const select = document.getElementById("orders-demand-select");
       const listContainer = document.getElementById("buyer-match-list");
       const allocBox = document.getElementById("buyer-alloc-box");
 
-      const myReqs = currentUser ? store.requirements.filter(r => r.buyer_id === currentUser.id && r.status !== 'fulfilled') : [];
+      let myReqs = [];
+      try {
+        if (isBackendLive && authToken) {
+          myReqs = await apiRequest('/requirements/my');
+          myReqs = myReqs.filter(r => r.status === 'open' || r.status === 'partially_fulfilled');
+        } else {
+          myReqs = store.requirements.filter(r => r.buyer_id === currentUser.id && r.status !== 'fulfilled' && r.status !== 'cancelled');
+        }
+      } catch(e) {
+        myReqs = store.requirements.filter(r => r.buyer_id === currentUser.id && r.status !== 'fulfilled');
+      }
 
       if (myReqs.length === 0) {
         select.innerHTML = `<option value="">No Active Demands (Post a requirement first)</option>`;
@@ -1590,45 +1189,85 @@
       myReqs.forEach(r => {
         const opt = document.createElement("option");
         opt.value = r.id;
-        opt.textContent = `${r.material_name} - ${r.required_quantity}T needed (≤ ₹${r.target_price_max}/T)`;
+        const rem = (r.required_quantity - (r.fulfilled_quantity || 0)).toFixed(1);
+        opt.textContent = `${r.material_name} - ${rem}T remaining (Budget: ≤ ₹${r.target_price_max}/T)`;
         select.appendChild(opt);
       });
 
+      select.onchange = () => renderSmartMatchingList();
       renderSmartMatchingList();
     }
 
-    function renderSmartMatchingList() {
+    async function renderSmartMatchingList() {
       const listContainer = document.getElementById("buyer-match-list");
       const select = document.getElementById("orders-demand-select");
       if (!select || !select.value) return;
 
-      const activeReq = store.requirements.find(r => r.id === parseInt(select.value));
-      if (!activeReq) return;
+      const reqId = parseInt(select.value);
+      listContainer.innerHTML = `<div class="p-4 text-center text-xs text-slate-400">Loading compatible farmer listings...</div>`;
 
-      const available = store.listings.filter(l => l.status === 'available' && l.available_quantity > 0);
+      let matches = [];
+      try {
+        if (isBackendLive && authToken) {
+          matches = await apiRequest(`/matches/requirements/${reqId}`);
+        }
+      } catch(e){}
+
+      if (matches.length === 0 && !isBackendLive) {
+        const activeReq = store.requirements.find(r => r.id === reqId);
+        if (activeReq) {
+          matches = store.listings
+            .filter(l => l.status === 'available' && l.available_quantity > 0)
+            .map(l => {
+              const mMatch = (l.material_name || "").toLowerCase().includes(activeReq.material_name.toLowerCase());
+              let score = mMatch ? 75 : 10;
+              if (l.price_per_unit <= activeReq.target_price_max) score += 15;
+              return {
+                listing_id: l.id,
+                farmer_name: l.farmer_name,
+                material_name: l.material_name,
+                available_quantity: l.available_quantity,
+                unit: l.unit,
+                price_per_unit: l.price_per_unit,
+                location_name: l.location_name,
+                storage_type: l.storage_type,
+                moisture_condition: l.moisture_condition,
+                score: Math.min(98, score),
+                reason: `${score}% Match for ${l.material_name}`
+              };
+            });
+        }
+      }
+
       listContainer.innerHTML = "";
+      if (matches.length === 0) {
+        listContainer.innerHTML = `
+          <div class="p-6 bg-white rounded-2xl border border-dashed border-slate-300 text-center space-y-2 text-xs text-slate-500 shadow-xs">
+            <div class="font-bold text-slate-700">No Compatible Residue Listings Found</div>
+            <div>No farmers currently have available crop listings matching this requirement.</div>
+          </div>
+        `;
+        recalculateAllocation();
+        return;
+      }
 
-      available.forEach(l => {
-        const mMatch = (l.material_name || "").toLowerCase().includes(activeReq.material_name.toLowerCase());
-        let score = mMatch ? 85 : 15;
-        if (l.price_per_unit <= activeReq.target_price_max) score += 10;
-        score = Math.min(98, score);
-
+      matches.forEach(m => {
         listContainer.innerHTML += `
           <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-start gap-3 text-xs">
-            <input type="checkbox" data-id="${l.id}" data-qty="${l.available_quantity}" data-price="${l.price_per_unit}" onchange="recalculateAllocation()" class="mt-1 w-4 h-4 text-agri-600 rounded" />
+            <input type="checkbox" data-id="${m.listing_id}" data-qty="${m.available_quantity}" data-price="${m.price_per_unit}" onchange="recalculateAllocation()" class="mt-1 w-4 h-4 text-agri-600 rounded" />
             <div class="flex-1 space-y-1">
               <div class="flex justify-between items-start">
                 <div>
-                  <span class="font-black text-slate-900">${l.farmer_name} • ${l.material_name}</span>
-                  <div class="text-[11px] text-slate-500">Available: <b>${l.available_quantity} ${l.unit}</b> • Form: ${l.storage_type}</div>
+                  <span class="font-black text-slate-900">${m.farmer_name || 'Farmer'} • ${m.material_name}</span>
+                  <div class="text-[11px] text-slate-500">Available: <b>${m.available_quantity} ${m.unit}</b> • Form: ${m.storage_type || 'Dry shed'}</div>
                 </div>
                 <div class="text-right">
-                  <span class="font-black text-agri-700">₹${l.price_per_unit}/T</span>
-                  <div class="text-[9px] font-black uppercase px-1.5 py-0.2 rounded-full ${score >= 80 ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-500'}">🎯 ${score}% Match</div>
+                  <span class="font-black text-agri-700">₹${m.price_per_unit}/T</span>
+                  <div class="text-[9px] font-black uppercase px-1.5 py-0.2 rounded-full ${m.score >= 80 ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-500'}">🎯 ${m.score}% Match</div>
                 </div>
               </div>
-              <div class="text-[10px] text-slate-400">📍 ${l.location_name} • Moisture: ${l.moisture_condition}</div>
+              <div class="text-[10px] text-slate-400">📍 ${m.location_name} • Moisture: ${m.moisture_condition || 'Standard'}</div>
+              ${m.reason ? `<div class="text-[9px] text-slate-500 italic">${m.reason}</div>` : ''}
             </div>
           </div>
         `;
@@ -1651,54 +1290,70 @@
       document.getElementById("alloc-total-val").textContent = "₹" + totalV.toLocaleString();
     }
 
-    function handleExecuteMultiFarmerOrder() {
+    async function handleExecuteMultiFarmerOrder() {
+      const select = document.getElementById("orders-demand-select");
+      if (!select || !select.value) {
+        alert("Please select an active demand first.");
+        return;
+      }
+      const reqId = parseInt(select.value);
       const checked = document.querySelectorAll("#buyer-match-list input[type='checkbox']:checked");
       if (checked.length === 0) {
         alert("Please select at least 1 farmer listing to combine into the order.");
         return;
       }
-      let combinedQty = 0;
-      let combinedVal = 0;
+
+      const contributions = [];
+      let totalQ = 0;
+      let totalV = 0;
+
       checked.forEach(cb => {
-        const id = parseInt(cb.getAttribute("data-id"));
-        const listing = store.listings.find(l => l.id === id);
-        if (listing) {
-          combinedQty += listing.available_quantity;
-          combinedVal += (listing.available_quantity * listing.price_per_unit);
-          listing.status = "reserved";
-          listing.available_quantity = 0;
+        const lid = parseInt(cb.getAttribute("data-id"));
+        const q = parseFloat(cb.getAttribute("data-qty"));
+        const p = parseFloat(cb.getAttribute("data-price"));
+        contributions.push({
+          listing_id: lid,
+          allocated_quantity: q
+        });
+        totalQ += q;
+        totalV += (q * p);
+      });
+
+      if (totalQ <= 0) {
+        alert("Selected quantity must be greater than 0.");
+        return;
+      }
+
+      try {
+        if (isBackendLive && authToken) {
+          const newOrder = await apiRequest('/orders', 'POST', {
+            requirement_id: reqId,
+            contributions: contributions,
+            delivery_address: "Sanand GIDC Biofuel Plant, Ahmedabad"
+          });
+          alert(`🎉 Multi-Farmer Order Confirmed!\n\nOrder #${newOrder.id} successfully created!\nBundled: ${newOrder.total_quantity} Tonnes from ${contributions.length} farmers.\nTotal Value: ₹${newOrder.total_amount.toLocaleString()}\nRural transport collection job has been generated automatically.`);
+        } else {
+          store.orders.unshift({
+            id: Date.now(),
+            buyer: currentUser.name,
+            quantity: totalQ,
+            total_amount: totalV,
+            status: "requested",
+            transporter: "Kisan Fleet Logistics",
+            route: `Pickup from ${contributions.length} farms ➔ Dropoff: Sanand GIDC Biofuel Plant`
+          });
+          persist();
+          alert(`🎉 Multi-Farmer Order Confirmed!\n\nBundled ${totalQ.toFixed(1)} Tonnes from ${contributions.length} farms.\nTotal Value: ₹${totalV.toLocaleString()}`);
         }
-      });
-
-      store.orders.unshift({
-        id: Date.now(),
-        buyer: currentUser ? currentUser.name : "Industrial Buyer",
-        quantity: combinedQty,
-        total_amount: combinedVal,
-        status: "Confirmed",
-        transporter: "Kisan Fleet Logistics",
-        route: `Pickup from ${checked.length} farms ➔ Dropoff: Sanand GIDC Biofuel Plant`
-      });
-
-      store.transportJobs.unshift({
-        id: Date.now(),
-        order_id: 1,
-        route: `Pickup from ${checked.length} farms ➔ Dropoff: Sanand GIDC Biofuel Plant`,
-        total_qty: combinedQty,
-        distance_km: 65.0,
-        est_cost: 2350.0,
-        status: "assigned"
-      });
-
-      persist();
-      alert(`🎉 Combined Multi-Farmer Order Confirmed!\n\nSuccessfully bundled ${combinedQty.toFixed(1)} Tonnes from ${checked.length} farms.\nTotal Value: ₹${combinedVal.toLocaleString()}\nA rural transport collection job has been generated.`);
-      navToTab('dashboard');
+        navToTab('dashboard');
+      } catch(err) {
+        alert(`Order Allocation Error: ${err.message}`);
+      }
     }
 
-
-    // ----------------------------------------------------
-    // USER PROFILE & SETTINGS
-    // ----------------------------------------------------
+    // ====================================================
+    // USER PROFILE & SYSTEM SETTINGS
+    // ====================================================
     function renderProfileView() {
       if (!currentUser) return;
       document.getElementById("prof-name").textContent = currentUser.name;
@@ -1707,102 +1362,55 @@
       document.getElementById("prof-username").textContent = currentUser.username;
       document.getElementById("prof-email").textContent = currentUser.email;
       document.getElementById("prof-phone").textContent = currentUser.phone || "+91 9876543210";
-      document.getElementById("prof-role-desc").textContent = currentUser.role.toUpperCase() + " Full Platform Access";
+      document.getElementById("prof-role-desc").textContent = currentUser.role.toUpperCase() + " (Scoped Permissions)";
+      updateBackendStatusUI(isBackendLive);
     }
 
-
-    // ----------------------------------------------------
+    // ====================================================
     // MODAL DIALOG CONTROLLERS
-    // ----------------------------------------------------
+    // ====================================================
     function openAddResidueModal() { document.getElementById("modal-add-residue").classList.remove("hidden"); }
     function closeAddResidueModal() { document.getElementById("modal-add-residue").classList.add("hidden"); }
     function setAddCrop(crop) { document.getElementById("add-material").value = crop; }
 
-    function handleCreateListing(e) {
-      e.preventDefault();
-      const mat = document.getElementById("add-material").value.trim();
-      const qty = parseFloat(document.getElementById("add-qty").value);
-      const price = parseFloat(document.getElementById("add-price").value);
-      const loc = document.getElementById("add-location").value.trim();
-      const storage = document.getElementById("add-storage").value;
-      const moist = document.getElementById("add-moisture").value;
-
-      store.listings.unshift({
-        id: Date.now(),
-        farmer_id: currentUser.id,
-        farmer_name: currentUser.name,
-        material_name: mat,
-        available_quantity: qty,
-        estimated_quantity: qty,
-        unit: "tonnes",
-        price_per_unit: price,
-        location_name: loc,
-        storage_type: storage,
-        moisture_condition: moist,
-        status: "available"
-      });
-
-      persist();
-      closeAddResidueModal();
-      alert(`🎉 Listing Published! ${qty} Tonnes of ${mat} listed at ₹${price}/T.`);
-      renderFarmerDashboard();
-    }
-
     function openPostRequirementModal() { document.getElementById("modal-post-req").classList.remove("hidden"); }
     function closePostRequirementModal() { document.getElementById("modal-post-req").classList.add("hidden"); }
 
-    function handleCreateRequirement(e) {
-      e.preventDefault();
-      const mat = document.getElementById("req-material").value.trim();
-      const qty = parseFloat(document.getElementById("req-qty").value);
-      const priceMax = parseFloat(document.getElementById("req-price-max").value);
-      const moisture = document.getElementById("req-moisture").value;
-      const storage = document.getElementById("req-storage").value;
-      const loc = document.getElementById("req-location").value.trim();
-
-      const newReq = {
-        id: Date.now(),
-        buyer_id: currentUser.id,
-        buyer_name: currentUser.name,
-        material_name: mat,
-        required_quantity: qty,
-        fulfilled_quantity: 0.0,
-        unit: "tonnes",
-        target_price_max: priceMax,
-        moisture: moisture,
-        storage: storage,
-        delivery_location: loc,
-        status: "open"
-      };
-
-      store.requirements.unshift(newReq);
-      persist();
-      closePostRequirementModal();
-      alert(`🎉 Procurement Requirement Published!\n\n${qty} Tonnes of ${mat} (Max ₹${priceMax}/T) is now active.`);
-      renderBuyerDashboard();
-    }
-
     function openIssueModal() { document.getElementById("modal-issue").classList.remove("hidden"); }
     function closeIssueModal() { document.getElementById("modal-issue").classList.add("hidden"); }
-    function handleReportIssue(e) {
+
+    async function handleReportIssue(e) {
       e.preventDefault();
       const title = document.getElementById("issue-title").value.trim();
       const desc = document.getElementById("issue-desc").value.trim();
-      store.issues.unshift({
-        id: Date.now(),
-        reporter: currentUser ? currentUser.name : "User",
-        title: title,
-        desc: desc,
-        status: "open"
-      });
-      persist();
-      closeIssueModal();
-      alert("⚠️ Issue ticket submitted. Platform moderator will review and resolve.");
+
+      try {
+        if (isBackendLive && authToken) {
+          await apiRequest('/issues', 'POST', {
+            title: title,
+            description: desc,
+            category: "quality_mismatch"
+          });
+        } else {
+          store.issues.unshift({
+            id: Date.now(),
+            reporter: currentUser ? currentUser.name : "User",
+            title: title,
+            description: desc,
+            status: "open"
+          });
+          persist();
+        }
+        closeIssueModal();
+        alert("⚠️ Issue ticket submitted. Platform moderator will review and resolve.");
+      } catch(err) {
+        alert(`Failed to submit issue: ${err.message}`);
+      }
     }
 
-    // Initialize Auth View
-    hideAllViews();
-    document.getElementById("view-auth").classList.remove("hidden");
+    // Start App & Check Session on Load
+    window.addEventListener("DOMContentLoaded", initApp);
   </script>
+
 </body>
 </html>

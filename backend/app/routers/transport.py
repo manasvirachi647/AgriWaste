@@ -75,10 +75,17 @@ def update_transport_status(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Transporter updates pickup, transit, or delivery progress."""
+    """Transporter updates pickup, transit, or delivery progress with RBAC validation."""
     job = db.query(TransportJob).filter(TransportJob.id == job_id).first()
     if not job:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Transport job not found")
+
+    # Only the assigned transporter or an admin is authorized to update job status
+    if job.aggregator_id != current_user.id and current_user.role != UserRole.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to update this transport job"
+        )
 
     job.status = payload.status
     if payload.notes:
@@ -89,6 +96,11 @@ def update_transport_status(
         order = db.query(Order).filter(Order.id == job.order_id).first()
         if order:
             order.status = OrderStatus.DELIVERED
+            # Also update order items to delivered
+            for item in order.items:
+                item.farmer_status = "delivered"
+                if item.delivered_quantity is None:
+                    item.delivered_quantity = item.committed_quantity
 
     db.commit()
     db.refresh(job)

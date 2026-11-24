@@ -125,9 +125,32 @@ def delete_requirement(
     if requirement.buyer_id != current_user.id and current_user.role != UserRole.ADMIN:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete this requirement")
 
-    db.delete(requirement)
+    if requirement.orders:
+        requirement.status = RequirementStatus.CANCELLED
+    else:
+        db.delete(requirement)
     db.commit()
     return None
+
+
+@router.patch("/{requirement_id}/cancel", response_model=BuyerRequirementResponse)
+def cancel_requirement(
+    requirement_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Explicitly mark a buyer requirement as cancelled/closed."""
+    requirement = db.query(BuyerRequirement).filter(BuyerRequirement.id == requirement_id).first()
+    if not requirement:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Requirement not found")
+    
+    if requirement.buyer_id != current_user.id and current_user.role != UserRole.ADMIN:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to cancel this requirement")
+
+    requirement.status = RequirementStatus.CANCELLED
+    db.commit()
+    db.refresh(requirement)
+    return requirement
 
 
 @router.get("/{requirement_id}/matching-listings", response_model=List[WasteListingResponse])
