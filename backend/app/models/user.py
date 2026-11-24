@@ -71,6 +71,7 @@ class AggregatorProfile(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False)
     vehicle_type = Column(String(100), nullable=True)  # e.g., Tractor Trolley, 10-Wheeler Truck
+    vehicle_number = Column(String(50), nullable=True)  # Vehicle registration number e.g., GJ-01-AX-4821
     capacity_tonnes = Column(Float, nullable=True)
     operating_district = Column(String(100), nullable=True)
     service_radius_km = Column(Float, nullable=True, default=50.0)
