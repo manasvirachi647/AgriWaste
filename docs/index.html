@@ -99,7 +99,7 @@
     <!-- Drawer Header -->
     <div class="p-4 bg-gradient-to-br from-emerald-50 to-agri-50 border-b border-emerald-100 flex items-center justify-between">
       <div class="flex items-center gap-2.5">
-        <div class="w-10 h-10 rounded-2xl bg-white border border-agri-200 text-2xl flex items-center justify-center shadow-xs">
+        <div id="drawer-user-avatar" class="w-10 h-10 rounded-2xl bg-white border border-agri-200 text-2xl flex items-center justify-center shadow-xs">
           👨‍🌾
         </div>
         <div>
@@ -112,38 +112,61 @@
 
     <!-- Drawer Nav Items -->
     <div class="p-3 flex-1 overflow-y-auto space-y-1 text-xs font-black">
-      <button onclick="handleFarmerDrawerNav('home')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
-        <span class="text-base">🏠</span>
-        <span>Home</span>
-      </button>
-      <button onclick="handleFarmerDrawerNav('listings')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
-        <span class="text-base">🌾</span>
-        <span>My Crop Waste</span>
-      </button>
-      <button onclick="handleFarmerDrawerNav('demands')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
-        <span class="text-base">📋</span>
-        <span>Buyer Needs</span>
-      </button>
-      <button onclick="handleFarmerDrawerNav('matches')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
-        <span class="text-base">🎯</span>
-        <span>Best Matches</span>
-      </button>
-      <button onclick="handleFarmerDrawerNav('orders')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
-        <span class="text-base">📦</span>
-        <span>Orders</span>
-      </button>
-      <button onclick="handleFarmerDrawerNav('tracking')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
-        <span class="text-base">🚛</span>
-        <span>Live Tracking</span>
-      </button>
-      <button onclick="handleFarmerDrawerNav('earnings')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
-        <span class="text-base">💰</span>
-        <span>My Income</span>
-      </button>
-      <button onclick="handleFarmerDrawerNav('help')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
-        <span class="text-base">❓</span>
-        <span>Help &amp; Support</span>
-      </button>
+      <!-- Farmer Drawer Menu -->
+      <div id="farmer-drawer-menu" class="space-y-1">
+        <button onclick="handleFarmerDrawerNav('home')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+          <span class="text-base">🏠</span>
+          <span>Home</span>
+        </button>
+        <button onclick="handleFarmerDrawerNav('listings')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+          <span class="text-base">🌾</span>
+          <span>My Crop Waste</span>
+        </button>
+        <button onclick="handleFarmerDrawerNav('demands')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+          <span class="text-base">📋</span>
+          <span>Buyer Needs</span>
+        </button>
+        <button onclick="handleFarmerDrawerNav('matches')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+          <span class="text-base">🎯</span>
+          <span>Best Matches</span>
+        </button>
+        <button onclick="handleFarmerDrawerNav('orders')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+          <span class="text-base">📦</span>
+          <span>Orders</span>
+        </button>
+        <button onclick="handleFarmerDrawerNav('tracking')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+          <span class="text-base">🚛</span>
+          <span>Live Tracking</span>
+        </button>
+        <button onclick="handleFarmerDrawerNav('earnings')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+          <span class="text-base">💰</span>
+          <span>My Income</span>
+        </button>
+        <button onclick="handleFarmerDrawerNav('help')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+          <span class="text-base">❓</span>
+          <span>Help &amp; Support</span>
+        </button>
+      </div>
+
+      <!-- Buyer Drawer Menu (Home, Requirements, Suppliers, My Orders) -->
+      <div id="buyer-drawer-menu" class="space-y-1 hidden">
+        <button onclick="handleBuyerDrawerNav('home')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-amber-50 hover:text-harvest-700 transition">
+          <span class="text-base">🏠</span>
+          <span>Home</span>
+        </button>
+        <button onclick="handleBuyerDrawerNav('requirements')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-amber-50 hover:text-harvest-700 transition">
+          <span class="text-base">📋</span>
+          <span>Requirements</span>
+        </button>
+        <button onclick="handleBuyerDrawerNav('suppliers')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-amber-50 hover:text-harvest-700 transition">
+          <span class="text-base">🌾</span>
+          <span>Suppliers</span>
+        </button>
+        <button onclick="handleBuyerDrawerNav('orders')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-amber-50 hover:text-harvest-700 transition">
+          <span class="text-base">📦</span>
+          <span>My Orders</span>
+        </button>
+      </div>
     </div>
 
     <!-- Drawer Footer -->
@@ -647,23 +670,11 @@
             </div>
           </div>
 
-          <!-- 3. Primary Action Buttons -->
-          <div class="grid grid-cols-2 gap-2 text-xs font-black">
-            <button onclick="openPostRequirementModal()" class="p-3.5 bg-harvest-600 hover:bg-harvest-700 text-white rounded-2xl shadow-xs flex items-center justify-center gap-2 transition active:scale-95 col-span-2">
+          <!-- 3. Primary Action Button -->
+          <div>
+            <button onclick="openPostRequirementModal()" class="w-full p-3.5 bg-harvest-600 hover:bg-harvest-700 text-white rounded-2xl shadow-xs flex items-center justify-center gap-2 text-xs font-black transition active:scale-95">
               <span class="text-base">📋</span>
               <span>+ Post Procurement Requirement</span>
-            </button>
-            <button onclick="switchBuyerTab('requirements')" class="p-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-800 rounded-2xl shadow-xs flex items-center justify-center gap-2 transition active:scale-95">
-              <span>📋</span>
-              <span>View Requirements</span>
-            </button>
-            <button onclick="switchBuyerTab('suppliers')" class="p-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-800 rounded-2xl shadow-xs flex items-center justify-center gap-2 transition active:scale-95">
-              <span>🌾</span>
-              <span>Find Suppliers</span>
-            </button>
-            <button onclick="switchBuyerTab('orders')" class="p-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-800 rounded-2xl shadow-xs flex items-center justify-center gap-2 transition active:scale-95 col-span-2">
-              <span>📦</span>
-              <span>View Orders</span>
             </button>
           </div>
 
@@ -671,7 +682,6 @@
           <div class="space-y-2">
             <div class="flex justify-between items-center px-1">
               <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Recent Requirements</h3>
-              <button onclick="switchBuyerTab('requirements')" class="text-[11px] font-bold text-harvest-700 hover:underline">All Requirements →</button>
             </div>
             <div id="buyer-dash-demands-preview" class="space-y-2">
               <!-- Populated via renderBuyerDashboard -->
@@ -682,7 +692,6 @@
           <div class="space-y-2">
             <div class="flex justify-between items-center px-1">
               <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Active Procurement Orders</h3>
-              <button onclick="switchBuyerTab('orders')" class="text-[11px] font-bold text-harvest-700 hover:underline">All Orders →</button>
             </div>
             <div id="buyer-dash-orders-preview" class="space-y-2">
               <!-- Populated via renderBuyerDashboard -->
@@ -767,6 +776,11 @@
 
         <!-- SUBTAB 5: BUYER PROFILE & PAYMENT HISTORY (FEATURE 8 & 7) -->
         <div id="buyer-sub-profile" class="space-y-4 hidden">
+          <div class="flex items-center justify-between pb-1">
+            <button onclick="switchBuyerTab('home')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1 transition">
+              <span>←</span><span>Back to Home</span>
+            </button>
+          </div>
           <!-- Buyer Header Card -->
           <div class="bg-gradient-to-br from-harvest-50 to-amber-50 p-5 rounded-3xl border border-harvest-200/80 shadow-xs text-center space-y-2">
             <div class="w-16 h-16 rounded-3xl bg-white border-2 border-harvest-300 text-3xl flex items-center justify-center mx-auto shadow-xs">
@@ -1658,6 +1672,11 @@ div>
       switchFarmerSubTab(subTab);
     };
 
+    window.handleBuyerDrawerNav = function(subTab) {
+      window.closeFarmerDrawer();
+      switchBuyerTab(subTab);
+    };
+
     window.openIssueModal = function() {
       const m = document.getElementById("modal-issue");
       if (m) {
@@ -2244,38 +2263,34 @@ div>
         if (hamBtn) hamBtn.classList.remove("hidden");
         if (botNav) botNav.classList.add("hidden");
         
+        const fMenu = document.getElementById("farmer-drawer-menu");
+        const bMenu = document.getElementById("buyer-drawer-menu");
+        if (fMenu) fMenu.classList.remove("hidden");
+        if (bMenu) bMenu.classList.add("hidden");
+
+        const dAvatar = document.getElementById("drawer-user-avatar");
+        if (dAvatar) dAvatar.textContent = "👨‍🌾";
         const dName = document.getElementById("drawer-farmer-name");
         if (dName) dName.textContent = currentUser.name;
         const dLoc = document.getElementById("drawer-farmer-location");
         if (dLoc) dLoc.textContent = "📍 " + (currentUser.location || "Sanand, Ahmedabad");
         navToTab('dashboard');
       } else if (currentUser.role === 'buyer') {
-        if (hamBtn) hamBtn.classList.add("hidden");
-        if (botNav) {
-          botNav.innerHTML = `
-            <button id="bnav-home" onclick="switchBuyerTab('home')" class="flex flex-col items-center text-harvest-700 transition">
-              <span class="text-base">🏠</span>
-              <span class="text-[9px] mt-0.5">Home</span>
-            </button>
-            <button id="bnav-requirements" onclick="switchBuyerTab('requirements')" class="flex flex-col items-center text-slate-400 hover:text-harvest-700 transition">
-              <span class="text-base">📋</span>
-              <span class="text-[9px] mt-0.5">Requirements</span>
-            </button>
-            <button id="bnav-suppliers" onclick="switchBuyerTab('suppliers')" class="flex flex-col items-center text-slate-400 hover:text-harvest-700 transition">
-              <span class="text-base">🌾</span>
-              <span class="text-[9px] mt-0.5">Suppliers</span>
-            </button>
-            <button id="bnav-orders" onclick="switchBuyerTab('orders')" class="flex flex-col items-center text-slate-400 hover:text-harvest-700 transition">
-              <span class="text-base">📦</span>
-              <span class="text-[9px] mt-0.5">My Orders</span>
-            </button>
-            <button id="bnav-profile" onclick="switchBuyerTab('profile')" class="flex flex-col items-center text-slate-400 hover:text-harvest-700 transition">
-              <span class="text-base">👤</span>
-              <span class="text-[9px] mt-0.5">Profile</span>
-            </button>
-          `;
-          botNav.classList.remove("hidden");
-        }
+        if (hamBtn) hamBtn.classList.remove("hidden");
+        if (botNav) botNav.classList.add("hidden");
+
+        const fMenu = document.getElementById("farmer-drawer-menu");
+        const bMenu = document.getElementById("buyer-drawer-menu");
+        if (fMenu) fMenu.classList.add("hidden");
+        if (bMenu) bMenu.classList.remove("hidden");
+
+        const dAvatar = document.getElementById("drawer-user-avatar");
+        if (dAvatar) dAvatar.textContent = "🏭";
+        const dName = document.getElementById("drawer-farmer-name");
+        if (dName) dName.textContent = currentUser.company || currentUser.name || "Gujarat BioPower Ltd";
+        const dLoc = document.getElementById("drawer-farmer-location");
+        if (dLoc) dLoc.textContent = "📍 " + (currentUser.location || "Sanand GIDC Biofuel Plant");
+
         switchBuyerTab('home');
       } else {
         if (hamBtn) hamBtn.classList.add("hidden");
@@ -2326,8 +2341,12 @@ div>
         document.getElementById("view-orders").classList.remove("hidden");
         renderOrdersAndAllocationView();
       } else if (tabName === 'profile') {
-        document.getElementById("view-profile").classList.remove("hidden");
-        renderProfileView();
+        if (currentUser && currentUser.role === 'buyer') {
+          switchBuyerTab('profile');
+        } else {
+          document.getElementById("view-profile").classList.remove("hidden");
+          renderProfileView();
+        }
       }
     }
 
