@@ -2522,11 +2522,22 @@ div>
       const saved = localStorage.getItem("agriwaste_store_v5");
       if (saved) {
         store = { ...store, ...JSON.parse(saved) };
-        // Sanitize orders payment_status to strictly Pending or Completed
+        // Sanitize orders payment_status to strictly Pending or Completed & ensure multi-farmer pool
         if (store.orders && Array.isArray(store.orders)) {
           store.orders.forEach(o => {
             if (o.payment_status === 'escrow_held' || !o.payment_status) {
               o.payment_status = 'pending';
+            }
+            if (o.id === 101 && (!o.contributions || o.contributions.length < 3)) {
+              o.material_name = "Rice Husk (Multi-Farmer Pool)";
+              o.total_quantity = 10.0;
+              o.quantity = 10.0;
+              o.total_amount = 23350;
+              o.contributions = [
+                { farmer_name: "Ramesh Patel", quantity: 2.0, price_per_unit: 2400, location: "Sanand Farm, Ahmedabad", status: "collected" },
+                { farmer_name: "Suresh Chaudhary", quantity: 3.0, price_per_unit: 2350, location: "Bavla Farm, Ahmedabad", status: "in_transit" },
+                { farmer_name: "Mahesh Desai", quantity: 5.0, price_per_unit: 2300, location: "Dholka Farm, Ahmedabad", status: "collected" }
+              ];
             }
           });
         }
