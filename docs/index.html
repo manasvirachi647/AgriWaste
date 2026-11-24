@@ -2690,6 +2690,9 @@ div>
     }
 
     function handleLogout() {
+      if (typeof window.closeFarmerDrawer === "function") {
+        window.closeFarmerDrawer();
+      }
       currentUser = null;
       authToken = null;
       localStorage.removeItem("agriwaste_jwt_token");
