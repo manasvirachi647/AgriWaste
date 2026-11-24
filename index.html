@@ -73,6 +73,10 @@
     <!-- TOP STATUS & APP BAR -->
     <header id="top-bar" class="hidden bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 sticky top-0 z-30 flex items-center justify-between shadow-2xs">
       <div class="flex items-center gap-2.5">
+        <!-- Farmer Hamburger Menu Button -->
+        <button id="farmer-hamburger-btn" onclick="toggleFarmerDrawer()" class="hidden w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center text-lg font-black transition active:scale-95" title="Menu">
+          ☰
+        </button>
         <div class="w-8 h-8 rounded-xl bg-agri-100 flex items-center justify-center text-agri-700 font-black text-base shadow-xs">🌾</div>
         <div>
           <h1 id="user-display-name" class="font-black text-sm text-slate-900 leading-tight">AgriWaste User</h1>
@@ -83,12 +87,75 @@
         </div>
       </div>
       <div class="flex items-center gap-2">
-
-        <button onclick="navToTab('profile')" title="My Profile & Settings" class="w-8 h-8 rounded-xl bg-agri-50 border border-agri-200 text-agri-800 flex items-center justify-center text-sm font-bold transition">
-          👤
+        <button onclick="navToTab('profile')" title="My Profile" class="px-2.5 py-1.5 rounded-xl bg-agri-50 hover:bg-agri-100 border border-agri-200 text-agri-800 flex items-center gap-1.5 text-xs font-black transition active:scale-95 shadow-2xs">
+          <span>👤</span>
+          <span class="text-[11px]">Profile</span>
         </button>
       </div>
     </header>
+  <!-- FARMER LEFT HAMBURGER DRAWER -->
+  <div id="farmer-drawer-backdrop" onclick="closeFarmerDrawer()" class="fixed inset-0 bg-black/50 z-50 transition-opacity hidden opacity-0"></div>
+  <aside id="farmer-drawer" class="fixed top-0 bottom-0 left-0 w-72 max-w-[80vw] bg-white z-50 shadow-2xl flex flex-col transition-transform transform -translate-x-full duration-300 ease-in-out">
+    <!-- Drawer Header -->
+    <div class="p-4 bg-gradient-to-br from-emerald-50 to-agri-50 border-b border-emerald-100 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-2xl bg-white border border-agri-200 text-2xl flex items-center justify-center shadow-xs">
+          👨‍🌾
+        </div>
+        <div>
+          <div id="drawer-farmer-name" class="font-black text-sm text-slate-900 leading-tight">Ramesh Patel</div>
+          <div id="drawer-farmer-location" class="text-[10px] text-agri-800 font-semibold mt-0.5">📍 Sanand, Ahmedabad</div>
+        </div>
+      </div>
+      <button onclick="closeFarmerDrawer()" class="w-8 h-8 rounded-full bg-white text-slate-500 hover:text-slate-800 font-bold flex items-center justify-center text-sm shadow-xs">&times;</button>
+    </div>
+
+    <!-- Drawer Nav Items -->
+    <div class="p-3 flex-1 overflow-y-auto space-y-1 text-xs font-black">
+      <button onclick="handleFarmerDrawerNav('home')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+        <span class="text-base">🏠</span>
+        <span>Home Dashboard</span>
+      </button>
+      <button onclick="handleFarmerDrawerNav('listings')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+        <span class="text-base">🌾</span>
+        <span>My Crop Waste</span>
+      </button>
+      <button onclick="handleFarmerDrawerNav('demands')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+        <span class="text-base">📋</span>
+        <span>Buyer Needs</span>
+      </button>
+      <button onclick="handleFarmerDrawerNav('matches')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+        <span class="text-base">🎯</span>
+        <span>Best Matches</span>
+      </button>
+      <button onclick="handleFarmerDrawerNav('orders')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+        <span class="text-base">📦</span>
+        <span>Orders</span>
+      </button>
+      <button onclick="handleFarmerDrawerNav('tracking')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+        <span class="text-base">🚛</span>
+        <span>Live Tracking</span>
+      </button>
+      <button onclick="handleFarmerDrawerNav('earnings')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+        <span class="text-base">💰</span>
+        <span>My Income</span>
+      </button>
+      <button onclick="handleFarmerDrawerNav('help')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+        <span class="text-base">❓</span>
+        <span>Help &amp; Support</span>
+      </button>
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="p-3 border-t border-slate-100">
+      <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-xs font-black transition">
+        <span>🚪</span>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+
+
 
     <!-- VIEWS CONTAINER -->
     <main class="flex-1 overflow-y-auto no-scrollbar p-4 space-y-4">
@@ -249,7 +316,7 @@
             <div>
               <div class="flex items-center gap-1.5">
                 <span class="text-[11px] font-bold text-agri-800">Namaste &amp; Welcome,</span>
-                <span id="farmer-lang-pill" class="text-[9px] font-bold bg-white text-agri-800 px-1.5 py-0.2 rounded-full border border-agri-200">English</span>
+                
               </div>
               <h2 id="farmer-dash-greeting" class="text-lg font-black text-slate-900 leading-tight mt-0.5">Ramesh Patel 👋</h2>
               <div id="farmer-dash-location" class="text-xs text-agri-900 font-semibold mt-1 flex items-center gap-1">
@@ -262,49 +329,7 @@
           </div>
         </div>
 
-        <!-- FARMER SUB-NAV TABS (SCROLLABLE PILLS) -->
-        <div class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 text-[11px] font-black">
-          <button id="f-tab-btn-home" onclick="switchFarmerSubTab('home')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-agri-700 text-white shadow-xs">
-            🏠 Home
-          </button>
-          <button id="f-tab-btn-listings" onclick="switchFarmerSubTab('listings')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            🌾 My Crop Waste
-          </button>
-          <button id="f-tab-btn-demands" onclick="switchFarmerSubTab('demands')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            📋 Buyer Needs
-          </button>
-          <button id="f-tab-btn-matches" onclick="switchFarmerSubTab('matches')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            🎯 Best Matches
-          </button>
-          <button id="f-tab-btn-orders" onclick="switchFarmerSubTab('orders')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            📦 Orders
-          </button>
-          <button id="f-tab-btn-tracking" onclick="switchFarmerSubTab('tracking')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            🚛 Live Truck
-          </button>
-          <button id="f-tab-btn-earnings" onclick="switchFarmerSubTab('earnings')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            💰 My Income
-          </button>
-
-          <button id="f-tab-btn-help" onclick="switchFarmerSubTab('help')" class="farmer-subtab-btn px-3 py-1.5 rounded-xl whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
-            ❓ Help
-          </button>
-        </div>
-
-
-        <!-- ============================================== -->
-        <!-- SUB-TAB 1: HOME SCREEN / OVERVIEW              -->
-        <!-- ============================================== -->
-        <div id="farmer-sub-home" class="space-y-4">
-          <!-- 5 REQUIRED KPI METRIC CARDS -->
-          <div class="space-y-1.5">
-            <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 px-1">Farm Operation Metrics</span>
-            <div class="grid grid-cols-2 gap-2 text-xs">
-              <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
-                <div class="text-[10px] font-bold text-slate-500">Active Waste Listings</div>
-                <div id="f-kpi-listings" class="text-xl font-black text-agri-700 mt-0.5">0</div>
-                <div class="text-[9px] text-slate-400 mt-0.5">In buyer market</div>
-              </div>
+        
               <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs">
                 <div class="text-[10px] font-bold text-slate-500">Total Quantity Available</div>
                 <div id="f-kpi-tonnes" class="text-xl font-black text-agri-700 mt-0.5">0.0 T</div>
@@ -937,59 +962,40 @@
           <div id="prof-location-tag" class="text-xs text-agri-900 font-bold">📍 Sanand Taluka, Ahmedabad District</div>
         </div>
 
-        <!-- Farmer Personal & Farm Details Form -->
-        <form onsubmit="handleSaveGlobalProfile(event)" class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3.5 text-xs">
+        <!-- Farmer Personal & Farm Details (Clean Info Cards) -->
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3 text-xs">
           <div class="flex justify-between items-center pb-2 border-b border-slate-100">
             <h3 class="font-black text-slate-900 text-xs uppercase tracking-wider">Farmer &amp; Land Details</h3>
             <span class="text-[10px] font-bold text-agri-700 bg-agri-50 px-2 py-0.5 rounded-lg border border-agri-200">Official Records</span>
           </div>
 
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Full Name *</label>
-            <input type="text" id="prof-input-name" required class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">Mobile Number *</label>
-              <input type="tel" id="prof-input-phone" required class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+          <div class="grid grid-cols-2 gap-3 py-1">
+            <div class="p-2.5 bg-slate-50 rounded-xl">
+              <span class="text-[10px] text-slate-400 block font-semibold">Full Name</span>
+              <span id="prof-disp-name" class="font-bold text-slate-800 text-xs">Ramesh Patel</span>
             </div>
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">Email Address</label>
-              <input type="email" id="prof-input-email" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+            <div class="p-2.5 bg-slate-50 rounded-xl">
+              <span class="text-[10px] text-slate-400 block font-semibold">Mobile Number</span>
+              <span id="prof-disp-phone" class="font-bold text-slate-800 text-xs">+91 98250 12345</span>
             </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">Village / Taluka *</label>
-              <input type="text" id="prof-input-village" required class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+            <div class="p-2.5 bg-slate-50 rounded-xl col-span-2">
+              <span class="text-[10px] text-slate-400 block font-semibold">Email Address</span>
+              <span id="prof-disp-email" class="font-bold text-slate-800 text-xs">ramesh@kisan.in</span>
             </div>
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">District *</label>
-              <input type="text" id="prof-input-district" required class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+            <div class="p-2.5 bg-slate-50 rounded-xl">
+              <span class="text-[10px] text-slate-400 block font-semibold">Village / Taluka</span>
+              <span id="prof-disp-village" class="font-bold text-slate-800 text-xs">Sanand</span>
             </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">State *</label>
-              <input type="text" id="prof-input-state" required class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-medium" />
+            <div class="p-2.5 bg-slate-50 rounded-xl">
+              <span class="text-[10px] text-slate-400 block font-semibold">District</span>
+              <span id="prof-disp-district" class="font-bold text-slate-800 text-xs">Ahmedabad</span>
             </div>
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">Preferred Language</label>
-              <select id="prof-input-lang" class="w-full px-2.5 py-2 border border-slate-300 rounded-xl bg-white font-medium">
-                <option value="English">English</option>
-                <option value="ગુજરાતી">ગુજરાતી (Gujarati)</option>
-                <option value="हिन्दी">हिन्दी (Hindi)</option>
-              </select>
+            <div class="p-2.5 bg-slate-50 rounded-xl col-span-2">
+              <span class="text-[10px] text-slate-400 block font-semibold">State</span>
+              <span id="prof-disp-state" class="font-bold text-slate-800 text-xs">Gujarat</span>
             </div>
           </div>
-
-          <button type="submit" class="w-full py-2.5 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-xs shadow-sm transition active:scale-95">
-            💾 Save Profile Details
-          </button>
-        </form>
+        </div>
 
         <!-- Logout Button -->
         <div class="pt-1">
@@ -1226,7 +1232,7 @@ div>
 
 
   <!-- MODAL 3: ISSUE / DISPUTE REPORTING -->
-  <div id="modal-issue" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-issue" class="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-3 shadow-2xl">
       <div class="flex justify-between items-center pb-2 border-b border-slate-100">
         <h3 class="font-black text-sm text-slate-900">⚠️ Report Issue or Dispute</h3>
@@ -1691,28 +1697,28 @@ div>
     }
 
     function renderAuthenticatedState() {
-      // Hide "My Sales" / Activity in bottom bar for Farmer
-      const actBtn = document.getElementById("nav-btn-activity");
-      if (actBtn) {
-        if (currentUser.role === 'farmer') {
-          actBtn.classList.add("hidden");
-        } else {
-          actBtn.classList.remove("hidden");
-        }
-      }
-
+      document.getElementById("view-auth").classList.add("hidden");
       document.getElementById("top-bar").classList.remove("hidden");
-      document.getElementById("bottom-nav").classList.remove("hidden");
+      
       document.getElementById("user-display-name").textContent = currentUser.name;
       document.getElementById("user-role-badge").textContent = currentUser.role.toUpperCase();
-      document.getElementById("user-location-badge").textContent = "📍 " + (currentUser.location || "Gujarat");
+      document.getElementById("user-location-badge").textContent = "📍 " + (currentUser.location || "Sanand");
 
-      const actLabel = document.getElementById("nav-activity-label");
-      if (actLabel) {
-        if (currentUser.role === 'farmer') actLabel.textContent = "My Sales";
-        else if (currentUser.role === 'buyer') actLabel.textContent = "Batch Order";
-        else if (currentUser.role === 'aggregator') actLabel.textContent = "Trips";
-        else actLabel.textContent = "Audits";
+      // Configure Navigation based on role
+      const hamBtn = document.getElementById("farmer-hamburger-btn");
+      const botNav = document.getElementById("bottom-nav");
+      
+      if (currentUser.role === 'farmer') {
+        if (hamBtn) hamBtn.classList.remove("hidden");
+        if (botNav) botNav.classList.add("hidden");
+        
+        const dName = document.getElementById("drawer-farmer-name");
+        if (dName) dName.textContent = currentUser.name;
+        const dLoc = document.getElementById("drawer-farmer-location");
+        if (dLoc) dLoc.textContent = "📍 " + (currentUser.location || "Sanand, Ahmedabad");
+      } else {
+        if (hamBtn) hamBtn.classList.add("hidden");
+        if (botNav) botNav.classList.remove("hidden");
       }
 
       navToTab('dashboard');
@@ -2162,6 +2168,17 @@ div>
     }
 
     // 4. BUYER REQUIREMENTS / DEMAND (FEATURE 4)
+    let sentOffers = new Set();
+
+    function handleExpressInterest(reqId, btnElement) {
+      sentOffers.add(reqId);
+      if (btnElement) {
+        btnElement.innerHTML = "✓ Offer Sent";
+        btnElement.className = "px-4 py-1.5 bg-emerald-100 text-emerald-800 font-black rounded-xl text-[11px] border border-emerald-300 cursor-default pointer-events-none";
+      }
+      alert("✅ Offer sent to buyer! The buyer has been notified of your stock availability.");
+    }
+
     async function renderFarmerBuyerDemands() {
       const container = document.getElementById("farmer-buyer-demands-container");
       if (!container) return;
@@ -2185,6 +2202,11 @@ div>
 
       buyerReqs.forEach(req => {
         const rem = (req.required_quantity - (req.fulfilled_quantity || 0)).toFixed(1);
+        const isSent = sentOffers.has(req.id);
+        const btnHtml = isSent 
+          ? `<button class="px-4 py-1.5 bg-emerald-100 text-emerald-800 font-black rounded-xl text-[11px] border border-emerald-300 cursor-default pointer-events-none">✓ Offer Sent</button>`
+          : `<button onclick="handleExpressInterest(${req.id}, this)" class="px-4 py-1.5 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-[11px] shadow-xs transition active:scale-95">Express Interest / Send Offer</button>`;
+
         container.innerHTML += `
           <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2.5 text-xs">
             <div class="flex justify-between items-start">
@@ -2207,20 +2229,25 @@ div>
 
             <div class="flex justify-between items-center pt-1 border-t border-slate-100">
               <span class="text-[10px] text-slate-400">Status: <b class="text-emerald-700 uppercase font-black">${req.status}</b></span>
-              <button onclick="handleExpressInterest(${req.id})" class="px-4 py-1.5 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-[11px] shadow-xs transition active:scale-95">
-                Express Interest / Send Offer
-              </button>
+              ${btnHtml}
             </div>
           </div>
         `;
       });
     }
 
-    function handleExpressInterest(reqId) {
-      alert("✅ Expressed interest successfully! The buyer and platform aggregators have been notified that you have stock available.");
+    // 5. MATCHING OPPORTUNITIES (FEATURE 5) - CLEAN & CONCISE
+    let sentProposals = new Set();
+
+    function handleSendProposal(reqId, btnElement) {
+      sentProposals.add(reqId);
+      if (btnElement) {
+        btnElement.innerHTML = "✓ Proposal Sent";
+        btnElement.className = "px-4 py-2 bg-emerald-100 text-emerald-800 font-black rounded-xl text-xs border border-emerald-300 cursor-default pointer-events-none";
+      }
+      alert("✅ Supply Proposal sent to buyer! The buyer will review your stock and contact you.");
     }
 
-    // 5. MATCHING OPPORTUNITIES (FEATURE 5)
     async function renderFarmerSmartMatches() {
       const container = document.getElementById("farmer-smart-matches-container");
       if (!container) return;
@@ -2234,7 +2261,7 @@ div>
           <div class="p-6 bg-white rounded-2xl border border-dashed border-slate-300 text-center space-y-2 text-xs text-slate-500 shadow-xs">
             <div class="text-2xl">🎯</div>
             <div class="font-bold text-slate-800">No Active Residue Listed</div>
-            <p>List your crop residue first. The matching engine compares material, rate, distance, and quantity to find suitable buyers.</p>
+            <p>List your crop residue first to see matching buyers.</p>
             <button onclick="openAddResidueModal()" class="px-4 py-2 bg-agri-700 text-white font-bold rounded-xl text-xs shadow-xs">+ List Residue Now</button>
           </div>
         `;
@@ -2245,42 +2272,24 @@ div>
       myListings.forEach(l => {
         openReqs.forEach(r => {
           let score = 0;
-          let breakdown = [];
-
-          // 1. Material compatibility
           const matMatch = (l.material_name || "").toLowerCase().includes((r.material_name || "").toLowerCase()) ||
                            (r.material_name || "").toLowerCase().includes((l.material_name || "").toLowerCase());
           if (matMatch) {
             score += 45;
-            breakdown.push(`✅ Material Compatibility: Exact ${l.material_name} match (+45%)`);
           } else {
-            return; // Skip if completely different crop
+            return;
           }
 
-          // 2. Price feasibility
-          if (l.price_per_unit <= r.target_price_max) {
-            score += 30;
-            breakdown.push(`✅ Price Feasibility: Farmer rate ₹${l.price_per_unit}/T ≤ Buyer budget ₹${r.target_price_max}/T (+30%)`);
-          } else {
-            score += 10;
-            breakdown.push(`⚠️ Price: Farmer rate ₹${l.price_per_unit}/T is slightly above buyer target ₹${r.target_price_max}/T (+10%)`);
-          }
+          if (l.price_per_unit <= r.target_price_max) score += 30;
+          else score += 10;
 
-          // 3. Quantity contribution
-          if (l.available_quantity >= 1.0) {
-            score += 15;
-            breakdown.push(`✅ Volume Feasibility: Available ${l.available_quantity} T supplies substantial batch (+15%)`);
-          }
-
-          // 4. Proximity / Logistics
+          if (l.available_quantity >= 1.0) score += 15;
           score += 10;
-          breakdown.push(`✅ Logistics: Farm in Sanand aligns with ${r.delivery_location} corridor (+10%)`);
 
           matches.push({
             listing: l,
             requirement: r,
-            score: Math.min(100, score),
-            breakdown: breakdown
+            score: Math.min(100, score)
           });
         });
       });
@@ -2298,13 +2307,18 @@ div>
       }
 
       matches.forEach(m => {
+        const isSent = sentProposals.has(m.requirement.id);
+        const btnHtml = isSent
+          ? `<button class="px-4 py-2 bg-emerald-100 text-emerald-800 font-black rounded-xl text-xs border border-emerald-300 cursor-default pointer-events-none">✓ Proposal Sent</button>`
+          : `<button onclick="handleSendProposal(${m.requirement.id}, this)" class="px-4 py-2 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-xs shadow-xs transition active:scale-95">Send Supply Proposal</button>`;
+
         container.innerHTML += `
-          <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-3 text-xs">
+          <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2.5 text-xs">
             <div class="flex justify-between items-start">
               <div>
                 <span class="font-black text-slate-900 text-sm">${m.requirement.buyer_name}</span>
-                <div class="text-[11px] text-slate-600 mt-0.5">Demands <b>${m.requirement.required_quantity} T ${m.requirement.material_name}</b></div>
-                <div class="text-[10px] text-slate-400">Matched with your listing: <b>${m.listing.material_name} (${m.listing.available_quantity} T available)</b></div>
+                <div class="text-[11px] text-slate-600 mt-0.5">Demands: <b>${m.requirement.required_quantity} T ${m.requirement.material_name}</b></div>
+                <div class="text-[10px] text-slate-500">Your Stock: <b>${m.listing.material_name} (${m.listing.available_quantity} T available)</b></div>
               </div>
               <div class="text-right">
                 <span class="px-2.5 py-1 rounded-full text-xs font-black ${m.score >= 80 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
@@ -2314,16 +2328,9 @@ div>
               </div>
             </div>
 
-            <!-- Match Breakdown -->
-            <div class="p-2.5 bg-slate-50 rounded-xl space-y-1 text-[10px] text-slate-600">
-              <span class="font-bold text-slate-700 block mb-0.5">Rule-Based Match Breakdown:</span>
-              ${m.breakdown.map(b => `<div>${b}</div>`).join('')}
-            </div>
-
-            <div class="flex justify-end pt-1 border-t border-slate-100">
-              <button onclick="handleExpressInterest(${m.requirement.id})" class="px-4 py-2 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-xs shadow-xs transition active:scale-95">
-                Send Supply Proposal
-              </button>
+            <div class="flex justify-between items-center pt-1 border-t border-slate-100">
+              <span class="text-[10px] text-slate-400">📍 ${m.requirement.delivery_location || 'Sanand corridor'}</span>
+              ${btnHtml}
             </div>
           </div>
         `;
@@ -3569,55 +3576,18 @@ div>
       document.getElementById("prof-name").textContent = currentUser.name;
       document.getElementById("prof-location-tag").textContent = "📍 " + (currentUser.location || "Sanand Taluka, Ahmedabad District");
       
-      const inName = document.getElementById("prof-input-name");
-      if (inName) inName.value = currentUser.name || "";
-      const inPhone = document.getElementById("prof-input-phone");
-      if (inPhone) inPhone.value = currentUser.phone || "+91 98250 12345";
-      const inEmail = document.getElementById("prof-input-email");
-      if (inEmail) inEmail.value = currentUser.email || "ramesh@kisan.in";
-      const inVill = document.getElementById("prof-input-village");
-      if (inVill) inVill.value = currentUser.village || "Sanand";
-      const inDist = document.getElementById("prof-input-district");
-      if (inDist) inDist.value = currentUser.district || "Ahmedabad";
-      const inState = document.getElementById("prof-input-state");
-      if (inState) inState.value = currentUser.state || "Gujarat";
-      const inLang = document.getElementById("prof-input-lang");
-      if (inLang) inLang.value = currentUser.preferred_language || "English";
-    }
-
-    async function handleSaveGlobalProfile(e) {
-      e.preventDefault();
-      const name = document.getElementById("prof-input-name").value.trim();
-      const phone = document.getElementById("prof-input-phone").value.trim();
-      const email = document.getElementById("prof-input-email").value.trim();
-      const village = document.getElementById("prof-input-village").value.trim();
-      const district = document.getElementById("prof-input-district").value.trim();
-      const state = document.getElementById("prof-input-state").value.trim();
-      const lang = document.getElementById("prof-input-lang").value;
-
-      currentUser.name = name;
-      currentUser.phone = phone;
-      currentUser.email = email;
-      currentUser.village = village;
-      currentUser.district = district;
-      currentUser.state = state;
-      currentUser.location = `${village}, ${district}`;
-      currentUser.preferred_language = lang;
-
-      const u = store.users.find(x => x.id === currentUser.id);
-      if (u) Object.assign(u, currentUser);
-      persist();
-
-      document.getElementById("prof-name").textContent = name;
-      document.getElementById("prof-location-tag").textContent = `📍 ${village} Taluka, ${district} District`;
-      const fGreet = document.getElementById("farmer-dash-greeting");
-      if (fGreet) fGreet.textContent = name + " 👋";
-      const fLoc = document.getElementById("farmer-dash-location");
-      if (fLoc) fLoc.textContent = `📍 ${village} Taluka, ${district} District`;
-      const fLang = document.getElementById("farmer-lang-pill");
-      if (fLang) fLang.textContent = lang;
-
-      alert("🎉 Farm Profile details updated successfully!");
+      const dName = document.getElementById("prof-disp-name");
+      if (dName) dName.textContent = currentUser.name || "Ramesh Patel";
+      const dPhone = document.getElementById("prof-disp-phone");
+      if (dPhone) dPhone.textContent = currentUser.phone || "+91 98250 12345";
+      const dEmail = document.getElementById("prof-disp-email");
+      if (dEmail) dEmail.textContent = currentUser.email || "ramesh@kisan.in";
+      const dVill = document.getElementById("prof-disp-village");
+      if (dVill) dVill.textContent = currentUser.village || "Sanand";
+      const dDist = document.getElementById("prof-disp-district");
+      if (dDist) dDist.textContent = currentUser.district || "Ahmedabad";
+      const dState = document.getElementById("prof-disp-state");
+      if (dState) dState.textContent = currentUser.state || "Gujarat";
     }
 
     // ====================================================
@@ -3630,8 +3600,20 @@ div>
     function openPostRequirementModal() { document.getElementById("modal-post-req").classList.remove("hidden"); }
     function closePostRequirementModal() { document.getElementById("modal-post-req").classList.add("hidden"); }
 
-    function openIssueModal() { document.getElementById("modal-issue").classList.remove("hidden"); }
-    function closeIssueModal() { document.getElementById("modal-issue").classList.add("hidden"); }
+    function openIssueModal() {
+      const m = document.getElementById("modal-issue");
+      if (m) {
+        m.classList.remove("hidden");
+        m.style.display = "flex";
+      }
+    }
+    function closeIssueModal() {
+      const m = document.getElementById("modal-issue");
+      if (m) {
+        m.classList.add("hidden");
+        m.style.display = "none";
+      }
+    }
 
     async function handleReportIssue(e) {
       e.preventDefault();
