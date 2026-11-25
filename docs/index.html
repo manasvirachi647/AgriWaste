@@ -288,7 +288,7 @@
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Email Address *</label>
-            <input type="email" id="reg-email" required placeholder="ramesh@example.com" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
+            <input type="email" id="reg-email" required placeholder="user@example.com" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Password (min 6 chars) *</label>
@@ -805,6 +805,20 @@
 
         <!-- SUBTAB 5: BUYER PROFILE & PAYMENT HISTORY (FEATURE 8 & 7) -->
         <div id="buyer-sub-profile" class="space-y-4 hidden">
+          <!-- Buyer Order Invoices & Receipts -->
+          <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3 text-xs">
+            <div class="flex items-center justify-between">
+              <h3 class="font-black text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <span>📄</span> Procurement Invoices &amp; Receipts
+              </h3>
+              <span id="buyer-receipts-count" class="text-[10px] font-bold text-harvest-700 bg-harvest-50 px-2 py-0.5 rounded-md">0 Invoices</span>
+            </div>
+            <p class="text-[11px] text-slate-500">Official tax invoices and delivery clearance certificates for purchased biomass.</p>
+            <div id="buyer-receipts-container" class="space-y-2">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
           <div class="flex items-center justify-between pb-1">
             <button onclick="switchBuyerTab('home')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1 transition">
               <span>←</span><span>Back to Home</span>
@@ -1135,6 +1149,20 @@
               <!-- Dynamically populated with read-only completed trips -->
             </div>
           </div>
+          <!-- Transporter Freight Receipts -->
+          <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3 text-xs">
+            <div class="flex items-center justify-between">
+              <h3 class="font-black text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <span>📄</span> Trip Receipts &amp; Freight Slips
+              </h3>
+              <span id="aggregator-receipts-count" class="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">0 Slips</span>
+            </div>
+            <p class="text-[11px] text-slate-500">Official proof of completed agricultural waste transit and freight payout slips.</p>
+            <div id="aggregator-receipts-container" class="space-y-2">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
 
           <!-- Sign Out -->
           <div class="pt-1">
@@ -1600,7 +1628,7 @@
             </div>
             <div class="p-2.5 bg-slate-50 rounded-xl col-span-2">
               <span class="text-[10px] text-slate-400 block font-semibold">Email Address</span>
-              <span id="prof-disp-email" class="font-bold text-slate-800 text-xs">ramesh@kisan.in</span>
+              <span id="prof-disp-email" class="font-bold text-slate-800 text-xs">—</span>
             </div>
             <div class="p-2.5 bg-slate-50 rounded-xl">
               <span class="text-[10px] text-slate-400 block font-semibold">Village / Taluka</span>
@@ -1627,7 +1655,22 @@
             <span>🚪</span>
             <span>Sign Out of Account</span>
           </button>
-        </div></section>
+        </div>
+        <!-- Transaction Receipts & Invoices -->
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3 text-xs">
+          <div class="flex items-center justify-between">
+            <h3 class="font-black text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span>📄</span> Invoices &amp; Official Receipts
+            </h3>
+            <span id="farmer-receipts-count" class="text-[10px] font-bold text-agri-700 bg-agri-50 px-2 py-0.5 rounded-md">0 Receipts</span>
+          </div>
+          <p class="text-[11px] text-slate-500">Official proof of payment and delivered agricultural waste receipts.</p>
+          <div id="farmer-receipts-container" class="space-y-2">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+      </section>
 
     </main>
 
@@ -2290,24 +2333,24 @@ div>
     };
 
     // Purge any old demonstration localStorage records on fresh app launch
-    const FRESH_STORAGE_KEY = "agriwaste_fresh_v7";
+    const FRESH_STORAGE_KEY = "agriwaste_fresh_launch_v12";
     if (localStorage.getItem("agriwaste_version") !== FRESH_STORAGE_KEY) {
       localStorage.clear();
       localStorage.setItem("agriwaste_version", FRESH_STORAGE_KEY);
     }
 
     try {
-      const saved = localStorage.getItem("agriwaste_store_v7");
+      const saved = localStorage.getItem("agriwaste_store_v12");
       if (saved) {
         store = { ...store, ...JSON.parse(saved) };
       }
     } catch(e) {}
 
     function persist() {
-      try { localStorage.setItem("agriwaste_store_v7", JSON.stringify(store)); } catch(e){}
+      try { localStorage.setItem("agriwaste_store_v12", JSON.stringify(store)); } catch(e){}
     }
     function saveStoreToLocal() {
-      try { localStorage.setItem("agriwaste_store_v7", JSON.stringify(store)); } catch(e){}
+      try { localStorage.setItem("agriwaste_store_v12", JSON.stringify(store)); } catch(e){}
     }
 
     async function apiRequest(endpoint, method = 'GET', body = null) {
@@ -2351,42 +2394,29 @@ div>
     // AUTHENTICATION & SESSION PERSISTENCE
     // ====================================================
     async function initApp() {
-      // 1. First ensure auth view is visible by default so screen is NEVER blank
+      // Clean launch: Always show the Login/Sign Up page on initial launch
+      currentUser = null;
+      authToken = null;
+      try {
+        localStorage.removeItem("agriwaste_current_user");
+        localStorage.removeItem("agriwaste_jwt_token");
+      } catch(e){}
+      
       hideAllViews();
-      document.getElementById("view-auth").classList.remove("hidden");
+      const authView = document.getElementById("view-auth");
+      if (authView) authView.classList.remove("hidden");
+      const topBar = document.getElementById("top-bar");
+      if (topBar) topBar.classList.add("hidden");
+      const bottomNav = document.getElementById("bottom-nav");
+      if (bottomNav) bottomNav.classList.add("hidden");
 
-      // 2. Check if a user is already signed in
-      if (authToken) {
-        try {
-          const me = await apiRequest('/auth/me');
-          if (me && me.id) {
-            currentUser = {
-              id: me.id,
-              name: me.full_name,
-              username: me.username,
-              email: me.email,
-              phone: me.phone_number || "",
-              role: me.role,
-              location: me.district ? `${me.district}, Gujarat` : "Gujarat"
-            };
-            isBackendLive = true;
-            renderAuthenticatedState();
-            return;
-          }
-        } catch(e) {
-          authToken = null;
-          localStorage.removeItem("agriwaste_jwt_token");
-        }
-      }
-
-      const savedUser = localStorage.getItem("agriwaste_current_user");
-      if (savedUser && !authToken) {
-        try {
-          currentUser = JSON.parse(savedUser);
-          renderAuthenticatedState();
-          return;
-        } catch(e){}
-      }
+      // Reset login and register form inputs so they are completely empty
+      const loginUserEl = document.getElementById("login-username");
+      if (loginUserEl) loginUserEl.value = "";
+      const loginPassEl = document.getElementById("login-password");
+      if (loginPassEl) loginPassEl.value = "";
+      const regForm = document.getElementById("form-register");
+      if (regForm) regForm.reset();
     }
 
     
@@ -3898,22 +3928,27 @@ div>
       const container = document.getElementById("farmer-my-orders-container");
       if (!container) return;
 
-      const myOrders = store.orders.filter(o => o.farmer_id === currentUser.id);
+      const myOrders = (store.orders || []).filter(o => currentUser && o.farmer_id === currentUser.id);
 
       container.innerHTML = "";
       if (myOrders.length === 0) {
-        container.innerHTML = `<div class="p-6 bg-white rounded-2xl border border-dashed border-slate-300 text-center text-xs text-slate-500 shadow-xs">No orders received yet.</div>`;
+        container.innerHTML = `<div class="p-6 bg-white rounded-2xl border border-dashed border-slate-300 text-center text-xs text-slate-500 shadow-xs">No orders received yet. Incoming orders from industrial buyers will appear here.</div>`;
         return;
       }
 
       myOrders.forEach(o => {
-        const isPending = o.status === 'pending';
+        const isPending = o.status === 'pending' || o.status === 'awaiting_confirmation' || o.status === 'pending_farmer';
+        const isConfirmed = o.status === 'confirmed' || o.status === 'pickup_scheduled';
+        const isInTransit = o.status === 'in_transit';
+        const isDelivered = o.status === 'delivered';
+        const isCompleted = o.status === 'completed';
+
         const statusBadge = 
           isPending ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-amber-100 text-amber-800 animate-pulse">Action Required: Pending</span>' :
-          o.status === 'confirmed' ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-blue-100 text-blue-800">Confirmed</span>' :
-          o.status === 'pickup_scheduled' ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-sky-100 text-sky-800">Pickup Scheduled</span>' :
-          o.status === 'in_transit' ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-purple-100 text-purple-800">In Transit</span>' :
-          o.status === 'completed' ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-800">Completed & Settled</span>' :
+          isConfirmed ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-blue-100 text-blue-800">Accepted • Transporter Assigned</span>' :
+          isInTransit ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-purple-100 text-purple-800">🚛 In Transit</span>' :
+          isDelivered ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-indigo-100 text-indigo-800">🏁 Delivered to Plant</span>' :
+          isCompleted ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-800">✓ Completed &amp; Settled</span>' :
           '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-red-100 text-red-800">Rejected</span>';
 
         container.innerHTML += `
@@ -3925,7 +3960,7 @@ div>
                   ${statusBadge}
                 </div>
                 <div class="text-[11px] text-slate-600 mt-1">
-                  Buyer: <b>${o.buyer_name || o.buyer || 'Gujarat BioPower Ltd'}</b> (📞 ${o.buyer_phone || '+91 98251 98765'})
+                  Buyer: <b>${o.buyer_name || o.buyer || 'Industrial Buyer'}</b> (📞 ${o.buyer_phone || '+91 98251 00000'})
                 </div>
               </div>
               <div class="text-right">
@@ -3937,11 +3972,18 @@ div>
             <div class="grid grid-cols-2 gap-2 p-2.5 bg-slate-50 rounded-xl text-[10px] text-slate-700">
               <div>🌾 <b>Residue:</b> ${o.material_name}</div>
               <div>⚖️ <b>Quantity:</b> ${o.quantity || o.total_quantity} Tonnes</div>
-              <div>💰 <b>Agreed Price:</b> ₹${o.agreed_price || o.price_per_unit || (o.total_amount/(o.quantity||1))}/T</div>
-              <div>🚛 <b>Transporter:</b> ${o.transporter_name || 'Kisan Fleet'}</div>
-              <div class="col-span-2">📍 <b>Collection Location:</b> ${o.collection_location || 'Sanand Farm'}</div>
-              <div class="col-span-2">🏭 <b>Delivery Address:</b> ${o.delivery_address}</div>
+              <div>💰 <b>Agreed Price:</b> ₹${o.agreed_price || o.price_per_unit || Math.round((o.total_amount || 0)/(o.quantity||o.total_quantity||1))}/T</div>
+              <div>🚛 <b>Transporter:</b> ${o.transporter_name || 'Assigned Logistics Partner'}</div>
+              <div class="col-span-2">📍 <b>Collection Location:</b> ${o.collection_location || 'Sanand Farm, Gujarat'}</div>
+              <div class="col-span-2">🏭 <b>Delivery Address:</b> ${o.delivery_address || 'Biofuel Plant, Gujarat'}</div>
             </div>
+
+            ${isDelivered ? `
+              <div class="p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-[11px] font-bold flex items-center gap-1.5">
+                <span>🔔</span>
+                <span><b>Trip Completed!</b> Goods delivered at factory. Awaiting buyer payment confirmation.</span>
+              </div>
+            ` : ''}
 
             ${isPending ? `
               <div class="flex gap-2 pt-1 border-t border-slate-100">
@@ -3954,10 +3996,17 @@ div>
               </div>
             ` : `
               <div class="flex justify-between items-center pt-1 border-t border-slate-100 text-[10px] text-slate-500">
-                <span>Payment Status: <b class="font-black ${o.payment_status === 'completed' ? 'text-emerald-700' : 'text-amber-700'}">${o.payment_status === 'completed' ? 'Completed' : 'Pending'}</b></span>
-                <button onclick="switchFarmerSubTab('tracking')" class="text-agri-700 font-bold hover:underline">
-                  Track Delivery ➔
-                </button>
+                <span>Payment Status: <b class="font-black ${isCompleted ? 'text-emerald-700' : 'text-amber-700'}">${isCompleted ? 'Completed & Paid' : 'Pending Escrow Release'}</b></span>
+                <div class="flex items-center gap-2">
+                  <button onclick="switchFarmerSubTab('tracking')" class="text-agri-700 font-bold hover:underline flex items-center gap-1">
+                    <span>🚛</span> Track Vehicle ➔
+                  </button>
+                  ${isCompleted ? `
+                    <button onclick="openReceiptModal(${o.id})" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] shadow-2xs">
+                      📄 View Receipt
+                    </button>
+                  ` : ''}
+                </div>
               </div>
             `}
           </div>
@@ -3966,29 +4015,65 @@ div>
     }
 
     async function handleFarmerAcceptOrder(orderId) {
+      if (!store.orders) store.orders = [];
       const order = store.orders.find(o => o.id === orderId);
       if (!order) return;
 
       order.status = 'confirmed';
-      order.transporter_name = "Kisan Fleet Logistics";
-      order.driver_name = "Vikram Singh";
-      order.driver_phone = "+91 98251 44321";
-      order.vehicle_no = "GJ-01-AX-4821";
-      order.pickup_time = "Today at 03:00 PM";
+      order.farmer_accepted = true;
+      order.current_milestone = "Order Accepted - Transporter Assigned";
+
+      // Create or update transport job for Aggregator
+      if (!store.transportJobs) store.transportJobs = [];
+      let job = store.transportJobs.find(j => j.order_id === orderId);
+      if (!job) {
+        job = {
+          id: Date.now() + Math.floor(Math.random() * 100),
+          order_id: order.id,
+          order_number: order.order_number || ('#ORD-' + order.id),
+          aggregator_id: null,
+          transporter_name: "Pending Aggregator Acceptance",
+          vehicle_type: "Commercial Agro Transport",
+          vehicle_number: "GJ-01-AB-1234",
+          driver_phone: "+91 98981 23456",
+          farmer_id: order.farmer_id || (currentUser ? currentUser.id : null),
+          farmer_name: order.farmer_name || (currentUser ? currentUser.name : "Farmer"),
+          farmer_phone: order.farmer_phone || (currentUser ? currentUser.phone : "+91 98765 43210"),
+          farmer_location: order.collection_location || (currentUser ? currentUser.village : "Sanand, Ahmedabad"),
+          buyer_id: order.buyer_id,
+          buyer_name: order.buyer_name || order.buyer || "Industrial Buyer",
+          buyer_phone: order.buyer_phone || "+91 98251 00000",
+          pickup_location: order.collection_location || (currentUser ? currentUser.village : "Sanand, Ahmedabad"),
+          delivery_location: order.delivery_address || "Biofuel Plant, Ahmedabad",
+          waste_type: order.material_name,
+          expected_quantity: order.total_quantity || order.quantity,
+          scheduled_pickup_date: "Today",
+          status: "assigned",
+          current_milestone: "Request Dispatched - Awaiting Transporter Acceptance",
+          estimated_cost: Math.round((order.total_quantity || order.quantity || 2) * 500),
+          assigned_at: new Date().toISOString()
+        };
+        store.transportJobs.unshift(job);
+      } else {
+        job.status = "assigned";
+        job.current_milestone = "Request Dispatched - Awaiting Transporter Acceptance";
+      }
 
       // Automatically decrease available quantity of the farmer's listing
-      const listing = store.listings.find(l => l.farmer_id === currentUser.id && l.material_name === order.material_name && l.status === 'available');
-      if (listing) {
-        listing.available_quantity = Math.max(0, listing.available_quantity - (order.quantity || 1.5));
-        if (listing.available_quantity === 0) listing.status = 'reserved';
-        else listing.status = 'partially_reserved';
+      if (store.listings && currentUser) {
+        const listing = store.listings.find(l => l.farmer_id === currentUser.id && l.material_name === order.material_name && l.status === 'available');
+        if (listing) {
+          listing.available_quantity = Math.max(0, listing.available_quantity - (order.quantity || order.total_quantity || 1.5));
+          if (listing.available_quantity === 0) listing.status = 'reserved';
+          else listing.status = 'partially_reserved';
+        }
       }
 
       persist();
-      alert("✅ Order Accepted! Reserved quantity from your listings and assigned Transporter Kisan Fleet Logistics for farm collection.");
+      alert(`✅ Order Accepted!\n\nTransport request has been dispatched to Aggregators. When the aggregator accepts the request, the trip begins and live vehicle tracking is shared with you and the buyer.`);
       renderFarmerMyOrders();
       renderFarmerHomeKPIs();
-      renderFarmerAllListings(currentListingFilter);
+      if (typeof renderFarmerAllListings === 'function') renderFarmerAllListings(currentListingFilter);
     }
 
     async function handleFarmerRejectOrder(orderId) {
@@ -4238,11 +4323,42 @@ div>
       document.getElementById("f-prof-loc-tag").textContent = "📍 " + (currentUser.location || "Sanand Taluka, Ahmedabad");
       document.getElementById("f-input-name").value = currentUser.name || "";
       document.getElementById("f-input-phone").value = currentUser.phone || "+91 98250 12345";
-      document.getElementById("f-input-email").value = currentUser.email || "ramesh@kisan.in";
+      document.getElementById("f-input-email").value = currentUser.email || "—";
       document.getElementById("f-input-village").value = currentUser.village || "Sanand";
       document.getElementById("f-input-district").value = currentUser.district || "Ahmedabad";
       document.getElementById("f-input-state").value = currentUser.state || "Gujarat";
       document.getElementById("f-input-lang").value = currentUser.preferred_language || "English";
+
+      // Populate Official Receipts & Invoices
+      const rContainer = document.getElementById("farmer-receipts-container");
+      const rBadge = document.getElementById("farmer-receipts-count");
+      if (rContainer) {
+        const completedOrders = (store.orders || []).filter(o => o.farmer_id === currentUser.id && o.status === 'completed');
+        if (rBadge) rBadge.textContent = `${completedOrders.length} Receipts`;
+        if (completedOrders.length === 0) {
+          rContainer.innerHTML = `<div class="p-3 bg-slate-50 rounded-xl text-center text-slate-400 text-[11px]">No official receipts generated yet. Receipts appear automatically when orders are delivered and payment is confirmed.</div>`;
+        } else {
+          rContainer.innerHTML = completedOrders.map(o => `
+            <div class="p-3 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200 flex justify-between items-center transition">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-black text-slate-900 text-xs">RCP-${o.order_number || o.id}</span>
+                  <span class="px-1.5 py-0.2 rounded text-[9px] font-black uppercase bg-emerald-100 text-emerald-800">Paid</span>
+                </div>
+                <div class="text-[10px] text-slate-500 mt-0.5">
+                  Buyer: <b>${o.buyer_name || o.buyer || 'Buyer'}</b> • ${o.material_name} (${o.total_quantity || o.quantity}T)
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="font-black text-emerald-700 text-xs block">₹${(o.total_amount || 0).toLocaleString()}</span>
+                <button onclick="openReceiptModal(${o.id})" class="mt-1 px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold shadow-2xs">
+                  📄 View Receipt
+                </button>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
     }
 
     async function handleUpdateFarmerProfile(e) {
@@ -5694,6 +5810,37 @@ Individual dispatch requests sent to farmers.`);
       document.getElementById("bprof-disp-district").textContent = currentUser.district || "Ahmedabad";
       document.getElementById("bprof-disp-state").textContent = currentUser.state || "Gujarat";
 
+      // Populate Procurement Invoices & Receipts
+      const brContainer = document.getElementById("buyer-receipts-container");
+      const brBadge = document.getElementById("buyer-receipts-count");
+      if (brContainer) {
+        const completedOrders = (store.orders || []).filter(o => o.buyer_id === currentUser.id && o.status === 'completed');
+        if (brBadge) brBadge.textContent = `${completedOrders.length} Invoices`;
+        if (completedOrders.length === 0) {
+          brContainer.innerHTML = `<div class="p-3 bg-slate-50 rounded-xl text-center text-slate-400 text-[11px]">No procurement invoices yet. Official tax invoices are generated automatically upon confirming biomass delivery.</div>`;
+        } else {
+          brContainer.innerHTML = completedOrders.map(o => `
+            <div class="p-3 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200 flex justify-between items-center transition">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-black text-slate-900 text-xs">INV-${o.order_number || o.id}</span>
+                  <span class="px-1.5 py-0.2 rounded text-[9px] font-black uppercase bg-emerald-100 text-emerald-800">Settled</span>
+                </div>
+                <div class="text-[10px] text-slate-500 mt-0.5">
+                  Supplier: <b>${o.farmer_name || 'Farmer'}</b> • ${o.material_name} (${o.total_quantity || o.quantity}T)
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="font-black text-slate-900 text-xs block">₹${(o.total_amount || 0).toLocaleString()}</span>
+                <button onclick="openReceiptModal(${o.id})" class="mt-1 px-2.5 py-1 bg-harvest-600 hover:bg-harvest-700 text-white rounded-lg text-[10px] font-bold shadow-2xs">
+                  📄 View Invoice
+                </button>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
       // Render Payment History
       renderBuyerPayments();
     }
@@ -5885,7 +6032,7 @@ Individual dispatch requests sent to farmers.`);
           return await apiRequest('/transport/jobs');
         } catch(e){}
       }
-      return (store.transportJobs || []).filter(j => j.aggregator_id === currentUser.id);
+      return (store.transportJobs || []).filter(j => !j.aggregator_id || (currentUser && j.aggregator_id === currentUser.id));
     }
 
     // FEATURE 2: AGGREGATOR DASHBOARD (HOME)
@@ -6455,6 +6602,40 @@ Individual dispatch requests sent to farmers.`);
       document.getElementById("aprof-disp-vehicle-type").textContent = currentUser.vehicle_type || currentUser.fleet || "Heavy Commercial Truck";
       document.getElementById("aprof-disp-vehicle-no").textContent = currentUser.vehicle_number || currentUser.vehicle_no || "GJ-01-AB-1234";
 
+      // Populate Freight Receipts & Slips
+      const arContainer = document.getElementById("aggregator-receipts-container");
+      const arBadge = document.getElementById("aggregator-receipts-count");
+      if (arContainer) {
+        const completedJobs = (store.transportJobs || []).filter(j => j.aggregator_id === currentUser.id && (j.status === 'completed' || j.status === 'delivered'));
+        if (arBadge) arBadge.textContent = `${completedJobs.length} Slips`;
+        if (completedJobs.length === 0) {
+          arContainer.innerHTML = `<div class="p-3 bg-slate-50 rounded-xl text-center text-slate-400 text-[11px]">No freight slips yet. Receipts are generated automatically upon successful factory delivery confirmation.</div>`;
+        } else {
+          arContainer.innerHTML = completedJobs.map(j => {
+            const freightAmt = j.estimated_cost || Math.round((j.expected_quantity || 2) * 500);
+            return `
+              <div class="p-3 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200 flex justify-between items-center transition">
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="font-black text-slate-900 text-xs">FSL-${j.id}</span>
+                    <span class="px-1.5 py-0.2 rounded text-[9px] font-black uppercase bg-blue-100 text-blue-800">Completed</span>
+                  </div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">
+                    Route: <b>${j.pickup_location} ➔ ${j.delivery_location}</b> • Plate: ${j.vehicle_number || 'GJ-01'}
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="font-black text-blue-700 text-xs block">₹${freightAmt.toLocaleString()}</span>
+                  <button onclick="openReceiptModal(${j.order_id})" class="mt-1 px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[10px] font-bold shadow-2xs">
+                    📄 View Slip
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
       // Completed Trips History (FEATURE 7)
       const container = document.getElementById("aggregator-completed-trips-container");
       if (container) {
@@ -6463,32 +6644,21 @@ Individual dispatch requests sent to farmers.`);
         const completedJobs = jobs.filter(j => j.status === 'completed' || j.status === 'delivered');
 
         if (completedJobs.length === 0) {
-          container.innerHTML = `<div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-center text-xs text-slate-400">No completed trips on record yet.</div>`;
-        } else {
-          completedJobs.forEach(j => {
-            container.innerHTML += `
-              <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/80 shadow-2xs space-y-1.5 text-xs">
-                <div class="flex justify-between items-start">
-                  <div>
-                    <span class="font-black text-slate-900">Trip #${j.id} (${j.order_number || 'Order #' + j.order_id})</span>
-                    <div class="text-[11px] text-slate-500">${j.waste_type} • <b>${j.actual_quantity || j.expected_quantity} Tonnes Delivered</b></div>
-                  </div>
-                  <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${j.status === 'completed' ? 'bg-emerald-100 text-emerald-800' : 'bg-purple-100 text-purple-800'}">
-                    ${j.status === 'completed' ? 'Completed' : 'Delivered'}
-                  </span>
-                </div>
-                <div class="text-[11px] text-slate-600 pl-2 border-l-2 border-blue-400 space-y-0.5">
-                  <div><b>Pickup:</b> ${j.farmer_name} (${j.pickup_location})</div>
-                  <div><b>Delivery:</b> ${j.buyer_name} (${j.delivery_location})</div>
-                </div>
-                <div class="flex justify-between items-center text-[10px] text-slate-400 pt-1 border-t border-slate-200/50">
-                  <span>Delivered: ${j.delivered_at ? j.delivered_at.slice(0, 10) : '2026-11-22'}</span>
-                  <span class="font-bold text-slate-600">Settled Payout: ₹${j.estimated_cost || 2500}</span>
-                </div>
-              </div>
-            `;
-          });
+          container.innerHTML = `<div class="p-4 bg-slate-50 rounded-2xl text-center text-slate-400 text-[11px]">No completed trips yet.</div>`;
+          return;
         }
+
+        completedJobs.forEach(job => {
+          container.innerHTML += `
+            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center text-xs">
+              <div>
+                <span class="font-bold text-slate-900">Trip #${job.id}</span>
+                <div class="text-[11px] text-slate-500">${job.waste_type} • ${job.actual_quantity || job.expected_quantity} Tonnes</div>
+              </div>
+              <span class="text-xs font-black text-emerald-700">₹${(job.estimated_cost || 1200).toLocaleString()}</span>
+            </div>
+          `;
+        });
       }
     }
 
@@ -6922,7 +7092,7 @@ Individual dispatch requests sent to farmers.`);
               <div>
                 <span class="font-black text-slate-900 text-sm">${l.material_name}</span>
                 <span class="text-[10px] text-slate-400 ml-1">#LST-${l.id}</span>
-                <div class="text-[10px] text-slate-500 mt-0.5">Farmer: <b>${l.farmer_name || 'Ramesh Patel'}</b> • 📍 ${l.location_name || 'Sanand, Ahmedabad'}</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">Farmer: <b>${l.farmer_name || 'Verified Farmer'}</b> • 📍 ${l.location_name || 'Sanand, Ahmedabad'}</div>
               </div>
               ${stBadge}
             </div>
@@ -7278,7 +7448,7 @@ Individual dispatch requests sent to farmers.`);
             <div class="p-2.5 bg-slate-50 rounded-xl space-y-1 text-[11px]">
               <div class="flex items-start gap-1.5">
                 <span class="text-agri-700 font-bold">📍 Pickup:</span>
-                <span class="text-slate-800 font-medium">${j.pickup_location || 'Sanand Farm, Ahmedabad'} (Farmer: ${j.farmer_name || 'Ramesh Patel'})</span>
+                <span class="text-slate-800 font-medium">${j.pickup_location || 'Sanand Farm, Ahmedabad'} (Farmer: ${j.farmer_name || 'Verified Farmer'})</span>
               </div>
               <div class="flex items-start gap-1.5">
                 <span class="text-blue-700 font-bold">🏭 Dropoff:</span>
@@ -7432,7 +7602,7 @@ Individual dispatch requests sent to farmers.`);
             <div class="flex justify-between items-start">
               <div>
                 <span class="font-black text-slate-900 text-sm">${iss.title}</span>
-                <div class="text-[10px] text-slate-500 mt-0.5">Reported by: <b>${iss.reporter || 'Ramesh Patel'}</b> (${iss.role || 'farmer'}) • Order ${iss.order_id || '#100'}</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">Reported by: <b>${iss.reporter || 'Farmer'}</b> (${iss.role || 'farmer'}) • Order ${iss.order_id || '#100'}</div>
               </div>
               ${stBadge}
             </div>
@@ -7913,11 +8083,11 @@ Individual dispatch requests sent to farmers.`);
       if (dId) dId.textContent = profileId;
 
       const dName = document.getElementById("prof-disp-name");
-      if (dName) dName.textContent = currentUser.name || "Ramesh Patel";
+      if (dName) dName.textContent = currentUser.name || "Farmer";
       const dPhone = document.getElementById("prof-disp-phone");
       if (dPhone) dPhone.textContent = currentUser.phone || "+91 98250 12345";
       const dEmail = document.getElementById("prof-disp-email");
-      if (dEmail) dEmail.textContent = currentUser.email || "ramesh@kisan.in";
+      if (dEmail) dEmail.textContent = currentUser.email || "—";
       const dVill = document.getElementById("prof-disp-village");
       if (dVill) dVill.textContent = currentUser.village || "Sanand";
       const dDist = document.getElementById("prof-disp-district");
@@ -7995,5 +8165,31 @@ Individual dispatch requests sent to farmers.`);
     // Run immediately when loaded
     initApp();
   </script>
+
+  <!-- MODAL: TRANSACTION RECEIPT VIEWER -->
+  <div id="modal-receipt-viewer" class="fixed inset-0 bg-black/60 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-md p-5 space-y-4 max-h-[92vh] overflow-y-auto no-scrollbar shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+        <h3 class="font-black text-sm text-slate-900 flex items-center gap-1.5">
+          <span>🧾</span> Official Transaction Receipt
+        </h3>
+        <button onclick="closeReceiptModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center">&times;</button>
+      </div>
+
+      <div id="receipt-modal-content" class="space-y-3.5 text-xs">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="pt-2 flex gap-2">
+        <button onclick="window.print()" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-xs">
+          <span>🖨️</span> Print / Save Receipt
+        </button>
+        <button onclick="closeReceiptModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
