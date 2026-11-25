@@ -103,7 +103,7 @@
           👨‍🌾
         </div>
         <div>
-          <div id="drawer-farmer-name" class="font-black text-sm text-slate-900 leading-tight">Ramesh Patel</div>
+          <div id="drawer-farmer-name" class="font-black text-sm text-slate-900 leading-tight">—</div>
           <div id="drawer-farmer-location" class="text-[10px] text-agri-800 font-semibold mt-0.5">📍 Sanand, Ahmedabad</div>
         </div>
       </div>
@@ -237,53 +237,7 @@
           </p>
         </div>
 
-                <!-- 1-CLICK ROLE-BASED DEMO LOGIN -->
-        <div class="bg-gradient-to-br from-emerald-50/80 to-agri-50 p-4 rounded-3xl border border-emerald-200/80 shadow-xs space-y-2.5">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-black text-slate-800 flex items-center gap-1.5">
-              ⚡ 1-Click Role-Based Demo Login
-            </span>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white text-agri-700 border border-agri-200 shadow-2xs">
-              Instant Access
-            </span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <button type="button" onclick="quickDemoLogin('farmer')" class="p-2.5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-agri-500 rounded-2xl text-left transition shadow-2xs flex items-center gap-2 group">
-              <span class="text-2xl group-hover:scale-110 transition">👨‍🌾</span>
-              <div>
-                <div class="font-black text-slate-900 leading-tight">Farmer Demo</div>
-                <div class="text-[10px] text-slate-500">Ramesh Patel • Sanand</div>
-              </div>
-            </button>
-
-            <button type="button" onclick="quickDemoLogin('buyer')" class="p-2.5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-harvest-500 rounded-2xl text-left transition shadow-2xs flex items-center gap-2 group">
-              <span class="text-2xl group-hover:scale-110 transition">🏭</span>
-              <div>
-                <div class="font-black text-slate-900 leading-tight">Buyer Demo</div>
-                <div class="text-[10px] text-slate-500">Gujarat BioPower Ltd</div>
-              </div>
-            </button>
-
-            <button type="button" onclick="quickDemoLogin('aggregator')" class="p-2.5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-blue-500 rounded-2xl text-left transition shadow-2xs flex items-center gap-2 group">
-              <span class="text-2xl group-hover:scale-110 transition">🚛</span>
-              <div>
-                <div class="font-black text-slate-900 leading-tight">Transporter Demo</div>
-                <div class="text-[10px] text-slate-500">Kisan Fleet Logistics</div>
-              </div>
-            </button>
-
-            <button type="button" onclick="quickDemoLogin('admin')" class="p-2.5 bg-white hover:bg-slate-50 border border-purple-200 hover:border-purple-500 rounded-2xl text-left transition shadow-2xs flex items-center gap-2 group">
-              <span class="text-2xl group-hover:scale-110 transition">🛡️</span>
-              <div>
-                <div class="font-black text-purple-900 leading-tight">Admin Portal</div>
-                <div class="text-[10px] text-slate-500">Platform Moderator</div>
-              </div>
-            </button>
-          </div>
-        </div>
-
-<!-- AUTH TABS -->
+                <!-- AUTH TABS -->
         <div class="flex border-b border-slate-200 text-xs font-bold">
           <button id="btn-tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2.5 text-center tab-active border-b-2">Sign In</button>
           <button id="btn-tab-register" onclick="switchAuthTab('register')" class="flex-1 py-2.5 text-center text-slate-400 hover:text-slate-700">Create Account</button>
@@ -297,7 +251,7 @@
         <form id="form-login" onsubmit="handleManualLogin(event)" class="space-y-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Username, Email, or Mobile</label>
-            <input type="text" id="login-username" required placeholder="e.g. ramesh123 or ramesh@example.com" class="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white" />
+            <input type="text" id="login-username" required placeholder="Enter username, email, or mobile number" class="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-agri-600 bg-white" />
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
@@ -320,12 +274,12 @@
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Full Name *</label>
-            <input type="text" id="reg-name" required placeholder="e.g. Ramesh Patel" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
+            <input type="text" id="reg-name" required placeholder="Enter your full name" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
           </div>
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">Username *</label>
-              <input type="text" id="reg-username" required placeholder="ramesh123" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
+              <input type="text" id="reg-username" required placeholder="Choose a username" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
             </div>
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">Mobile No. (10 digits) *</label>
@@ -395,7 +349,7 @@
 
           <div id="role-extra-buyer" class="p-2.5 bg-harvest-50 border border-harvest-200 rounded-xl space-y-2 text-xs hidden">
             <span class="font-bold text-harvest-800 block">🏭 Industry Details</span>
-            <input type="text" id="reg-company" placeholder="Company Name (e.g. Gujarat BioPower Ltd)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
+            <input type="text" id="reg-company" placeholder="Company / Factory Name" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
             <input type="text" id="reg-industry" placeholder="Industry Type (e.g. Bio-Energy, Paper)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
           </div>
 
@@ -428,7 +382,7 @@
             <div class="flex items-start justify-between">
               <div>
                 <span class="text-[11px] font-bold text-agri-800">Namaste &amp; Welcome,</span>
-                <h2 id="farmer-dash-greeting" class="text-lg font-black text-slate-900 leading-tight mt-0.5">Ramesh Patel 👋</h2>
+                <h2 id="farmer-dash-greeting" class="text-lg font-black text-slate-900 leading-tight mt-0.5">Welcome 👋</h2>
                 <div id="farmer-dash-location" class="text-xs text-agri-900 font-semibold mt-1 flex items-center gap-1">
                   📍 Sanand Taluka, Ahmedabad District
                 </div>
@@ -827,7 +781,7 @@
               🏭
             </div>
             <div>
-              <h2 id="bprof-company-name" class="font-black text-lg text-slate-900 leading-tight">Gujarat BioPower Ltd</h2>
+              <h2 id="bprof-company-name" class="font-black text-lg text-slate-900 leading-tight">—</h2>
               <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-harvest-100 text-harvest-800 text-[10px] font-black uppercase tracking-wider mt-1">
                 🏭 Verified Industrial Buyer
               </div>
@@ -851,7 +805,7 @@
             <div id="bprof-view-mode" class="grid grid-cols-2 gap-3 py-1">
               <div class="p-2.5 bg-slate-50 rounded-xl col-span-2">
                 <span class="text-[10px] text-slate-400 block font-semibold">Company / Factory Name</span>
-                <span id="bprof-disp-company" class="font-bold text-slate-800 text-xs">Gujarat BioPower Ltd</span>
+                <span id="bprof-disp-company" class="font-bold text-slate-800 text-xs">—</span>
               </div>
               <div class="p-2.5 bg-slate-50 rounded-xl">
                 <span class="text-[10px] text-slate-400 block font-semibold">Contact Person</span>
@@ -953,7 +907,7 @@
             <div class="flex items-start justify-between">
               <div>
                 <span class="text-[11px] font-bold text-blue-800">Logistics &amp; Fleet Operations,</span>
-                <h2 id="trans-dash-greeting" class="text-lg font-black text-slate-900 leading-tight">Harpreet Singh 👋</h2>
+                <h2 id="trans-dash-greeting" class="text-lg font-black text-slate-900 leading-tight">Welcome 👋</h2>
                 <div id="trans-dash-fleet" class="text-xs text-blue-900 font-semibold mt-1 flex items-center gap-1">
                   🚛 Kisan Fleet Logistics • 10T Commercial Fleet
                 </div>
@@ -1042,7 +996,7 @@
               🚛
             </div>
             <div>
-              <h2 id="aprof-name" class="font-black text-lg text-slate-900 leading-tight">Harpreet Singh</h2>
+              <h2 id="aprof-name" class="font-black text-lg text-slate-900 leading-tight">—</h2>
               <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-black uppercase tracking-wider mt-1">
                 🚛 Verified Agricultural Logistics Partner
               </div>
@@ -1066,11 +1020,11 @@
             <div id="aprof-view-mode" class="grid grid-cols-2 gap-3 py-1">
               <div class="p-2.5 bg-slate-50 rounded-xl">
                 <span class="text-[10px] text-slate-400 block font-semibold">Full Name</span>
-                <span id="aprof-disp-name" class="font-bold text-slate-800 text-xs">Harpreet Singh</span>
+                <span id="aprof-disp-name" class="font-bold text-slate-800 text-xs">—</span>
               </div>
               <div class="p-2.5 bg-slate-50 rounded-xl">
                 <span class="text-[10px] text-slate-400 block font-semibold">Username</span>
-                <span id="aprof-disp-username" class="font-bold text-slate-800 text-xs">kisan_trans</span>
+                <span id="aprof-disp-username" class="font-bold text-slate-800 text-xs">—</span>
               </div>
               <div class="p-2.5 bg-slate-50 rounded-xl">
                 <span class="text-[10px] text-slate-400 block font-semibold">Mobile Number</span>
@@ -1581,7 +1535,7 @@
             👨‍🌾
           </div>
           <div>
-            <h2 id="prof-name" class="font-black text-lg text-slate-900 leading-tight">Ramesh Patel</h2>
+            <h2 id="prof-name" class="font-black text-lg text-slate-900 leading-tight">—</h2>
             <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase tracking-wider mt-1">
               🌾 Verified Agricultural Producer
             </div>
@@ -1603,7 +1557,7 @@
             </div>
             <div class="p-2.5 bg-slate-50 rounded-xl">
               <span class="text-[10px] text-slate-400 block font-semibold">Full Name</span>
-              <span id="prof-disp-name" class="font-bold text-slate-800 text-xs">Ramesh Patel</span>
+              <span id="prof-disp-name" class="font-bold text-slate-800 text-xs">—</span>
             </div>
             <div class="p-2.5 bg-slate-50 rounded-xl">
               <span class="text-[10px] text-slate-400 block font-semibold">Mobile Number</span>
@@ -2288,390 +2242,37 @@ div>
     let activeNavTab = 'dashboard';
     let activeMarketCategory = 'all';
 
-    // Local in-memory / localStorage fallback store for seamless offline draft mode
-    const defaultUsers = [
-      { id: 1, profile_id: "AGY-FRM-1001", username: "ramesh123", email: "ramesh@example.com", phone: "9876543210", password: "password123", name: "Ramesh Patel", role: "farmer", location: "Sanand Taluka, Ahmedabad", village: "Sanand", district: "Ahmedabad", state: "Gujarat", pincode: "382110" },
-      { id: 2, profile_id: "AGY-BYR-2001", username: "gujarat_bio", email: "buyer@biopower.com", phone: "9876543211", password: "password123", name: "Vikram Mehta (Gujarat BioPower)", role: "buyer", location: "Sanand GIDC Biofuel Plant", company: "Gujarat BioPower Ltd", industry: "Bio-Energy", village: "Sanand GIDC", district: "Ahmedabad", state: "Gujarat", pincode: "382170" },
-      { id: 3, profile_id: "AGY-TRN-3001", username: "kisan_trans", email: "trans@kisanfleet.com", phone: "9876543212", password: "password123", name: "Harpreet Singh (Kisan Fleet)", role: "aggregator", location: "Ahmedabad District Fleet Hub", fleet: "10T Eicher Commercial Truck", vehicle_type: "10T Commercial Truck", vehicle_no: "GJ-01-AX-4821", village: "Narol", district: "Ahmedabad", state: "Gujarat", pincode: "382415" },
-      { id: 4, profile_id: "AGY-ADM-4001", username: "admin", email: "admin@agriwaste.com", phone: "9876543213", password: "adminpassword", name: "System Administrator", role: "admin", location: "Platform Headquarters", village: "Gandhinagar IT Zone", district: "Gandhinagar", state: "Gujarat", pincode: "380001" }
-    ];
+    // Local in-memory / localStorage store - Starts completely fresh with 0 preloaded data
+    const defaultUsers = [];
 
     let store = {
-      users: [...defaultUsers],
-      listings: [
-        { id: 1, farmer_id: 1, farmer_name: "Ramesh Patel", material_name: "Rice Husk", available_quantity: 2.0, estimated_quantity: 2.0, unit: "tonnes", price_per_unit: 2400, location_name: "Sanand, Ahmedabad", storage_type: "Dry covered shed", moisture_condition: "Dry (< 12%)", status: "available" },
-        { id: 2, farmer_id: 2, farmer_name: "Suresh Chaudhary", material_name: "Rice Husk", available_quantity: 3.0, estimated_quantity: 3.0, unit: "tonnes", price_per_unit: 2350, location_name: "Bavla, Ahmedabad", storage_type: "Baled & stacked", moisture_condition: "Medium (14%)", status: "available" },
-        { id: 3, farmer_id: 3, farmer_name: "Mahesh Desai", material_name: "Rice Husk", available_quantity: 5.0, estimated_quantity: 5.0, unit: "tonnes", price_per_unit: 2300, location_name: "Dholka, Ahmedabad", storage_type: "Dry covered shed", moisture_condition: "Dry (< 12%)", status: "available" },
-        { id: 4, farmer_id: 1, farmer_name: "Ramesh Patel", material_name: "Wheat Straw", available_quantity: 8.0, estimated_quantity: 8.0, unit: "tonnes", price_per_unit: 1800, location_name: "Sanand, Ahmedabad", storage_type: "Baled & stacked", moisture_condition: "Dry (< 12%)", status: "available" },
-        { id: 5, farmer_id: 1, farmer_name: "Ramesh Patel", material_name: "Sugarcane Bagasse", available_quantity: 5.0, estimated_quantity: 5.0, unit: "tonnes", price_per_unit: 1600, location_name: "Sanand, Ahmedabad", storage_type: "Baled & stacked", moisture_condition: "Medium (14%)", status: "reserved" },
-        { id: 6, farmer_id: 1, farmer_name: "Ramesh Patel", material_name: "Cotton Stalks", available_quantity: 4.0, estimated_quantity: 4.0, unit: "tonnes", price_per_unit: 2100, location_name: "Sanand, Ahmedabad", storage_type: "Open field", moisture_condition: "Dry (< 12%)", status: "cancelled" }
-      ],
-      requirements: [
-        { id: 1, buyer_id: 2, buyer_name: "Gujarat BioPower Ltd", material_name: "Rice Husk", required_quantity: 10.0, fulfilled_quantity: 2.0, unit: "tonnes", target_price_max: 2500, delivery_location: "Sanand GIDC Biofuel Plant", quality_specifications: "Dry covered shed (< 12% moisture)", status: "open", required_date: "2026-11-28" },
-        { id: 2, buyer_id: 2, buyer_name: "Gujarat BioPower Ltd", material_name: "Wheat Straw", required_quantity: 15.0, fulfilled_quantity: 2.0, unit: "tonnes", target_price_max: 1900, delivery_location: "Sanand GIDC Biofuel Plant", quality_specifications: "Baled & stacked", status: "open", required_date: "2026-12-02" },
-        { id: 3, buyer_id: 4, buyer_name: "Changodar BioMass Energy", material_name: "Sugarcane Bagasse", required_quantity: 20.0, fulfilled_quantity: 5.0, unit: "tonnes", target_price_max: 1750, delivery_location: "Changodar Industrial Area", quality_specifications: "Baled & dry", status: "open", required_date: "2026-11-30" }
-      ],
-      orders: [
-        {
-          id: 101,
-          order_number: "ORD-101",
-          buyer_id: 2,
-          buyer_name: "Gujarat BioPower Ltd",
-          buyer: "Gujarat BioPower Ltd",
-          buyer_phone: "+91 98251 98765",
-          farmer_id: 1,
-          farmer_name: "Ramesh Patel (Lead Supplier)",
-          material_name: "Rice Husk (Multi-Farmer Pool)",
-          quantity: 10.0,
-          total_quantity: 10.0,
-          unit: "tonnes",
-          agreed_price: 2335,
-          total_amount: 23350,
-          collection_location: "Multi-point Rural Corridor (Sanand - Bavla - Dholka)",
-          delivery_address: "Sanand GIDC Biofuel Plant",
-          status: "in_transit",
-          transporter_name: "Kisan Fleet Logistics",
-          driver_name: "Harpreet Singh",
-          driver_phone: "+91 98765 43212",
-          vehicle_no: "GJ-01-AX-4821",
-          pickup_time: "Today at 02:30 PM",
-          date: "2026-11-24",
-          payment_status: "pending",
-          contributions: [
-            { farmer_name: "Ramesh Patel", quantity: 2.0, price_per_unit: 2400, location: "Sanand Farm, Ahmedabad", status: "collected" },
-            { farmer_name: "Suresh Chaudhary", quantity: 3.0, price_per_unit: 2350, location: "Bavla Farm, Ahmedabad", status: "in_transit" },
-            { farmer_name: "Mahesh Desai", quantity: 5.0, price_per_unit: 2300, location: "Dholka Farm, Ahmedabad", status: "collected" }
-          ]
-        },
-        {
-          id: 102,
-          order_number: "ORD-102",
-          buyer_id: 2,
-          buyer_name: "Gujarat BioPower Ltd",
-          buyer: "Gujarat BioPower Ltd",
-          buyer_phone: "+91 98251 98765",
-          farmer_id: 1,
-          farmer_name: "Ramesh Patel",
-          material_name: "Rice Husk",
-          quantity: 1.5,
-          total_quantity: 1.5,
-          unit: "tonnes",
-          agreed_price: 2400,
-          total_amount: 3600,
-          collection_location: "Sanand Farm, Ahmedabad",
-          delivery_address: "Sanand GIDC Biofuel Plant",
-          status: "pending",
-          transporter_name: "Kisan Fleet Logistics",
-          driver_name: "Assigned upon acceptance",
-          driver_phone: "-",
-          vehicle_no: "Pending Dispatch",
-          pickup_time: "Tomorrow at 10:00 AM",
-          date: "2026-11-24",
-          payment_status: "pending"
-        },
-        {
-          id: 100,
-          order_number: "ORD-100",
-          buyer_id: 2,
-          buyer_name: "Gujarat BioPower Ltd",
-          buyer: "Gujarat BioPower Ltd",
-          buyer_phone: "+91 98251 98765",
-          farmer_id: 1,
-          farmer_name: "Ramesh Patel",
-          material_name: "Sugarcane Bagasse",
-          quantity: 5.0,
-          total_quantity: 5.0,
-          unit: "tonnes",
-          agreed_price: 1600,
-          total_amount: 8000,
-          collection_location: "Sanand Farm, Ahmedabad",
-          delivery_address: "Changodar Industrial Area",
-          status: "completed",
-          transporter_name: "Kisan Fleet Logistics",
-          driver_name: "Pravin Solanki",
-          driver_phone: "+91 98240 11223",
-          vehicle_no: "GJ-01-ZZ-9912",
-          pickup_time: "2026-11-22 at 11:00 AM",
-          date: "2026-11-22",
-          payment_status: "completed",
-          payment_ref: "UPI-SBI-89214710",
-          settled_at: "2026-11-23"
-        }
-      ],
-      transportJobs: [
-        {
-          id: 1,
-          order_id: 101,
-          order_number: "ORD-101",
-          aggregator_id: 3,
-          farmer_id: 1,
-          farmer_name: "Ramesh Patel",
-          farmer_phone: "+91 98765 43210",
-          buyer_id: 2,
-          buyer_name: "Gujarat BioPower Ltd",
-          buyer_phone: "+91 98251 98765",
-          waste_type: "Wheat Straw",
-          expected_quantity: 2.0,
-          actual_quantity: 2.0,
-          discrepancy_flag: false,
-          discrepancy_reason: null,
-          pickup_location: "Sanand Farm, Ahmedabad",
-          delivery_location: "Sanand GIDC Biofuel Plant",
-          scheduled_pickup_date: "Today at 02:30 PM",
-          status: "picked_up",
-          notes: "Loaded dry bales from farm storage",
-          assigned_at: "2026-11-24T08:00:00Z",
-          picked_up_at: "2026-11-24T14:30:00Z",
-          delivered_at: null,
-          completed_at: null,
-          estimated_distance_km: 24.0,
-          estimated_cost: 1450.0
-        },
-        {
-          id: 2,
-          order_id: 102,
-          order_number: "ORD-102",
-          aggregator_id: 3,
-          farmer_id: 1,
-          farmer_name: "Ramesh Patel",
-          farmer_phone: "+91 98765 43210",
-          buyer_id: 2,
-          buyer_name: "Gujarat BioPower Ltd",
-          buyer_phone: "+91 98251 98765",
-          waste_type: "Rice Husk",
-          expected_quantity: 1.5,
-          actual_quantity: null,
-          discrepancy_flag: false,
-          discrepancy_reason: null,
-          pickup_location: "Sanand Farm, Ahmedabad",
-          delivery_location: "Sanand GIDC Biofuel Plant",
-          scheduled_pickup_date: "Tomorrow at 10:00 AM",
-          status: "assigned",
-          notes: "Awaiting aggregator review & acceptance",
-          assigned_at: "2026-11-24T10:15:00Z",
-          picked_up_at: null,
-          delivered_at: null,
-          completed_at: null,
-          estimated_distance_km: 18.5,
-          estimated_cost: 1100.0
-        },
-        {
-          id: 3,
-          order_id: 103,
-          order_number: "ORD-103",
-          aggregator_id: 3,
-          farmer_id: 2,
-          farmer_name: "Suresh Chaudhary",
-          farmer_phone: "+91 98252 33445",
-          buyer_id: 2,
-          buyer_name: "Gujarat BioPower Ltd",
-          buyer_phone: "+91 98251 98765",
-          waste_type: "Rice Husk",
-          expected_quantity: 3.0,
-          actual_quantity: null,
-          discrepancy_flag: false,
-          discrepancy_reason: null,
-          pickup_location: "Bavla Farm, Ahmedabad",
-          delivery_location: "Sanand GIDC Biofuel Plant",
-          scheduled_pickup_date: "2026-11-26 at 09:30 AM",
-          status: "accepted",
-          notes: "Accepted by Harpreet Singh • Ready for farm pickup",
-          assigned_at: "2026-11-23T11:00:00Z",
-          picked_up_at: null,
-          delivered_at: null,
-          completed_at: null,
-          estimated_distance_km: 32.0,
-          estimated_cost: 1850.0
-        },
-        {
-          id: 4,
-          order_id: 100,
-          order_number: "ORD-100",
-          aggregator_id: 3,
-          farmer_id: 1,
-          farmer_name: "Ramesh Patel",
-          farmer_phone: "+91 98765 43210",
-          buyer_id: 2,
-          buyer_name: "Gujarat BioPower Ltd",
-          buyer_phone: "+91 98251 98765",
-          waste_type: "Sugarcane Bagasse",
-          expected_quantity: 5.0,
-          actual_quantity: 5.0,
-          discrepancy_flag: false,
-          discrepancy_reason: null,
-          pickup_location: "Sanand Farm, Ahmedabad",
-          delivery_location: "Changodar Industrial Area",
-          scheduled_pickup_date: "2026-11-22",
-          status: "completed",
-          notes: "Delivered & verified at weighbridge",
-          assigned_at: "2026-11-22T08:00:00Z",
-          picked_up_at: "2026-11-22 11:00 AM",
-          delivered_at: "2026-11-22 03:45 PM",
-          completed_at: "2026-11-22 04:00 PM",
-          estimated_distance_km: 28.0,
-          estimated_cost: 2500.0
-        }
-      ],
-      issues: [
-        { id: 1, reporter: "Ramesh Patel", user_id: 1, role: "farmer", category: "quality_dispute", order_id: "#100", title: "Moisture reading dispute at plant gate", description: "Plant sensor reported 14.5% moisture while farm sample was tested at 11.8%.", status: "resolved", resolution_notes: "Admin reviewed calibration certificate; accepted 12% standard rate with zero penalty.", created_at: "2026-11-22" },
-        { id: 2, reporter: "Ramesh Patel", user_id: 1, role: "farmer", category: "transporter_issue", order_id: "#101", title: "Truck delay on pickup schedule", description: "Driver reported tire puncture on Sanand road, requested 45 min buffer.", status: "under_review", resolution_notes: "Transporter dispatcher dispatched escort vehicle to ensure same-day arrival.", created_at: "2026-11-24" }
-      ]
+      users: [],
+      listings: [],
+      requirements: [],
+      orders: [],
+      transportJobs: [],
+      issues: []
     };
 
+    // Purge any old demonstration localStorage records on fresh app launch
+    const FRESH_STORAGE_KEY = "agriwaste_fresh_v7";
+    if (localStorage.getItem("agriwaste_version") !== FRESH_STORAGE_KEY) {
+      localStorage.clear();
+      localStorage.setItem("agriwaste_version", FRESH_STORAGE_KEY);
+    }
+
     try {
-      const saved = localStorage.getItem("agriwaste_store_v5");
+      const saved = localStorage.getItem("agriwaste_store_v7");
       if (saved) {
         store = { ...store, ...JSON.parse(saved) };
-        // Sanitize orders payment_status to strictly Pending or Completed & ensure multi-farmer pool
-        if (store.orders && Array.isArray(store.orders)) {
-          store.orders.forEach(o => {
-            if (o.payment_status === 'escrow_held' || !o.payment_status) {
-              o.payment_status = 'pending';
-            }
-            if (o.id === 101 && (!o.contributions || o.contributions.length < 3)) {
-              o.material_name = "Rice Husk (Multi-Farmer Pool)";
-              o.total_quantity = 10.0;
-              o.quantity = 10.0;
-              o.total_amount = 23350;
-              o.contributions = [
-                { farmer_name: "Ramesh Patel", quantity: 2.0, price_per_unit: 2400, location: "Sanand Farm, Ahmedabad", status: "collected" },
-                { farmer_name: "Suresh Chaudhary", quantity: 3.0, price_per_unit: 2350, location: "Bavla Farm, Ahmedabad", status: "in_transit" },
-                { farmer_name: "Mahesh Desai", quantity: 5.0, price_per_unit: 2300, location: "Dholka Farm, Ahmedabad", status: "collected" }
-              ];
-            }
-          });
-        }
-        // Ensure default users have profile_id
-        if (store.users && Array.isArray(store.users)) {
-          store.users.forEach(u => {
-            if (!u.profile_id) {
-              const r = (u.role || 'farmer').toUpperCase().slice(0, 3);
-              u.profile_id = `AGY-${r === 'FAR' ? 'FRM' : (r === 'BUY' ? 'BYR' : (r === 'AGG' ? 'TRN' : 'ADM'))}-${u.id || 1001}`;
-            }
-          });
-        }
-        // Ensure transportJobs are upgraded with rich multi-status aggregator data
-        if (!store.transportJobs || store.transportJobs.length < 4 || !store.transportJobs[0].farmer_name) {
-          store.transportJobs = [
-            {
-              id: 1,
-              order_id: 101,
-              order_number: "ORD-101",
-              aggregator_id: 3,
-              farmer_id: 1,
-              farmer_name: "Ramesh Patel",
-              farmer_phone: "+91 98765 43210",
-              buyer_id: 2,
-              buyer_name: "Gujarat BioPower Ltd",
-              buyer_phone: "+91 98251 98765",
-              waste_type: "Wheat Straw",
-              expected_quantity: 2.0,
-              actual_quantity: 2.0,
-              discrepancy_flag: false,
-              discrepancy_reason: null,
-              pickup_location: "Sanand Farm, Ahmedabad",
-              delivery_location: "Sanand GIDC Biofuel Plant",
-              scheduled_pickup_date: "Today at 02:30 PM",
-              status: "picked_up",
-              notes: "Loaded dry bales from farm storage",
-              assigned_at: "2026-11-24T08:00:00Z",
-              picked_up_at: "2026-11-24T14:30:00Z",
-              delivered_at: null,
-              completed_at: null,
-              estimated_distance_km: 24.0,
-              estimated_cost: 1450.0
-            },
-            {
-              id: 2,
-              order_id: 102,
-              order_number: "ORD-102",
-              aggregator_id: 3,
-              farmer_id: 1,
-              farmer_name: "Ramesh Patel",
-              farmer_phone: "+91 98765 43210",
-              buyer_id: 2,
-              buyer_name: "Gujarat BioPower Ltd",
-              buyer_phone: "+91 98251 98765",
-              waste_type: "Rice Husk",
-              expected_quantity: 1.5,
-              actual_quantity: null,
-              discrepancy_flag: false,
-              discrepancy_reason: null,
-              pickup_location: "Sanand Farm, Ahmedabad",
-              delivery_location: "Sanand GIDC Biofuel Plant",
-              scheduled_pickup_date: "Tomorrow at 10:00 AM",
-              status: "assigned",
-              notes: "Awaiting aggregator review & acceptance",
-              assigned_at: "2026-11-24T10:15:00Z",
-              picked_up_at: null,
-              delivered_at: null,
-              completed_at: null,
-              estimated_distance_km: 18.5,
-              estimated_cost: 1100.0
-            },
-            {
-              id: 3,
-              order_id: 103,
-              order_number: "ORD-103",
-              aggregator_id: 3,
-              farmer_id: 2,
-              farmer_name: "Suresh Chaudhary",
-              farmer_phone: "+91 98252 33445",
-              buyer_id: 2,
-              buyer_name: "Gujarat BioPower Ltd",
-              buyer_phone: "+91 98251 98765",
-              waste_type: "Rice Husk",
-              expected_quantity: 3.0,
-              actual_quantity: null,
-              discrepancy_flag: false,
-              discrepancy_reason: null,
-              pickup_location: "Bavla Farm, Ahmedabad",
-              delivery_location: "Sanand GIDC Biofuel Plant",
-              scheduled_pickup_date: "2026-11-26 at 09:30 AM",
-              status: "accepted",
-              notes: "Accepted by Harpreet Singh • Ready for farm pickup",
-              assigned_at: "2026-11-23T11:00:00Z",
-              picked_up_at: null,
-              delivered_at: null,
-              completed_at: null,
-              estimated_distance_km: 32.0,
-              estimated_cost: 1850.0
-            },
-            {
-              id: 4,
-              order_id: 100,
-              order_number: "ORD-100",
-              aggregator_id: 3,
-              farmer_id: 1,
-              farmer_name: "Ramesh Patel",
-              farmer_phone: "+91 98765 43210",
-              buyer_id: 2,
-              buyer_name: "Gujarat BioPower Ltd",
-              buyer_phone: "+91 98251 98765",
-              waste_type: "Sugarcane Bagasse",
-              expected_quantity: 5.0,
-              actual_quantity: 5.0,
-              discrepancy_flag: false,
-              discrepancy_reason: null,
-              pickup_location: "Sanand Farm, Ahmedabad",
-              delivery_location: "Changodar Industrial Area",
-              scheduled_pickup_date: "2026-11-22",
-              status: "completed",
-              notes: "Delivered & verified at weighbridge",
-              assigned_at: "2026-11-22T08:00:00Z",
-              picked_up_at: "2026-11-22 11:00 AM",
-              delivered_at: "2026-11-22 03:45 PM",
-              completed_at: "2026-11-22 04:00 PM",
-              estimated_distance_km: 28.0,
-              estimated_cost: 2500.0
-            }
-          ];
-        }
       }
-    } catch(e){}
+    } catch(e) {}
 
     function persist() {
-      try { localStorage.setItem("agriwaste_store_v5", JSON.stringify(store)); } catch(e){}
+      try { localStorage.setItem("agriwaste_store_v7", JSON.stringify(store)); } catch(e){}
+    }
+    function saveStoreToLocal() {
+      try { localStorage.setItem("agriwaste_store_v7", JSON.stringify(store)); } catch(e){}
     }
 
     async function apiRequest(endpoint, method = 'GET', body = null) {
@@ -2754,22 +2355,6 @@ div>
     }
 
     
-    function quickDemoLogin(role) {
-      let user = null;
-      if (role === 'farmer') user = store.users.find(u => u.username === 'ramesh123') || defaultUsers[0];
-      else if (role === 'buyer') user = store.users.find(u => u.username === 'gujarat_bio') || defaultUsers[1];
-      else if (role === 'aggregator') user = store.users.find(u => u.username === 'kisan_trans') || defaultUsers[2];
-      else if (role === 'admin') user = store.users.find(u => u.username === 'admin') || defaultUsers[3];
-
-      if (user) {
-        currentUser = { ...user };
-        authToken = "demo-token-" + user.username;
-        localStorage.setItem("agriwaste_current_user", JSON.stringify(currentUser));
-        localStorage.setItem("agriwaste_auth_token", authToken);
-        renderAuthenticatedState();
-      }
-    }
-
     async function handleManualLogin(e) {
       e.preventDefault();
       const errorEl = document.getElementById("login-error-msg");
@@ -3452,9 +3037,9 @@ div>
         container.innerHTML = `
           <div class="p-6 bg-white rounded-2xl border border-dashed border-slate-300 text-center space-y-2 text-xs text-slate-500 shadow-xs">
             <div class="text-2xl">🌾</div>
-            <div class="font-bold text-slate-800">No Listings in this category</div>
+            <div class="font-bold text-slate-800">You haven't added any listings yet.</div>
             <p>List your stubble and crop residue to receive purchase orders from industries.</p>
-            <button onclick="openAddResidueModal()" class="px-4 py-2 bg-agri-700 text-white font-bold rounded-xl text-xs shadow-xs">+ Add Residue Listing</button>
+            <button onclick="openAddResidueModal()" class="px-4 py-2 bg-agri-700 text-white font-bold rounded-xl text-xs shadow-xs">+ Add Waste Listing</button>
           </div>
         `;
         return;
@@ -7028,7 +6613,7 @@ Individual dispatch requests sent to farmers.`);
       filtered.forEach(o => {
         const isComp = o.status === 'completed';
         const stBadge = isComp ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800">Delivered &amp; Completed</span>' : `<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-100 text-amber-800 uppercase">${o.status}</span>`;
-        const payStatus = o.payment_status === 'completed' ? '<span class="text-emerald-700 font-black">Completed</span>' : '<span class="text-amber-700 font-bold">Pending Escrow Release</span>';
+        const payStatus = o.payment_status === 'completed' ? '<span class="text-emerald-700 font-black">Completed</span>' : '<span class="text-amber-700 font-bold">Pending</span>';
 
         // Multi-farmer contributions breakdown
         const contributions = o.contributions || [
@@ -7386,7 +6971,7 @@ Individual dispatch requests sent to farmers.`);
 
     // --- SUBSECTION 6: ADMIN PROFILE ---
     function renderAdminProfile() {
-      const u = (currentUser && currentUser.role === 'admin') ? currentUser : (store.users.find(x => x.role === 'admin') || defaultUsers[3]);
+      const u = (currentUser && currentUser.role === 'admin') ? currentUser : (store.users.find(x => x.role === 'admin') || { name: 'System Administrator', username: 'admin', role: 'admin', email: 'admin@agriwaste.com', phone: '9876543213' });
       
       const headName = document.getElementById("admprof-disp-name-head");
       if (headName) headName.textContent = u.name || u.full_name || "System Administrator";
@@ -7411,7 +6996,7 @@ Individual dispatch requests sent to farmers.`);
       if (!vMode || !eForm) return;
 
       if (eForm.classList.contains("hidden")) {
-        const u = (currentUser && currentUser.role === 'admin') ? currentUser : (store.users.find(x => x.role === 'admin') || defaultUsers[3]);
+        const u = (currentUser && currentUser.role === 'admin') ? currentUser : (store.users.find(x => x.role === 'admin') || { name: 'System Administrator', username: 'admin', role: 'admin', email: 'admin@agriwaste.com', phone: '9876543213' });
         document.getElementById("admprof-input-name").value = u.name || u.full_name || "";
         document.getElementById("admprof-input-phone").value = (u.phone || u.phone_number || "").replace(/[^0-9]/g, "").slice(-10);
         document.getElementById("admprof-input-email").value = u.email || "";
