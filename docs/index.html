@@ -74,8 +74,9 @@
     <header id="top-bar" class="hidden bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 sticky top-0 z-30 flex items-center justify-between shadow-2xs">
       <div class="flex items-center gap-2.5">
         <!-- Farmer Hamburger Menu Button -->
-        <button id="farmer-hamburger-btn" onclick="toggleFarmerDrawer()" class="hidden w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center text-lg font-black transition active:scale-95" title="Menu">
+        <button id="farmer-hamburger-btn" onclick="toggleFarmerDrawer()" class="relative hidden w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center text-lg font-black transition active:scale-95" title="Menu">
           ☰
+          <span id="top-drawer-badge-dot" class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-white animate-pulse hidden"></span>
         </button>
         <div class="w-8 h-8 rounded-xl bg-agri-100 flex items-center justify-center text-agri-700 font-black text-base shadow-xs">🌾</div>
         <div>
@@ -126,17 +127,26 @@
           <span class="text-base">📋</span>
           <span>Buyer Needs</span>
         </button>
-        <button onclick="handleFarmerDrawerNav('matches')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
-          <span class="text-base">🎯</span>
-          <span>Best Matches</span>
+        <button onclick="handleFarmerDrawerNav('matches')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+          <span class="flex items-center gap-3">
+            <span class="text-base">🎯</span>
+            <span>Best Matches</span>
+          </span>
+          <span id="farmer-dot-matches" class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200 animate-pulse hidden"></span>
         </button>
-        <button onclick="handleFarmerDrawerNav('orders')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
-          <span class="text-base">📦</span>
-          <span>Orders</span>
+        <button onclick="handleFarmerDrawerNav('orders')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+          <span class="flex items-center gap-3">
+            <span class="text-base">📦</span>
+            <span>Orders</span>
+          </span>
+          <span id="farmer-dot-orders" class="w-2.5 h-2.5 rounded-full bg-amber-500 ring-2 ring-amber-200 animate-pulse hidden"></span>
         </button>
-        <button onclick="handleFarmerDrawerNav('tracking')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
-          <span class="text-base">🚛</span>
-          <span>Live Tracking</span>
+        <button onclick="handleFarmerDrawerNav('tracking')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
+          <span class="flex items-center gap-3">
+            <span class="text-base">🚛</span>
+            <span>Live Tracking</span>
+          </span>
+          <span id="farmer-dot-tracking" class="w-2.5 h-2.5 rounded-full bg-blue-500 ring-2 ring-blue-200 animate-pulse hidden"></span>
         </button>
         <button onclick="handleFarmerDrawerNav('earnings')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-agri-50 hover:text-agri-700 transition">
           <span class="text-base">💰</span>
@@ -148,7 +158,7 @@
         </button>
       </div>
 
-      <!-- Buyer Drawer Menu (Home, Requirements, Suppliers, My Orders) -->
+      <!-- Buyer Drawer Menu (Home, Requirements, Best Matches / Suppliers, My Orders) -->
       <div id="buyer-drawer-menu" class="space-y-1 hidden">
         <button onclick="handleBuyerDrawerNav('home')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-amber-50 hover:text-harvest-700 transition">
           <span class="text-base">🏠</span>
@@ -158,13 +168,19 @@
           <span class="text-base">📋</span>
           <span>Requirements</span>
         </button>
-        <button onclick="handleBuyerDrawerNav('suppliers')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-amber-50 hover:text-harvest-700 transition">
-          <span class="text-base">🌾</span>
-          <span>Suppliers</span>
+        <button onclick="handleBuyerDrawerNav('suppliers')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-800 hover:bg-amber-50 hover:text-harvest-700 transition">
+          <span class="flex items-center gap-3">
+            <span class="text-base">🎯</span>
+            <span>Best Matches / Suppliers</span>
+          </span>
+          <span id="buyer-dot-suppliers" class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200 animate-pulse hidden"></span>
         </button>
-        <button onclick="handleBuyerDrawerNav('orders')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-amber-50 hover:text-harvest-700 transition">
-          <span class="text-base">📦</span>
-          <span>My Orders</span>
+        <button onclick="handleBuyerDrawerNav('orders')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-800 hover:bg-amber-50 hover:text-harvest-700 transition">
+          <span class="flex items-center gap-3">
+            <span class="text-base">📦</span>
+            <span>My Orders</span>
+          </span>
+          <span id="buyer-dot-orders" class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200 animate-pulse hidden"></span>
         </button>
       </div>
 
@@ -174,13 +190,19 @@
           <span class="text-base">🏠</span>
           <span>Home</span>
         </button>
-        <button onclick="handleAggregatorDrawerNav('assigned')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-blue-50 hover:text-blue-700 transition">
-          <span class="text-base">📋</span>
-          <span>Assigned Jobs</span>
+        <button onclick="handleAggregatorDrawerNav('assigned')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-800 hover:bg-blue-50 hover:text-blue-700 transition">
+          <span class="flex items-center gap-3">
+            <span class="text-base">📋</span>
+            <span>Assigned Jobs</span>
+          </span>
+          <span id="aggregator-dot-assigned" class="w-2.5 h-2.5 rounded-full bg-blue-500 ring-2 ring-blue-200 animate-pulse hidden"></span>
         </button>
-        <button onclick="handleAggregatorDrawerNav('active')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-800 hover:bg-blue-50 hover:text-blue-700 transition">
-          <span class="text-base">🚛</span>
-          <span>Active Trips</span>
+        <button onclick="handleAggregatorDrawerNav('active')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-800 hover:bg-blue-50 hover:text-blue-700 transition">
+          <span class="flex items-center gap-3">
+            <span class="text-base">🚛</span>
+            <span>Active Trips</span>
+          </span>
+          <span id="aggregator-dot-active" class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200 animate-pulse hidden"></span>
         </button>
       </div>
 
@@ -661,6 +683,9 @@
 
         <!-- SUBTAB 1: BUYER DASHBOARD (FEATURE 1) -->
         <div id="buyer-sub-home" class="space-y-4">
+          <!-- Live Matching Notification Highlight Banner -->
+          <div id="buyer-home-matches-banner" class="hidden"></div>
+
           <!-- 1. Greeting & Plant Location -->
           <div class="bg-gradient-to-br from-harvest-50 to-amber-100/70 p-4 rounded-3xl border border-harvest-200 shadow-xs">
             <div class="flex items-start justify-between">
@@ -2332,24 +2357,24 @@
     };
 
     // Purge any old demonstration localStorage records on fresh app launch
-    const FRESH_STORAGE_KEY = "agriwaste_fresh_launch_v14";
+    const FRESH_STORAGE_KEY = "agriwaste_fresh_launch_v15";
     if (localStorage.getItem("agriwaste_version") !== FRESH_STORAGE_KEY) {
       localStorage.clear();
       localStorage.setItem("agriwaste_version", FRESH_STORAGE_KEY);
     }
 
     try {
-      const saved = localStorage.getItem("agriwaste_store_v14");
+      const saved = localStorage.getItem("agriwaste_store_v15");
       if (saved) {
         store = { ...store, ...JSON.parse(saved) };
       }
     } catch(e) {}
 
     function persist() {
-      try { localStorage.setItem("agriwaste_store_v14", JSON.stringify(store)); } catch(e){}
+      try { localStorage.setItem("agriwaste_store_v15", JSON.stringify(store)); } catch(e){}
     }
     function saveStoreToLocal() {
-      try { localStorage.setItem("agriwaste_store_v14", JSON.stringify(store)); } catch(e){}
+      try { localStorage.setItem("agriwaste_store_v15", JSON.stringify(store)); } catch(e){}
     }
 
     async function apiRequest(endpoint, method = 'GET', body = null) {
@@ -3213,6 +3238,7 @@
     }
 
     function renderAuthenticatedState() {
+      setTimeout(updateNotificationDots, 100);
       document.getElementById("view-auth").classList.add("hidden");
       document.getElementById("top-bar").classList.remove("hidden");
       
@@ -3435,7 +3461,210 @@
     }
 
     // 1. HOME SCREEN & KPIs (FEATURE 1)
-    async function renderFarmerHomeKPIs() {
+    async 
+    // ===================================================
+    // ATTRACTIVE COLORFUL TOAST NOTIFICATION SYSTEM
+    // ===================================================
+    function showCustomToast(message, type = 'success') {
+      const container = document.getElementById("app-toast-container");
+      if (!container) return;
+
+      // Extract concise, crisp message title (no overwhelming paragraphs)
+      let cleanMsg = typeof message === 'string' ? message : String(message);
+      if (cleanMsg.includes('\n')) {
+        cleanMsg = cleanMsg.split('\n')[0].trim();
+      }
+      cleanMsg = cleanMsg.replace(/^[\s\r\n]+|[\s\r\n]+$/g, '');
+
+      let icon = '✨';
+      let gradientBg = 'from-emerald-600 via-teal-600 to-green-600';
+      let borderColor = 'border-emerald-300/40';
+      let shadowColor = 'shadow-emerald-900/30';
+
+      const lower = cleanMsg.toLowerCase();
+      if (lower.includes('accept') || lower.includes('confirmed') || lower.includes('completed') || lower.includes('success') || lower.includes('welcome') || lower.includes('listed')) {
+        icon = '✅';
+        gradientBg = 'from-emerald-600 via-teal-600 to-green-600';
+        borderColor = 'border-emerald-300/40';
+        shadowColor = 'shadow-emerald-900/30';
+      } else if (lower.includes('transport') || lower.includes('trip') || lower.includes('pickup') || lower.includes('transit')) {
+        icon = '🚛';
+        gradientBg = 'from-blue-600 via-indigo-600 to-sky-600';
+        borderColor = 'border-blue-300/40';
+        shadowColor = 'shadow-blue-900/30';
+      } else if (lower.includes('offer') || lower.includes('sent') || lower.includes('requirement') || lower.includes('demand')) {
+        icon = '📨';
+        gradientBg = 'from-teal-600 via-emerald-600 to-cyan-700';
+        borderColor = 'border-teal-300/40';
+        shadowColor = 'shadow-teal-900/30';
+      } else if (lower.includes('decline') || lower.includes('reject') || lower.includes('fail') || lower.includes('error') || lower.includes('cancel') || lower.includes('⚠️')) {
+        icon = '❌';
+        gradientBg = 'from-rose-600 via-red-600 to-pink-700';
+        borderColor = 'border-rose-300/40';
+        shadowColor = 'shadow-rose-900/30';
+      }
+
+      // Create new toast element
+      const toastId = 'toast-' + Date.now();
+      const toastEl = document.createElement('div');
+      toastEl.id = toastId;
+      toastEl.className = `pointer-events-auto transform transition-all duration-300 ease-out translate-y-[-20px] opacity-0 scale-95 w-full bg-gradient-to-r ${gradientBg} text-white p-3.5 rounded-2xl shadow-xl ${shadowColor} border ${borderColor} flex items-center justify-between gap-3 cursor-pointer select-none`;
+      toastEl.onclick = () => dismissToast(toastId);
+
+      toastEl.innerHTML = `
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-lg shadow-inner font-black shrink-0">
+            ${icon}
+          </div>
+          <div>
+            <div class="font-black text-xs tracking-wide leading-tight drop-shadow-xs">${cleanMsg}</div>
+            <div class="text-[10px] text-white/80 font-medium">AgriWaste Exchange</div>
+          </div>
+        </div>
+        <button onclick="event.stopPropagation(); dismissToast('${toastId}')" class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center text-xs font-bold transition shrink-0">&times;</button>
+      `;
+
+      container.innerHTML = '';
+      container.appendChild(toastEl);
+
+      // Animate entry
+      requestAnimationFrame(() => {
+        toastEl.classList.remove('translate-y-[-20px]', 'opacity-0', 'scale-95');
+        toastEl.classList.add('translate-y-0', 'opacity-100', 'scale-100');
+      });
+
+      // Auto dismiss after 2.6s
+      setTimeout(() => {
+        dismissToast(toastId);
+      }, 2600);
+    }
+
+    function dismissToast(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.remove('translate-y-0', 'opacity-100', 'scale-100');
+      el.classList.add('translate-y-[-20px]', 'opacity-0', 'scale-95');
+      setTimeout(() => {
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+      }, 300);
+    }
+
+    // Global override: Replaces boring native alert popups with colorful toasts!
+    window.showToast = showCustomToast;
+    window.dismissToast = dismissToast;
+    window.alert = function(msg) {
+      showCustomToast(msg);
+    };
+
+    // ===================================================
+    // INTERACTIVE NOTIFICATION CIRCLES & HIGHLIGHT SYSTEM
+    // ===================================================
+    function updateNotificationDots() {
+      if (!currentUser) return;
+      let hasUnreadAlert = false;
+
+      // 1. BUYER ROLE
+      if (currentUser.role === 'buyer') {
+        const myReqs = (store.requirements || []).filter(r => r.buyer_id === currentUser.id && (r.status === 'open' || r.status === 'partially_fulfilled' || r.status === 'Active'));
+        let matchCount = 0;
+        myReqs.forEach(r => {
+          const matches = (store.listings || []).filter(l => 
+            l.status === 'available' && 
+            l.available_quantity > 0 && 
+            (l.material_name || '').toLowerCase().includes((r.material_name || '').toLowerCase())
+          );
+          matchCount += matches.length;
+        });
+
+        const buyerOrders = (store.orders || []).filter(o => o.buyer_id === currentUser.id);
+        const activeOrders = buyerOrders.filter(o => o.status === 'confirmed' || o.status === 'in_transit' || o.status === 'delivered');
+
+        const dotSuppliers = document.getElementById("buyer-dot-suppliers");
+        if (dotSuppliers) dotSuppliers.classList.toggle("hidden", matchCount === 0);
+
+        const dotOrders = document.getElementById("buyer-dot-orders");
+        if (dotOrders) dotOrders.classList.toggle("hidden", activeOrders.length === 0);
+
+        if (matchCount > 0 || activeOrders.length > 0) hasUnreadAlert = true;
+
+        // Interactive highlight banner in buyer dashboard
+        const banner = document.getElementById("buyer-home-matches-banner");
+        if (banner) {
+          if (matchCount > 0 && myReqs.length > 0) {
+            banner.innerHTML = `
+              <div onclick="switchBuyerTab('suppliers')" class="p-3.5 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-300 rounded-2xl flex items-center justify-between cursor-pointer hover:shadow-xs transition active:scale-98">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200 animate-pulse shrink-0"></span>
+                  <div>
+                    <span class="font-black text-xs text-emerald-950 block">🎯 New Matching Supplies Found!</span>
+                    <span class="text-[10px] text-emerald-700 font-semibold">${matchCount} farmer supply matches available for your requirements.</span>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[10px] font-bold shadow-2xs shrink-0">View Matches ➔</span>
+              </div>
+            `;
+            banner.classList.remove("hidden");
+          } else {
+            banner.classList.add("hidden");
+          }
+        }
+      }
+
+      // 2. FARMER ROLE
+      else if (currentUser.role === 'farmer') {
+        const farmerOrders = (store.orders || []).filter(o => 
+          (o.farmer_id === currentUser.id || (o.items && o.items.some(i => i.farmer_id === currentUser.id)))
+        );
+        const pendingOffers = farmerOrders.filter(o => o.status === 'pending' || o.status === 'awaiting_confirmation');
+        const inTransitOrders = farmerOrders.filter(o => o.status === 'in_transit');
+
+        const dotOrders = document.getElementById("farmer-dot-orders");
+        if (dotOrders) dotOrders.classList.toggle("hidden", pendingOffers.length === 0);
+
+        const dotTracking = document.getElementById("farmer-dot-tracking");
+        if (dotTracking) dotTracking.classList.toggle("hidden", inTransitOrders.length === 0);
+
+        // Check if buyer requirements match farmer's listings
+        const myListings = (store.listings || []).filter(l => l.farmer_id === currentUser.id && l.status === 'available');
+        let reqMatches = 0;
+        myListings.forEach(l => {
+          const reqs = (store.requirements || []).filter(r => 
+            (r.status === 'open' || r.status === 'partially_fulfilled') && 
+            (r.material_name || '').toLowerCase().includes(l.material_name.toLowerCase())
+          );
+          reqMatches += reqs.length;
+        });
+
+        const dotMatches = document.getElementById("farmer-dot-matches");
+        if (dotMatches) dotMatches.classList.toggle("hidden", reqMatches === 0);
+
+        if (pendingOffers.length > 0 || inTransitOrders.length > 0 || reqMatches > 0) hasUnreadAlert = true;
+      }
+
+      // 3. AGGREGATOR ROLE
+      else if (currentUser.role === 'aggregator') {
+        const jobs = (store.transportJobs || []).filter(j => !j.aggregator_id || j.aggregator_id === currentUser.id);
+        const assignedJobs = jobs.filter(j => j.status === 'assigned');
+        const activeTrips = jobs.filter(j => j.status === 'in_transit');
+
+        const dotAssigned = document.getElementById("aggregator-dot-assigned");
+        if (dotAssigned) dotAssigned.classList.toggle("hidden", assignedJobs.length === 0);
+
+        const dotActive = document.getElementById("aggregator-dot-active");
+        if (dotActive) dotActive.classList.toggle("hidden", activeTrips.length === 0);
+
+        if (assignedJobs.length > 0 || activeTrips.length > 0) hasUnreadAlert = true;
+      }
+
+      // Top Header Hamburger Badge Dot
+      const topDot = document.getElementById("top-drawer-badge-dot");
+      if (topDot) topDot.classList.toggle("hidden", !hasUnreadAlert);
+    }
+    window.updateNotificationDots = updateNotificationDots;
+
+
+    function renderFarmerHomeKPIs() {
+      setTimeout(updateNotificationDots, 50);
       if (!currentUser) return;
       let myListings = (store.listings || []).filter(l => l.farmer_id === currentUser.id);
       let myOrders = (store.orders || []).filter(o => 
@@ -3768,9 +3997,7 @@
       document.getElementById("add-price").value = "";
       document.getElementById("add-location").value = "";
 
-      alert(`🎉 Crop Residue Listed Successfully!
-
-Buyers searching for ${mat} in Gujarat can now see your supply and send purchase offers.`);
+      showToast("🎉 Crop Residue Listed!", "success");
       renderFarmerHomeKPIs();
       if (typeof renderFarmerAllListings === 'function') renderFarmerAllListings(currentListingFilter);
     }
@@ -4125,11 +4352,7 @@ Buyers searching for ${mat} in Gujarat can now see your supply and send purchase
       }
 
       persist();
-      alert(`✅ Offer Accepted!
-
-Transport job for ${order.material_name} (${order.total_quantity || order.quantity} Tonnes) has been sent to Transporters/Aggregators.
-
-When a transporter logs in and accepts the job, their vehicle number plate, driver phone, and live tracking will appear on both your screen and the buyer's screen.`);
+      showToast("✅ Offer Accepted!", "success");
       renderFarmerMyOrders();
       renderFarmerHomeKPIs();
       if (typeof renderFarmerAllListings === 'function') renderFarmerAllListings(currentListingFilter);
@@ -4141,7 +4364,7 @@ When a transporter logs in and accepts the job, their vehicle number plate, driv
       if (!order) return;
       order.status = 'rejected';
       persist();
-      alert("Order rejected.");
+      showToast("❌ Offer Declined", "error");
       renderFarmerMyOrders();
       renderFarmerHomeKPIs();
     }
@@ -4611,6 +4834,7 @@ When a transporter logs in and accepts the job, their vehicle number plate, driv
 
     // FEATURE 1: BUYER DASHBOARD
     async function renderBuyerDashboard() {
+      setTimeout(updateNotificationDots, 50);
       if (!currentUser) return;
       document.getElementById("buyer-dash-greeting").textContent = (currentUser.contact_person || currentUser.name) + " 👋";
       document.getElementById("buyer-dash-location").textContent = "🏭 Plant: " + (currentUser.company || currentUser.name) + " • " + (currentUser.district || "Sanand GIDC");
@@ -5299,7 +5523,7 @@ ${qty} Tonnes of ${mat} needed by ${reqDate}.`);
         btn.classList.add("bg-emerald-100", "text-emerald-800", "border-emerald-200");
       }
 
-      alert(`🎉 Purchase Offer Sent to Farmer!\n\nOffer of ${qty} Tonnes of ${l.material_name} for ₹${totalAmt.toLocaleString()} has been sent to ${l.farmer_name}.\n\nThe farmer can now review and Accept or Decline your offer from their dashboard.`);
+      showToast("✓ Offer Sent to Farmer!", "success");
     }
     window.handleExpressInterest = handleExpressInterest;
 
@@ -6148,6 +6372,7 @@ Individual dispatch requests sent to farmers.`);
 
     // FEATURE 2: AGGREGATOR DASHBOARD (HOME)
     async function renderAggregatorDashboard() {
+      setTimeout(updateNotificationDots, 50);
       if (!currentUser) return;
       const dGreet = document.getElementById("trans-dash-greeting");
       if (dGreet) dGreet.textContent = currentUser.name + " 👋";
@@ -6352,10 +6577,7 @@ Individual dispatch requests sent to farmers.`);
       renderAggregatorDashboard();
       switchAggregatorTab('active');
 
-      alert(`🎉 Transport Job Accepted!
-
-The trip has begun! Your vehicle (${j.vehicle_number}) is now assigned to this deal.
-Live tracking is now visible to both Farmer (${j.farmer_name}) and Buyer (${j.buyer_name}).`);
+      showToast("🎉 Transport Job Accepted!", "success");
     }
     window.handleAcceptTransportJob = handleAcceptTransportJob;
 
@@ -6700,10 +6922,7 @@ Live tracking is now visible to both Farmer (${j.farmer_name}) and Buyer (${j.bu
       }
 
       persist();
-      alert(`🏁 Material Delivered!
-
-Delivered to ${job.buyer_name}.
-Both Buyer and Farmer have received notifications that the trip is completed! Once the buyer confirms delivery, payment will be released and official receipts will be generated.`);
+      showToast("🏁 Trip Delivered to Buyer!", "success");
       renderAggregatorActiveTrips();
       renderAggregatorDashboard();
     }
@@ -8312,6 +8531,9 @@ Both Buyer and Farmer have received notifications that the trip is completed! On
       </div>
     </div>
   </div>
+
+  <!-- COLORFUL ANIMATED TOAST NOTIFICATION CONTAINER -->
+  <div id="app-toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] w-[92%] max-w-sm pointer-events-none flex flex-col items-center gap-2"></div>
 
 </body>
 </html>
