@@ -337,42 +337,33 @@
           </div>
 
           <div id="reg-pincode-container">
-            <div class="flex items-center justify-between mb-1">
-              <label class="block text-xs font-bold text-slate-700">PIN Code (6 digits) *</label>
-              <span id="reg-pincode-badge" class="text-[10px] text-agri-700 font-bold bg-agri-50 border border-agri-200 px-2 py-0.5 rounded-md">✨ Auto-detected</span>
-            </div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">PIN Code (6 digits) *</label>
             <input type="text" id="reg-pincode" maxlength="6" inputmode="numeric" placeholder="e.g. 382110" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white font-semibold text-slate-900" />
           </div>
 
           <!-- Dynamic Role Fields -->
           <!-- 1. FARMER ROLE FIELDS -->
           <div id="role-extra-farmer" class="p-2.5 bg-agri-50 border border-agri-200 rounded-xl space-y-2 text-xs">
-            <div class="flex items-center justify-between">
-              <span class="font-black text-agri-900 block text-xs">🌾 Farm Location (Taluka / Village)</span>
-              <span class="text-[10px] text-agri-700 font-bold">Auto-fills PIN Code</span>
-            </div>
+            <span class="font-black text-agri-900 block text-xs">🌾 Farm Location (Taluka / Village)</span>
             <div>
               <label class="block text-[11px] font-bold text-slate-700 mb-1">Select Taluka / Area</label>
               <select id="reg-village-select" onchange="handleFarmSelectChange()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs font-semibold text-slate-800">
-                <!-- Populated dynamically based on district -->
+                <option value="" disabled selected>-- Select Taluka / Area --</option>
               </select>
             </div>
             <div>
               <label class="block text-[11px] font-bold text-slate-700 mb-1">Or Specific Village / Farm Address</label>
-              <input type="text" id="reg-village" oninput="handleFarmLocationInput()" placeholder="e.g. Sanand Rural" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs" />
+              <input type="text" id="reg-village" oninput="handleFarmLocationInput()" placeholder="Village, Taluka (e.g. Sanand)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs" />
             </div>
           </div>
 
           <!-- 2. BUYER ROLE FIELDS -->
           <div id="role-extra-buyer" class="p-2.5 bg-harvest-50 border border-harvest-200 rounded-xl space-y-2 text-xs hidden">
-            <div class="flex items-center justify-between">
-              <span class="font-black text-harvest-800 block text-xs">🏭 Industry Details</span>
-              <span class="text-[10px] text-harvest-700 font-bold">Auto-fills Industry Type &amp; PIN</span>
-            </div>
+            <span class="font-black text-harvest-800 block text-xs">🏭 Industry Details</span>
             <div>
               <label class="block text-[11px] font-bold text-slate-700 mb-1">Select Existing Industry / Factory</label>
               <select id="reg-company-select" onchange="handleIndustrySelectChange()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs font-semibold text-slate-800">
-                <!-- Populated dynamically based on district -->
+                <option value="" disabled selected>-- Select Existing Industry / Factory --</option>
               </select>
             </div>
             <div id="reg-company-custom-container" class="hidden">
@@ -382,6 +373,7 @@
             <div>
               <label class="block text-[11px] font-bold text-slate-700 mb-1">Industry Type</label>
               <select id="reg-industry" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs font-semibold text-slate-800">
+                <option value="" disabled selected>-- Select Industry Type --</option>
                 <option value="Bio-Energy & Biomass Power">Bio-Energy &amp; Biomass Power</option>
                 <option value="Paper & Pulp Mills">Paper &amp; Pulp Mills</option>
                 <option value="Briquette & Pellet Manufacturing">Briquette &amp; Pellet Manufacturing</option>
@@ -404,6 +396,7 @@
             <div>
               <label class="block text-[11px] font-bold text-slate-700 mb-1">Vehicle Type *</label>
               <select id="reg-vehicle" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs font-semibold text-slate-800">
+                <option value="" disabled selected>-- Select Vehicle Type --</option>
                 <option value="Tractor Trolley">Tractor Trolley (High Payload Agro Transport)</option>
                 <option value="Mini Tempo (Chhota Hathi)">Mini Tempo / Chhota Hathi (1.5 - 2.5 Tonnes)</option>
                 <option value="Pickup Truck (Bolero Maxi)">Pickup Truck / Bolero Maxi (2.5 - 3.5 Tonnes)</option>
@@ -2593,7 +2586,11 @@ div>
       if (role === 'farmer') {
         const vInput = document.getElementById("reg-village");
         const vSelect = document.getElementById("reg-village-select");
-        const farmLoc = (vInput && vInput.value.trim()) || (vSelect ? vSelect.value : "Sanand");
+        const farmLoc = (vInput && vInput.value.trim()) || (vSelect ? vSelect.value : "");
+        if (!farmLoc) {
+          alert("⚠️ Please select your taluka/area from the dropdown or enter your farm location.");
+          return;
+        }
         payload.farm_village = farmLoc;
         payload.district = district;
         userSpecificFields.village = farmLoc;
@@ -2605,11 +2602,17 @@ div>
         let compName = cSelect ? cSelect.value : "";
         if (compName === 'Other' && cInput && cInput.value.trim()) {
           compName = cInput.value.trim();
-        } else if (!compName || compName === 'Other') {
-          compName = `${name} Agro Processing`;
+        } else if (compName === 'Other' || !compName) {
+          alert("⚠️ Please select an existing industry/factory from the dropdown or enter your company name.");
+          return;
         }
 
-        const indType = iSelect ? iSelect.value : "Bio-Energy & Biomass Power";
+        const indType = (iSelect && iSelect.value) ? iSelect.value : "";
+        if (!indType) {
+          alert("⚠️ Please select your industry type.");
+          return;
+        }
+
         payload.company_name = compName;
         payload.industry_type = indType;
         userSpecificFields.company = compName;
@@ -2617,8 +2620,13 @@ div>
       } else if (role === 'aggregator') {
         const vehSelect = document.getElementById("reg-vehicle");
         const plateInput = document.getElementById("reg-plate-number");
-        const vehType = vehSelect ? vehSelect.value : "Heavy Commercial Truck (10 Wheeler)";
-        const plateNo = plateInput ? plateInput.value.trim().toUpperCase() : "GJ-01-AB-1234";
+        const vehType = vehSelect ? vehSelect.value : "";
+        const plateNo = plateInput ? plateInput.value.trim().toUpperCase() : "";
+
+        if (!vehType) {
+          alert("⚠️ Please select your vehicle type.");
+          return;
+        }
 
         if (!plateNo || plateNo.length < 5) {
           alert("⚠️ Please enter a valid vehicle registration / number plate (e.g. GJ-01-AB-1234).");
@@ -2994,70 +3002,53 @@ div>
       const dist = distSelect ? distSelect.value : "Ahmedabad";
       const data = GUJARAT_DATA[dist] || GUJARAT_DATA["Ahmedabad"];
 
-      // 1. Update Farmer Taluka Select
+      // 1. Update Farmer Taluka Select (Start empty with prompt)
       const vSelect = document.getElementById("reg-village-select");
       if (vSelect) {
-        vSelect.innerHTML = data.talukas.map((t, i) => 
-          `<option value="${t.name}" data-pin="${t.pincode}" ${i === 0 ? 'selected' : ''}>${t.name} (PIN: ${t.pincode})</option>`
-        ).join("") + `<option value="Other">Other Village / Area...</option>`;
+        vSelect.innerHTML = `<option value="" disabled selected>-- Select Taluka / Area --</option>` +
+          data.talukas.map(t => 
+            `<option value="${t.name}" data-pin="${t.pincode}">${t.name} (PIN: ${t.pincode})</option>`
+          ).join("") + `<option value="Other">Other Village / Area...</option>`;
         
         const vInput = document.getElementById("reg-village");
-        if (vInput && data.talukas.length > 0) {
-          vInput.value = data.talukas[0].name;
+        if (vInput) {
+          vInput.value = "";
         }
       }
 
-      // 2. Update Buyer Industry Select
+      // 2. Update Buyer Industry Select (Start empty with prompt)
       const cSelect = document.getElementById("reg-company-select");
       if (cSelect) {
-        cSelect.innerHTML = data.industries.map((ind, i) =>
-          `<option value="${ind.name}" data-type="${ind.type}" data-pin="${ind.pincode}" ${i === 0 ? 'selected' : ''}>${ind.name}</option>`
-        ).join("") + `<option value="Other">Other / Enter Custom Factory Name...</option>`;
+        cSelect.innerHTML = `<option value="" disabled selected>-- Select Existing Industry / Factory --</option>` +
+          data.industries.map(ind =>
+            `<option value="${ind.name}" data-type="${ind.type}" data-pin="${ind.pincode}">${ind.name}</option>`
+          ).join("") + `<option value="Other">Other / Enter Custom Factory Name...</option>`;
 
         const cCustom = document.getElementById("reg-company-custom-container");
         if (cCustom) cCustom.classList.add("hidden");
+        const cInput = document.getElementById("reg-company");
+        if (cInput) cInput.value = "";
       }
 
-      // 3. Update Pincode and Industry Type based on current selected role
-      applyAutoPincodeForCurrentRole();
+      // Do NOT pre-fill PIN Code — leave empty until user selects an option
+      const pinInput = document.getElementById("reg-pincode");
+      if (pinInput && !pinInput.dataset.userEdited) {
+        pinInput.value = "";
+      }
+
+      const role = document.getElementById("reg-role") ? document.getElementById("reg-role").value : "farmer";
+      const pinContainer = document.getElementById("reg-pincode-container");
+      if (pinContainer) {
+        pinContainer.classList.toggle("hidden", role === 'aggregator');
+      }
     }
     window.updateRegistrationLocations = updateRegistrationLocations;
 
     function applyAutoPincodeForCurrentRole() {
       const role = document.getElementById("reg-role") ? document.getElementById("reg-role").value : "farmer";
-      const distSelect = document.getElementById("reg-district");
-      const dist = distSelect ? distSelect.value : "Ahmedabad";
-      const data = GUJARAT_DATA[dist] || GUJARAT_DATA["Ahmedabad"];
-      const pinInput = document.getElementById("reg-pincode");
-
-      if (role === 'aggregator') {
-        const pinContainer = document.getElementById("reg-pincode-container");
-        if (pinContainer) pinContainer.classList.add("hidden");
-        return;
-      } else {
-        const pinContainer = document.getElementById("reg-pincode-container");
-        if (pinContainer) pinContainer.classList.remove("hidden");
-      }
-
-      if (role === 'farmer') {
-        const vSelect = document.getElementById("reg-village-select");
-        if (vSelect && vSelect.selectedOptions && vSelect.selectedOptions[0]) {
-          const pin = vSelect.selectedOptions[0].getAttribute("data-pin");
-          if (pin && pinInput) pinInput.value = pin;
-        } else if (pinInput) {
-          pinInput.value = data.defaultPin;
-        }
-      } else if (role === 'buyer') {
-        const cSelect = document.getElementById("reg-company-select");
-        if (cSelect && cSelect.selectedOptions && cSelect.selectedOptions[0]) {
-          const pin = cSelect.selectedOptions[0].getAttribute("data-pin");
-          const type = cSelect.selectedOptions[0].getAttribute("data-type");
-          if (pin && pinInput) pinInput.value = pin;
-          const iSelect = document.getElementById("reg-industry");
-          if (type && iSelect) iSelect.value = type;
-        } else if (pinInput) {
-          pinInput.value = data.defaultPin;
-        }
+      const pinContainer = document.getElementById("reg-pincode-container");
+      if (pinContainer) {
+        pinContainer.classList.toggle("hidden", role === 'aggregator');
       }
     }
     window.applyAutoPincodeForCurrentRole = applyAutoPincodeForCurrentRole;
@@ -3066,13 +3057,14 @@ div>
       const vSelect = document.getElementById("reg-village-select");
       const vInput = document.getElementById("reg-village");
       const pinInput = document.getElementById("reg-pincode");
-      if (!vSelect) return;
+      if (!vSelect || !vSelect.value) return;
 
       if (vSelect.value === 'Other') {
         if (vInput) {
           vInput.value = "";
           vInput.focus();
         }
+        if (pinInput) pinInput.value = "";
       } else {
         if (vInput) vInput.value = vSelect.value;
         const pin = vSelect.selectedOptions[0] ? vSelect.selectedOptions[0].getAttribute("data-pin") : null;
@@ -3103,7 +3095,7 @@ div>
       const cInput = document.getElementById("reg-company");
       const iSelect = document.getElementById("reg-industry");
       const pinInput = document.getElementById("reg-pincode");
-      if (!cSelect) return;
+      if (!cSelect || !cSelect.value) return;
 
       if (cSelect.value === 'Other') {
         if (cCustom) cCustom.classList.remove("hidden");
@@ -3111,6 +3103,7 @@ div>
           cInput.value = "";
           cInput.focus();
         }
+        if (pinInput) pinInput.value = "";
       } else {
         if (cCustom) cCustom.classList.add("hidden");
         const opt = cSelect.selectedOptions[0];
@@ -3140,7 +3133,9 @@ div>
         pDiv.classList.toggle("hidden", r === 'aggregator');
       }
 
-      applyAutoPincodeForCurrentRole();
+      // Ensure pincode is empty until user selects an option
+      const pinInput = document.getElementById("reg-pincode");
+      if (pinInput) pinInput.value = "";
     }
     window.toggleRoleProfileInputs = toggleRoleProfileInputs;
 
@@ -3699,17 +3694,46 @@ div>
       }
     }
 
+
     // 4. BUYER REQUIREMENTS / DEMAND (FEATURE 4)
     let sentOffers = new Set();
 
-    function handleExpressInterest(reqId, btnElement) {
+    function handleFarmerSendOffer(reqId, btnElement) {
+      if (!currentUser) return;
+      if (!store.offers) store.offers = [];
+
+      let req = null;
+      if (store.requirements) {
+        req = store.requirements.find(r => r.id === reqId);
+      }
+
+      const offerObj = {
+        id: Date.now(),
+        requirement_id: reqId,
+        farmer_id: currentUser.id,
+        farmer_name: currentUser.name,
+        farmer_phone: currentUser.phone || "",
+        farmer_location: currentUser.location || currentUser.village || "Sanand",
+        material_name: req ? req.material_name : "Agricultural Residue",
+        buyer_id: req ? req.buyer_id : null,
+        buyer_name: req ? req.buyer_name : "Buyer",
+        status: "pending",
+        date: new Date().toISOString().split('T')[0]
+      };
+
+      store.offers.push(offerObj);
       sentOffers.add(reqId);
+      persist();
+
       if (btnElement) {
         btnElement.innerHTML = "✓ Offer Sent";
         btnElement.className = "px-4 py-1.5 bg-emerald-100 text-emerald-800 font-black rounded-xl text-[11px] border border-emerald-300 cursor-default pointer-events-none";
       }
-      alert("✅ Offer sent to buyer! The buyer has been notified of your stock availability.");
+
+      alert("🎉 Offer Sent Successfully!\n\nYour stock availability offer has been sent to " + (req ? req.buyer_name : "the buyer") + ". The buyer will be notified and can now proceed with your offer.");
     }
+    window.handleFarmerSendOffer = handleFarmerSendOffer;
+
 
     async function renderFarmerBuyerDemands() {
       const container = document.getElementById("farmer-buyer-demands-container");
@@ -3734,10 +3758,10 @@ div>
 
       buyerReqs.forEach(req => {
         const rem = (req.required_quantity - (req.fulfilled_quantity || 0)).toFixed(1);
-        const isSent = sentOffers.has(req.id);
-        const btnHtml = isSent 
+        const hasOffer = (sentOffers && sentOffers.has(req.id)) || (store.offers && store.offers.some(o => o.requirement_id === req.id && currentUser && o.farmer_id === currentUser.id));
+        const btnHtml = hasOffer 
           ? `<button class="px-4 py-1.5 bg-emerald-100 text-emerald-800 font-black rounded-xl text-[11px] border border-emerald-300 cursor-default pointer-events-none">✓ Offer Sent</button>`
-          : `<button onclick="handleExpressInterest(${req.id}, this)" class="px-4 py-1.5 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-[11px] shadow-xs transition active:scale-95">Express Interest / Send Offer</button>`;
+          : `<button onclick="handleFarmerSendOffer(${req.id}, this)" class="px-4 py-1.5 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-[11px] shadow-xs transition active:scale-95">Express Interest / Send Offer</button>`;
 
         container.innerHTML += `
           <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2.5 text-xs">
@@ -4620,7 +4644,7 @@ div>
       document.getElementById("req-material").value = "";
       document.getElementById("req-qty").value = "";
       document.getElementById("req-price-max").value = "";
-      document.getElementById("req-location").value = currentUser.location || "Sanand GIDC Biofuel Plant, Ahmedabad";
+      document.getElementById("req-location").value = "";
       
       // Default delivery date: 7 days from now
       const d = new Date();
@@ -4684,6 +4708,12 @@ div>
       if (!reqDate) {
         alert("Please select required delivery date.");
         return;
+      }
+
+      if (currentUser) {
+        currentUser.delivery_address = loc;
+        currentUser.facility_address = loc;
+        localStorage.setItem("agriwaste_current_user", JSON.stringify(currentUser));
       }
 
       const payload = {
@@ -5172,14 +5202,38 @@ ${qty} Tonnes of ${mat} needed by ${reqDate}.`);
       document.getElementById("ob-summary-cost").textContent = "₹" + totalCost.toLocaleString();
       
       const addrInput = document.getElementById("ob-delivery-address");
-      if (addrInput && !addrInput.value) {
-        addrInput.value = currentUser.location || "Sanand GIDC Biofuel Plant, Ahmedabad";
+      if (addrInput) {
+        // Automatically fetch destination from buyer's requirement form delivery/plant address
+        let targetReq = null;
+        if (buyerAllocation.requirementId) {
+          targetReq = myReqs.find(r => r.id === buyerAllocation.requirementId);
+        }
+        if (!targetReq && myReqs.length > 0) {
+          targetReq = myReqs[0];
+        }
+        if (targetReq && targetReq.delivery_location) {
+          addrInput.value = targetReq.delivery_location;
+        } else if (currentUser && currentUser.delivery_address) {
+          addrInput.value = currentUser.delivery_address;
+        } else if (currentUser && currentUser.facility_address) {
+          addrInput.value = currentUser.facility_address;
+        } else if (!addrInput.value) {
+          addrInput.value = (currentUser && currentUser.location) || "";
+        }
       }
     }
 
-    function handleOBReqSelectChange() {
+    async function handleOBReqSelectChange() {
       const sel = document.getElementById("ob-req-select");
       buyerAllocation.requirementId = sel.value ? parseInt(sel.value) : null;
+      const addrInput = document.getElementById("ob-delivery-address");
+      if (addrInput && buyerAllocation.requirementId) {
+        const myReqs = await getBuyerRequirementsData();
+        const req = myReqs.find(r => r.id === buyerAllocation.requirementId);
+        if (req && req.delivery_location) {
+          addrInput.value = req.delivery_location;
+        }
+      }
     }
     window.handleOBReqSelectChange = handleOBReqSelectChange;
 
@@ -7877,7 +7931,17 @@ Individual dispatch requests sent to farmers.`);
     // ====================================================
     // MODAL DIALOG CONTROLLERS
     // ====================================================
-    function openAddResidueModal() { document.getElementById("modal-add-residue").classList.remove("hidden"); }
+    function openAddResidueModal() {
+      const mat = document.getElementById("add-material");
+      const qty = document.getElementById("add-qty");
+      const price = document.getElementById("add-price");
+      const loc = document.getElementById("add-location");
+      if (mat) mat.value = "";
+      if (qty) qty.value = "";
+      if (price) price.value = "";
+      if (loc) loc.value = "";
+      document.getElementById("modal-add-residue").classList.remove("hidden");
+    }
     function closeAddResidueModal() { document.getElementById("modal-add-residue").classList.add("hidden"); }
     function setAddCrop(crop) { document.getElementById("add-material").value = crop; }
 
