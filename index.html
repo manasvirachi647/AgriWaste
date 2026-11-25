@@ -2344,6 +2344,210 @@
     let activeNavTab = 'dashboard';
     let activeMarketCategory = 'all';
 
+    currentFarmerSubTab = 'home';
+    currentBuyerTab = 'home';
+    currentAggregatorTab = 'home';
+// ===================================================
+    // ATTRACTIVE COLORFUL TOAST NOTIFICATION SYSTEM
+    // ===================================================
+    function showCustomToast(message, type = 'success') {
+      const container = document.getElementById("app-toast-container");
+      if (!container) return;
+
+      // Extract concise, crisp message title (no overwhelming paragraphs)
+      let cleanMsg = typeof message === 'string' ? message : String(message);
+      if (cleanMsg.includes('\n')) {
+        cleanMsg = cleanMsg.split('\n')[0].trim();
+      }
+      cleanMsg = cleanMsg.replace(/^[\s\r\n]+|[\s\r\n]+$/g, '');
+
+      let icon = '✨';
+      let gradientBg = 'from-emerald-600 via-teal-600 to-green-600';
+      let borderColor = 'border-emerald-300/40';
+      let shadowColor = 'shadow-emerald-900/30';
+
+      const lower = cleanMsg.toLowerCase();
+      if (lower.includes('accept') || lower.includes('confirmed') || lower.includes('completed') || lower.includes('success') || lower.includes('welcome') || lower.includes('listed')) {
+        icon = '✅';
+        gradientBg = 'from-emerald-600 via-teal-600 to-green-600';
+        borderColor = 'border-emerald-300/40';
+        shadowColor = 'shadow-emerald-900/30';
+      } else if (lower.includes('transport') || lower.includes('trip') || lower.includes('pickup') || lower.includes('transit')) {
+        icon = '🚛';
+        gradientBg = 'from-blue-600 via-indigo-600 to-sky-600';
+        borderColor = 'border-blue-300/40';
+        shadowColor = 'shadow-blue-900/30';
+      } else if (lower.includes('offer') || lower.includes('sent') || lower.includes('requirement') || lower.includes('demand')) {
+        icon = '📨';
+        gradientBg = 'from-teal-600 via-emerald-600 to-cyan-700';
+        borderColor = 'border-teal-300/40';
+        shadowColor = 'shadow-teal-900/30';
+      } else if (lower.includes('decline') || lower.includes('reject') || lower.includes('fail') || lower.includes('error') || lower.includes('cancel') || lower.includes('⚠️')) {
+        icon = '❌';
+        gradientBg = 'from-rose-600 via-red-600 to-pink-700';
+        borderColor = 'border-rose-300/40';
+        shadowColor = 'shadow-rose-900/30';
+      }
+
+      // Create new toast element
+      const toastId = 'toast-' + Date.now();
+      const toastEl = document.createElement('div');
+      toastEl.id = toastId;
+      toastEl.className = `pointer-events-auto transform transition-all duration-300 ease-out translate-y-[-20px] opacity-0 scale-95 w-full bg-gradient-to-r ${gradientBg} text-white p-3.5 rounded-2xl shadow-xl ${shadowColor} border ${borderColor} flex items-center justify-between gap-3 cursor-pointer select-none`;
+      toastEl.onclick = () => dismissToast(toastId);
+
+      toastEl.innerHTML = `
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-lg shadow-inner font-black shrink-0">
+            ${icon}
+          </div>
+          <div>
+            <div class="font-black text-xs tracking-wide leading-tight drop-shadow-xs">${cleanMsg}</div>
+            <div class="text-[10px] text-white/80 font-medium">AgriWaste Exchange</div>
+          </div>
+        </div>
+        <button onclick="event.stopPropagation(); dismissToast('${toastId}')" class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center text-xs font-bold transition shrink-0">&times;</button>
+      `;
+
+      container.innerHTML = '';
+      container.appendChild(toastEl);
+
+      // Animate entry
+      requestAnimationFrame(() => {
+        toastEl.classList.remove('translate-y-[-20px]', 'opacity-0', 'scale-95');
+        toastEl.classList.add('translate-y-0', 'opacity-100', 'scale-100');
+      });
+
+      // Auto dismiss after 2.6s
+      setTimeout(() => {
+        dismissToast(toastId);
+      }, 2600);
+    }
+
+    function dismissToast(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.remove('translate-y-0', 'opacity-100', 'scale-100');
+      el.classList.add('translate-y-[-20px]', 'opacity-0', 'scale-95');
+      setTimeout(() => {
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+      }, 300);
+    }
+
+    // Global override: Replaces boring native alert popups with colorful toasts!
+    window.showToast = showCustomToast;
+    window.dismissToast = dismissToast;
+    window.alert = function(msg) {
+      showCustomToast(msg);
+    };
+
+    // ===================================================
+    // INTERACTIVE NOTIFICATION CIRCLES & HIGHLIGHT SYSTEM
+    // ===================================================
+    function updateNotificationDots() {
+      if (!currentUser) return;
+      let hasUnreadAlert = false;
+
+      // 1. BUYER ROLE
+      if (currentUser.role === 'buyer') {
+        const myReqs = (store.requirements || []).filter(r => r.buyer_id === currentUser.id && (r.status === 'open' || r.status === 'partially_fulfilled' || r.status === 'Active'));
+        let matchCount = 0;
+        myReqs.forEach(r => {
+          const matches = (store.listings || []).filter(l => 
+            l.status === 'available' && 
+            l.available_quantity > 0 && 
+            (l.material_name || '').toLowerCase().includes((r.material_name || '').toLowerCase())
+          );
+          matchCount += matches.length;
+        });
+
+        const buyerOrders = (store.orders || []).filter(o => o.buyer_id === currentUser.id);
+        const activeOrders = buyerOrders.filter(o => o.status === 'confirmed' || o.status === 'in_transit' || o.status === 'delivered');
+
+        const dotSuppliers = document.getElementById("buyer-dot-suppliers");
+        if (dotSuppliers) dotSuppliers.classList.toggle("hidden", matchCount === 0);
+
+        const dotOrders = document.getElementById("buyer-dot-orders");
+        if (dotOrders) dotOrders.classList.toggle("hidden", activeOrders.length === 0);
+
+        if (matchCount > 0 || activeOrders.length > 0) hasUnreadAlert = true;
+
+        // Interactive highlight banner in buyer dashboard
+        const banner = document.getElementById("buyer-home-matches-banner");
+        if (banner) {
+          if (matchCount > 0 && myReqs.length > 0) {
+            banner.innerHTML = `
+              <div onclick="switchBuyerTab('suppliers')" class="p-3.5 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-300 rounded-2xl flex items-center justify-between cursor-pointer hover:shadow-xs transition active:scale-98">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200 animate-pulse shrink-0"></span>
+                  <div>
+                    <span class="font-black text-xs text-emerald-950 block">🎯 New Matching Supplies Found!</span>
+                    <span class="text-[10px] text-emerald-700 font-semibold">${matchCount} farmer supply matches available for your requirements.</span>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[10px] font-bold shadow-2xs shrink-0">View Matches ➔</span>
+              </div>
+            `;
+            banner.classList.remove("hidden");
+          } else {
+            banner.classList.add("hidden");
+          }
+        }
+      }
+
+      // 2. FARMER ROLE
+      else if (currentUser.role === 'farmer') {
+        const farmerOrders = (store.orders || []).filter(o => 
+          (o.farmer_id === currentUser.id || (o.items && o.items.some(i => i.farmer_id === currentUser.id)))
+        );
+        const pendingOffers = farmerOrders.filter(o => o.status === 'pending' || o.status === 'awaiting_confirmation');
+        const inTransitOrders = farmerOrders.filter(o => o.status === 'in_transit');
+
+        const dotOrders = document.getElementById("farmer-dot-orders");
+        if (dotOrders) dotOrders.classList.toggle("hidden", pendingOffers.length === 0);
+
+        const dotTracking = document.getElementById("farmer-dot-tracking");
+        if (dotTracking) dotTracking.classList.toggle("hidden", inTransitOrders.length === 0);
+
+        // Check if buyer requirements match farmer's listings
+        const myListings = (store.listings || []).filter(l => l.farmer_id === currentUser.id && l.status === 'available');
+        let reqMatches = 0;
+        myListings.forEach(l => {
+          const reqs = (store.requirements || []).filter(r => 
+            (r.status === 'open' || r.status === 'partially_fulfilled') && 
+            (r.material_name || '').toLowerCase().includes(l.material_name.toLowerCase())
+          );
+          reqMatches += reqs.length;
+        });
+
+        const dotMatches = document.getElementById("farmer-dot-matches");
+        if (dotMatches) dotMatches.classList.toggle("hidden", reqMatches === 0);
+
+        if (pendingOffers.length > 0 || inTransitOrders.length > 0 || reqMatches > 0) hasUnreadAlert = true;
+      }
+
+      // 3. AGGREGATOR ROLE
+      else if (currentUser.role === 'aggregator') {
+        const jobs = (store.transportJobs || []).filter(j => !j.aggregator_id || j.aggregator_id === currentUser.id);
+        const assignedJobs = jobs.filter(j => j.status === 'assigned');
+        const activeTrips = jobs.filter(j => j.status === 'in_transit');
+
+        const dotAssigned = document.getElementById("aggregator-dot-assigned");
+        if (dotAssigned) dotAssigned.classList.toggle("hidden", assignedJobs.length === 0);
+
+        const dotActive = document.getElementById("aggregator-dot-active");
+        if (dotActive) dotActive.classList.toggle("hidden", activeTrips.length === 0);
+
+        if (assignedJobs.length > 0 || activeTrips.length > 0) hasUnreadAlert = true;
+      }
+
+      // Top Header Hamburger Badge Dot
+      const topDot = document.getElementById("top-drawer-badge-dot");
+      if (topDot) topDot.classList.toggle("hidden", !hasUnreadAlert);
+    }
+    window.updateNotificationDots = updateNotificationDots;
+
+
     // Local in-memory / localStorage store - Starts completely fresh with 0 preloaded data
     const defaultUsers = [];
 
@@ -2357,24 +2561,24 @@
     };
 
     // Purge any old demonstration localStorage records on fresh app launch
-    const FRESH_STORAGE_KEY = "agriwaste_fresh_launch_v15";
+    const FRESH_STORAGE_KEY = "agriwaste_fresh_launch_v16";
     if (localStorage.getItem("agriwaste_version") !== FRESH_STORAGE_KEY) {
       localStorage.clear();
       localStorage.setItem("agriwaste_version", FRESH_STORAGE_KEY);
     }
 
     try {
-      const saved = localStorage.getItem("agriwaste_store_v15");
+      const saved = localStorage.getItem("agriwaste_store_v16");
       if (saved) {
         store = { ...store, ...JSON.parse(saved) };
       }
     } catch(e) {}
 
     function persist() {
-      try { localStorage.setItem("agriwaste_store_v15", JSON.stringify(store)); } catch(e){}
+      try { localStorage.setItem("agriwaste_store_v16", JSON.stringify(store)); } catch(e){}
     }
     function saveStoreToLocal() {
-      try { localStorage.setItem("agriwaste_store_v15", JSON.stringify(store)); } catch(e){}
+      try { localStorage.setItem("agriwaste_store_v16", JSON.stringify(store)); } catch(e){}
     }
 
     async function apiRequest(endpoint, method = 'GET', body = null) {
@@ -3392,7 +3596,7 @@
     // ====================================================
     // ROLE 1: FARMER DASHBOARD & COMPLETE 10-FEATURE SUITE
     // ====================================================
-    let currentFarmerSubTab = 'home';
+    currentFarmerSubTab = 'home';
     let currentListingFilter = 'all';
     let uploadedResidueImage = null;
 
@@ -3461,207 +3665,7 @@
     }
 
     // 1. HOME SCREEN & KPIs (FEATURE 1)
-    async 
-    // ===================================================
-    // ATTRACTIVE COLORFUL TOAST NOTIFICATION SYSTEM
-    // ===================================================
-    function showCustomToast(message, type = 'success') {
-      const container = document.getElementById("app-toast-container");
-      if (!container) return;
-
-      // Extract concise, crisp message title (no overwhelming paragraphs)
-      let cleanMsg = typeof message === 'string' ? message : String(message);
-      if (cleanMsg.includes('\n')) {
-        cleanMsg = cleanMsg.split('\n')[0].trim();
-      }
-      cleanMsg = cleanMsg.replace(/^[\s\r\n]+|[\s\r\n]+$/g, '');
-
-      let icon = '✨';
-      let gradientBg = 'from-emerald-600 via-teal-600 to-green-600';
-      let borderColor = 'border-emerald-300/40';
-      let shadowColor = 'shadow-emerald-900/30';
-
-      const lower = cleanMsg.toLowerCase();
-      if (lower.includes('accept') || lower.includes('confirmed') || lower.includes('completed') || lower.includes('success') || lower.includes('welcome') || lower.includes('listed')) {
-        icon = '✅';
-        gradientBg = 'from-emerald-600 via-teal-600 to-green-600';
-        borderColor = 'border-emerald-300/40';
-        shadowColor = 'shadow-emerald-900/30';
-      } else if (lower.includes('transport') || lower.includes('trip') || lower.includes('pickup') || lower.includes('transit')) {
-        icon = '🚛';
-        gradientBg = 'from-blue-600 via-indigo-600 to-sky-600';
-        borderColor = 'border-blue-300/40';
-        shadowColor = 'shadow-blue-900/30';
-      } else if (lower.includes('offer') || lower.includes('sent') || lower.includes('requirement') || lower.includes('demand')) {
-        icon = '📨';
-        gradientBg = 'from-teal-600 via-emerald-600 to-cyan-700';
-        borderColor = 'border-teal-300/40';
-        shadowColor = 'shadow-teal-900/30';
-      } else if (lower.includes('decline') || lower.includes('reject') || lower.includes('fail') || lower.includes('error') || lower.includes('cancel') || lower.includes('⚠️')) {
-        icon = '❌';
-        gradientBg = 'from-rose-600 via-red-600 to-pink-700';
-        borderColor = 'border-rose-300/40';
-        shadowColor = 'shadow-rose-900/30';
-      }
-
-      // Create new toast element
-      const toastId = 'toast-' + Date.now();
-      const toastEl = document.createElement('div');
-      toastEl.id = toastId;
-      toastEl.className = `pointer-events-auto transform transition-all duration-300 ease-out translate-y-[-20px] opacity-0 scale-95 w-full bg-gradient-to-r ${gradientBg} text-white p-3.5 rounded-2xl shadow-xl ${shadowColor} border ${borderColor} flex items-center justify-between gap-3 cursor-pointer select-none`;
-      toastEl.onclick = () => dismissToast(toastId);
-
-      toastEl.innerHTML = `
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-lg shadow-inner font-black shrink-0">
-            ${icon}
-          </div>
-          <div>
-            <div class="font-black text-xs tracking-wide leading-tight drop-shadow-xs">${cleanMsg}</div>
-            <div class="text-[10px] text-white/80 font-medium">AgriWaste Exchange</div>
-          </div>
-        </div>
-        <button onclick="event.stopPropagation(); dismissToast('${toastId}')" class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center text-xs font-bold transition shrink-0">&times;</button>
-      `;
-
-      container.innerHTML = '';
-      container.appendChild(toastEl);
-
-      // Animate entry
-      requestAnimationFrame(() => {
-        toastEl.classList.remove('translate-y-[-20px]', 'opacity-0', 'scale-95');
-        toastEl.classList.add('translate-y-0', 'opacity-100', 'scale-100');
-      });
-
-      // Auto dismiss after 2.6s
-      setTimeout(() => {
-        dismissToast(toastId);
-      }, 2600);
-    }
-
-    function dismissToast(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.classList.remove('translate-y-0', 'opacity-100', 'scale-100');
-      el.classList.add('translate-y-[-20px]', 'opacity-0', 'scale-95');
-      setTimeout(() => {
-        if (el && el.parentNode) el.parentNode.removeChild(el);
-      }, 300);
-    }
-
-    // Global override: Replaces boring native alert popups with colorful toasts!
-    window.showToast = showCustomToast;
-    window.dismissToast = dismissToast;
-    window.alert = function(msg) {
-      showCustomToast(msg);
-    };
-
-    // ===================================================
-    // INTERACTIVE NOTIFICATION CIRCLES & HIGHLIGHT SYSTEM
-    // ===================================================
-    function updateNotificationDots() {
-      if (!currentUser) return;
-      let hasUnreadAlert = false;
-
-      // 1. BUYER ROLE
-      if (currentUser.role === 'buyer') {
-        const myReqs = (store.requirements || []).filter(r => r.buyer_id === currentUser.id && (r.status === 'open' || r.status === 'partially_fulfilled' || r.status === 'Active'));
-        let matchCount = 0;
-        myReqs.forEach(r => {
-          const matches = (store.listings || []).filter(l => 
-            l.status === 'available' && 
-            l.available_quantity > 0 && 
-            (l.material_name || '').toLowerCase().includes((r.material_name || '').toLowerCase())
-          );
-          matchCount += matches.length;
-        });
-
-        const buyerOrders = (store.orders || []).filter(o => o.buyer_id === currentUser.id);
-        const activeOrders = buyerOrders.filter(o => o.status === 'confirmed' || o.status === 'in_transit' || o.status === 'delivered');
-
-        const dotSuppliers = document.getElementById("buyer-dot-suppliers");
-        if (dotSuppliers) dotSuppliers.classList.toggle("hidden", matchCount === 0);
-
-        const dotOrders = document.getElementById("buyer-dot-orders");
-        if (dotOrders) dotOrders.classList.toggle("hidden", activeOrders.length === 0);
-
-        if (matchCount > 0 || activeOrders.length > 0) hasUnreadAlert = true;
-
-        // Interactive highlight banner in buyer dashboard
-        const banner = document.getElementById("buyer-home-matches-banner");
-        if (banner) {
-          if (matchCount > 0 && myReqs.length > 0) {
-            banner.innerHTML = `
-              <div onclick="switchBuyerTab('suppliers')" class="p-3.5 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-300 rounded-2xl flex items-center justify-between cursor-pointer hover:shadow-xs transition active:scale-98">
-                <div class="flex items-center gap-2.5">
-                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200 animate-pulse shrink-0"></span>
-                  <div>
-                    <span class="font-black text-xs text-emerald-950 block">🎯 New Matching Supplies Found!</span>
-                    <span class="text-[10px] text-emerald-700 font-semibold">${matchCount} farmer supply matches available for your requirements.</span>
-                  </div>
-                </div>
-                <span class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[10px] font-bold shadow-2xs shrink-0">View Matches ➔</span>
-              </div>
-            `;
-            banner.classList.remove("hidden");
-          } else {
-            banner.classList.add("hidden");
-          }
-        }
-      }
-
-      // 2. FARMER ROLE
-      else if (currentUser.role === 'farmer') {
-        const farmerOrders = (store.orders || []).filter(o => 
-          (o.farmer_id === currentUser.id || (o.items && o.items.some(i => i.farmer_id === currentUser.id)))
-        );
-        const pendingOffers = farmerOrders.filter(o => o.status === 'pending' || o.status === 'awaiting_confirmation');
-        const inTransitOrders = farmerOrders.filter(o => o.status === 'in_transit');
-
-        const dotOrders = document.getElementById("farmer-dot-orders");
-        if (dotOrders) dotOrders.classList.toggle("hidden", pendingOffers.length === 0);
-
-        const dotTracking = document.getElementById("farmer-dot-tracking");
-        if (dotTracking) dotTracking.classList.toggle("hidden", inTransitOrders.length === 0);
-
-        // Check if buyer requirements match farmer's listings
-        const myListings = (store.listings || []).filter(l => l.farmer_id === currentUser.id && l.status === 'available');
-        let reqMatches = 0;
-        myListings.forEach(l => {
-          const reqs = (store.requirements || []).filter(r => 
-            (r.status === 'open' || r.status === 'partially_fulfilled') && 
-            (r.material_name || '').toLowerCase().includes(l.material_name.toLowerCase())
-          );
-          reqMatches += reqs.length;
-        });
-
-        const dotMatches = document.getElementById("farmer-dot-matches");
-        if (dotMatches) dotMatches.classList.toggle("hidden", reqMatches === 0);
-
-        if (pendingOffers.length > 0 || inTransitOrders.length > 0 || reqMatches > 0) hasUnreadAlert = true;
-      }
-
-      // 3. AGGREGATOR ROLE
-      else if (currentUser.role === 'aggregator') {
-        const jobs = (store.transportJobs || []).filter(j => !j.aggregator_id || j.aggregator_id === currentUser.id);
-        const assignedJobs = jobs.filter(j => j.status === 'assigned');
-        const activeTrips = jobs.filter(j => j.status === 'in_transit');
-
-        const dotAssigned = document.getElementById("aggregator-dot-assigned");
-        if (dotAssigned) dotAssigned.classList.toggle("hidden", assignedJobs.length === 0);
-
-        const dotActive = document.getElementById("aggregator-dot-active");
-        if (dotActive) dotActive.classList.toggle("hidden", activeTrips.length === 0);
-
-        if (assignedJobs.length > 0 || activeTrips.length > 0) hasUnreadAlert = true;
-      }
-
-      // Top Header Hamburger Badge Dot
-      const topDot = document.getElementById("top-drawer-badge-dot");
-      if (topDot) topDot.classList.toggle("hidden", !hasUnreadAlert);
-    }
-    window.updateNotificationDots = updateNotificationDots;
-
+    
 
     function renderFarmerHomeKPIs() {
       setTimeout(updateNotificationDots, 50);
@@ -4758,7 +4762,7 @@
     // ====================================================
     // ROLE 2: COMPLETE BUYER SECTION MODULE (FEATURES 1-8)
     // ====================================================
-    let currentBuyerTab = 'home';
+    currentBuyerTab = 'home';
     let buyerAllocation = {
       requirementId: null,
       contributions: []
@@ -6317,7 +6321,7 @@ Individual dispatch requests sent to farmers.`);
     // ====================================================
     // ROLE 3: AGGREGATOR / TRANSPORTER COMPLETE CONTROLLER
     // ====================================================
-    let currentAggregatorTab = 'home';
+    currentAggregatorTab = 'home';
     let aggregatorActiveFilter = 'all';
 
     function switchAggregatorTab(tabName) {
