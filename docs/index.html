@@ -2465,24 +2465,25 @@
 
     function getBuyerSuppliersKey() {
       if (!currentUser || currentUser.role !== 'buyer') return '';
-      const myReqs = (store.requirements || []).filter(r => r.buyer_id === currentUser.id && (r.status === 'open' || r.status === 'partially_fulfilled' || r.status === 'Active'));
+      const myReqs = (store.requirements || []).filter(r => String(r.buyer_id) === String(currentUser.id) && (r.status === 'open' || r.status === 'partially_fulfilled' || r.status === 'Active'));
       if (myReqs.length === 0) return '';
       const matchListingIds = [];
       myReqs.forEach(r => {
         (store.listings || []).forEach(l => {
           if (l.status === 'available' && (parseFloat(l.available_quantity) || 0) > 0 &&
               (l.material_name || '').toLowerCase().includes((r.material_name || '').toLowerCase())) {
-            if (!matchListingIds.includes(l.id)) matchListingIds.push(l.id);
+            const lid = String(l.id);
+            if (!matchListingIds.includes(lid)) matchListingIds.push(lid);
           }
         });
       });
       if (matchListingIds.length === 0) return '';
-      return myReqs.map(r => r.id).sort().join(',') + '::' + matchListingIds.sort().join(',');
+      return myReqs.map(r => String(r.id)).sort().join(',') + '::' + matchListingIds.sort().join(',');
     }
 
     function getBuyerOrdersKey() {
       if (!currentUser || currentUser.role !== 'buyer') return '';
-      const buyerOrders = (store.orders || []).filter(o => o.buyer_id === currentUser.id);
+      const buyerOrders = (store.orders || []).filter(o => String(o.buyer_id) === String(currentUser.id));
       const activeOrders = buyerOrders.filter(o => ['confirmed', 'in_transit', 'delivered'].includes(o.status));
       if (activeOrders.length === 0) return '';
       return activeOrders.map(o => `${o.id}:${o.status}:${o.aggregator_id || ''}:${o.delivery_milestone || ''}`).sort().join('|');
@@ -2491,7 +2492,7 @@
     function getFarmerOrdersKey() {
       if (!currentUser || currentUser.role !== 'farmer') return '';
       const farmerOrders = (store.orders || []).filter(o => 
-        (o.farmer_id === currentUser.id || (o.items && o.items.some(i => i.farmer_id === currentUser.id)))
+        (String(o.farmer_id) === String(currentUser.id) || (o.items && o.items.some(i => String(i.farmer_id) === String(currentUser.id))))
       );
       const pendingOffers = farmerOrders.filter(o => o.status === 'pending' || o.status === 'awaiting_confirmation');
       if (pendingOffers.length === 0) return '';
@@ -2501,7 +2502,7 @@
     function getFarmerTrackingKey() {
       if (!currentUser || currentUser.role !== 'farmer') return '';
       const farmerOrders = (store.orders || []).filter(o => 
-        (o.farmer_id === currentUser.id || (o.items && o.items.some(i => i.farmer_id === currentUser.id)))
+        (String(o.farmer_id) === String(currentUser.id) || (o.items && o.items.some(i => String(i.farmer_id) === String(currentUser.id))))
       );
       const inTransitOrders = farmerOrders.filter(o => o.status === 'in_transit');
       if (inTransitOrders.length === 0) return '';
@@ -2510,24 +2511,25 @@
 
     function getFarmerMatchesKey() {
       if (!currentUser || currentUser.role !== 'farmer') return '';
-      const myListings = (store.listings || []).filter(l => l.farmer_id === currentUser.id && l.status === 'available');
+      const myListings = (store.listings || []).filter(l => String(l.farmer_id) === String(currentUser.id) && l.status === 'available');
       if (myListings.length === 0) return '';
       const reqMatchIds = [];
       myListings.forEach(l => {
         (store.requirements || []).forEach(r => {
           if ((r.status === 'open' || r.status === 'partially_fulfilled') && 
               (r.material_name || '').toLowerCase().includes(l.material_name.toLowerCase())) {
-            if (!reqMatchIds.includes(r.id)) reqMatchIds.push(r.id);
+            const rid = String(r.id);
+            if (!reqMatchIds.includes(rid)) reqMatchIds.push(rid);
           }
         });
       });
       if (reqMatchIds.length === 0) return '';
-      return myListings.map(l => l.id).sort().join(',') + '::' + reqMatchIds.sort().join(',');
+      return myListings.map(l => String(l.id)).sort().join(',') + '::' + reqMatchIds.sort().join(',');
     }
 
     function getAggregatorAssignedKey() {
       if (!currentUser || currentUser.role !== 'aggregator') return '';
-      const jobs = (store.transportJobs || []).filter(j => !j.aggregator_id || j.aggregator_id === currentUser.id);
+      const jobs = (store.transportJobs || []).filter(j => !j.aggregator_id || String(j.aggregator_id) === String(currentUser.id));
       const assignedJobs = jobs.filter(j => j.status === 'assigned');
       if (assignedJobs.length === 0) return '';
       return assignedJobs.map(j => `${j.id}:${j.status}`).sort().join('|');
@@ -2535,7 +2537,7 @@
 
     function getAggregatorActiveKey() {
       if (!currentUser || currentUser.role !== 'aggregator') return '';
-      const jobs = (store.transportJobs || []).filter(j => !j.aggregator_id || j.aggregator_id === currentUser.id);
+      const jobs = (store.transportJobs || []).filter(j => !j.aggregator_id || String(j.aggregator_id) === String(currentUser.id));
       const activeTrips = jobs.filter(j => j.status === 'in_transit');
       if (activeTrips.length === 0) return '';
       return activeTrips.map(j => `${j.id}:${j.status}:${j.milestone || ''}`).sort().join('|');
@@ -2549,20 +2551,22 @@
       // 1. BUYER ROLE
       if (currentUser.role === 'buyer') {
         const suppliersKey = getBuyerSuppliersKey();
-        if (currentBuyerTab === 'suppliers' && suppliersKey) {
-          setSeenNotification('buyerSuppliers', suppliersKey);
-          seen.buyerSuppliers = suppliersKey;
+        if (currentBuyerTab === 'suppliers') {
+          const markVal = suppliersKey || 'seen';
+          setSeenNotification('buyerSuppliers', markVal);
+          seen.buyerSuppliers = markVal;
         }
-        const isSuppliersUnread = Boolean(suppliersKey && seen.buyerSuppliers !== suppliersKey);
+        const isSuppliersUnread = Boolean(suppliersKey && currentBuyerTab !== 'suppliers' && seen.buyerSuppliers !== suppliersKey);
         const dotSuppliers = document.getElementById("buyer-dot-suppliers");
         if (dotSuppliers) dotSuppliers.classList.toggle("hidden", !isSuppliersUnread);
 
         const ordersKey = getBuyerOrdersKey();
-        if (currentBuyerTab === 'orders' && ordersKey) {
-          setSeenNotification('buyerOrders', ordersKey);
-          seen.buyerOrders = ordersKey;
+        if (currentBuyerTab === 'orders') {
+          const markVal = ordersKey || 'seen';
+          setSeenNotification('buyerOrders', markVal);
+          seen.buyerOrders = markVal;
         }
-        const isOrdersUnread = Boolean(ordersKey && seen.buyerOrders !== ordersKey);
+        const isOrdersUnread = Boolean(ordersKey && currentBuyerTab !== 'orders' && seen.buyerOrders !== ordersKey);
         const dotOrders = document.getElementById("buyer-dot-orders");
         if (dotOrders) dotOrders.classList.toggle("hidden", !isOrdersUnread);
 
@@ -2595,29 +2599,32 @@
       // 2. FARMER ROLE
       else if (currentUser.role === 'farmer') {
         const ordersKey = getFarmerOrdersKey();
-        if (currentFarmerSubTab === 'orders' && ordersKey) {
-          setSeenNotification('farmerOrders', ordersKey);
-          seen.farmerOrders = ordersKey;
+        if (currentFarmerSubTab === 'orders') {
+          const markVal = ordersKey || 'seen';
+          setSeenNotification('farmerOrders', markVal);
+          seen.farmerOrders = markVal;
         }
-        const isOrdersUnread = Boolean(ordersKey && seen.farmerOrders !== ordersKey);
+        const isOrdersUnread = Boolean(ordersKey && currentFarmerSubTab !== 'orders' && seen.farmerOrders !== ordersKey);
         const dotOrders = document.getElementById("farmer-dot-orders");
         if (dotOrders) dotOrders.classList.toggle("hidden", !isOrdersUnread);
 
         const trackingKey = getFarmerTrackingKey();
-        if (currentFarmerSubTab === 'tracking' && trackingKey) {
-          setSeenNotification('farmerTracking', trackingKey);
-          seen.farmerTracking = trackingKey;
+        if (currentFarmerSubTab === 'tracking') {
+          const markVal = trackingKey || 'seen';
+          setSeenNotification('farmerTracking', markVal);
+          seen.farmerTracking = markVal;
         }
-        const isTrackingUnread = Boolean(trackingKey && seen.farmerTracking !== trackingKey);
+        const isTrackingUnread = Boolean(trackingKey && currentFarmerSubTab !== 'tracking' && seen.farmerTracking !== trackingKey);
         const dotTracking = document.getElementById("farmer-dot-tracking");
         if (dotTracking) dotTracking.classList.toggle("hidden", !isTrackingUnread);
 
         const matchesKey = getFarmerMatchesKey();
-        if (currentFarmerSubTab === 'matches' && matchesKey) {
-          setSeenNotification('farmerMatches', matchesKey);
-          seen.farmerMatches = matchesKey;
+        if (currentFarmerSubTab === 'matches') {
+          const markVal = matchesKey || 'seen';
+          setSeenNotification('farmerMatches', markVal);
+          seen.farmerMatches = markVal;
         }
-        const isMatchesUnread = Boolean(matchesKey && seen.farmerMatches !== matchesKey);
+        const isMatchesUnread = Boolean(matchesKey && currentFarmerSubTab !== 'matches' && seen.farmerMatches !== matchesKey);
         const dotMatches = document.getElementById("farmer-dot-matches");
         if (dotMatches) dotMatches.classList.toggle("hidden", !isMatchesUnread);
 
@@ -2627,20 +2634,22 @@
       // 3. AGGREGATOR ROLE
       else if (currentUser.role === 'aggregator') {
         const assignedKey = getAggregatorAssignedKey();
-        if (currentAggregatorTab === 'assigned' && assignedKey) {
-          setSeenNotification('aggregatorAssigned', assignedKey);
-          seen.aggregatorAssigned = assignedKey;
+        if (currentAggregatorTab === 'assigned') {
+          const markVal = assignedKey || 'seen';
+          setSeenNotification('aggregatorAssigned', markVal);
+          seen.aggregatorAssigned = markVal;
         }
-        const isAssignedUnread = Boolean(assignedKey && seen.aggregatorAssigned !== assignedKey);
+        const isAssignedUnread = Boolean(assignedKey && currentAggregatorTab !== 'assigned' && seen.aggregatorAssigned !== assignedKey);
         const dotAssigned = document.getElementById("aggregator-dot-assigned");
         if (dotAssigned) dotAssigned.classList.toggle("hidden", !isAssignedUnread);
 
         const activeKey = getAggregatorActiveKey();
-        if (currentAggregatorTab === 'active' && activeKey) {
-          setSeenNotification('aggregatorActive', activeKey);
-          seen.aggregatorActive = activeKey;
+        if (currentAggregatorTab === 'active') {
+          const markVal = activeKey || 'seen';
+          setSeenNotification('aggregatorActive', markVal);
+          seen.aggregatorActive = markVal;
         }
-        const isActiveUnread = Boolean(activeKey && seen.aggregatorActive !== activeKey);
+        const isActiveUnread = Boolean(activeKey && currentAggregatorTab !== 'active' && seen.aggregatorActive !== activeKey);
         const dotActive = document.getElementById("aggregator-dot-active");
         if (dotActive) dotActive.classList.toggle("hidden", !isActiveUnread);
 
@@ -3742,6 +3751,16 @@
 
     function switchFarmerSubTab(tabName) {
       currentFarmerSubTab = tabName;
+      if (tabName === 'orders') {
+        const k = (typeof getFarmerOrdersKey === 'function' ? getFarmerOrdersKey() : '') || 'seen';
+        if (typeof setSeenNotification === 'function') setSeenNotification('farmerOrders', k);
+      } else if (tabName === 'tracking') {
+        const k = (typeof getFarmerTrackingKey === 'function' ? getFarmerTrackingKey() : '') || 'seen';
+        if (typeof setSeenNotification === 'function') setSeenNotification('farmerTracking', k);
+      } else if (tabName === 'matches') {
+        const k = (typeof getFarmerMatchesKey === 'function' ? getFarmerMatchesKey() : '') || 'seen';
+        if (typeof setSeenNotification === 'function') setSeenNotification('farmerMatches', k);
+      }
       const tabs = ['home', 'listings', 'demands', 'matches', 'orders', 'tracking', 'earnings', 'help'];
       tabs.forEach(t => {
         const btn = document.getElementById(`f-tab-btn-${t}`);
@@ -4894,6 +4913,13 @@
     function switchBuyerTab(tabName) {
       if (!currentUser || currentUser.role !== 'buyer') return;
       currentBuyerTab = tabName;
+      if (tabName === 'suppliers') {
+        const k = (typeof getBuyerSuppliersKey === 'function' ? getBuyerSuppliersKey() : '') || 'seen';
+        if (typeof setSeenNotification === 'function') setSeenNotification('buyerSuppliers', k);
+      } else if (tabName === 'orders') {
+        const k = (typeof getBuyerOrdersKey === 'function' ? getBuyerOrdersKey() : '') || 'seen';
+        if (typeof setSeenNotification === 'function') setSeenNotification('buyerOrders', k);
+      }
       hideAllViews();
       
       const vBuyer = document.getElementById("view-buyer");
@@ -6453,6 +6479,13 @@ Individual dispatch requests sent to farmers.`);
     function switchAggregatorTab(tabName) {
       if (!currentUser || currentUser.role !== 'aggregator') return;
       currentAggregatorTab = tabName;
+      if (tabName === 'assigned') {
+        const k = (typeof getAggregatorAssignedKey === 'function' ? getAggregatorAssignedKey() : '') || 'seen';
+        if (typeof setSeenNotification === 'function') setSeenNotification('aggregatorAssigned', k);
+      } else if (tabName === 'active') {
+        const k = (typeof getAggregatorActiveKey === 'function' ? getAggregatorActiveKey() : '') || 'seen';
+        if (typeof setSeenNotification === 'function') setSeenNotification('aggregatorActive', k);
+      }
       hideAllViews();
 
       const vAgg = document.getElementById("view-aggregator");
