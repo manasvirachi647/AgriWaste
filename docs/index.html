@@ -2444,38 +2444,135 @@
     // ===================================================
     // INTERACTIVE NOTIFICATION CIRCLES & HIGHLIGHT SYSTEM
     // ===================================================
+    function getSeenNotifications() {
+      if (!currentUser) return {};
+      try {
+        const raw = localStorage.getItem(`agriwaste_seen_${currentUser.id}`);
+        return raw ? JSON.parse(raw) : {};
+      } catch(e) {
+        return {};
+      }
+    }
+
+    function setSeenNotification(key, val) {
+      if (!currentUser) return;
+      try {
+        const seen = getSeenNotifications();
+        seen[key] = val;
+        localStorage.setItem(`agriwaste_seen_${currentUser.id}`, JSON.stringify(seen));
+      } catch(e) {}
+    }
+
+    function getBuyerSuppliersKey() {
+      if (!currentUser || currentUser.role !== 'buyer') return '';
+      const myReqs = (store.requirements || []).filter(r => r.buyer_id === currentUser.id && (r.status === 'open' || r.status === 'partially_fulfilled' || r.status === 'Active'));
+      if (myReqs.length === 0) return '';
+      const matchListingIds = [];
+      myReqs.forEach(r => {
+        (store.listings || []).forEach(l => {
+          if (l.status === 'available' && (parseFloat(l.available_quantity) || 0) > 0 &&
+              (l.material_name || '').toLowerCase().includes((r.material_name || '').toLowerCase())) {
+            if (!matchListingIds.includes(l.id)) matchListingIds.push(l.id);
+          }
+        });
+      });
+      if (matchListingIds.length === 0) return '';
+      return myReqs.map(r => r.id).sort().join(',') + '::' + matchListingIds.sort().join(',');
+    }
+
+    function getBuyerOrdersKey() {
+      if (!currentUser || currentUser.role !== 'buyer') return '';
+      const buyerOrders = (store.orders || []).filter(o => o.buyer_id === currentUser.id);
+      const activeOrders = buyerOrders.filter(o => ['confirmed', 'in_transit', 'delivered'].includes(o.status));
+      if (activeOrders.length === 0) return '';
+      return activeOrders.map(o => `${o.id}:${o.status}:${o.aggregator_id || ''}:${o.delivery_milestone || ''}`).sort().join('|');
+    }
+
+    function getFarmerOrdersKey() {
+      if (!currentUser || currentUser.role !== 'farmer') return '';
+      const farmerOrders = (store.orders || []).filter(o => 
+        (o.farmer_id === currentUser.id || (o.items && o.items.some(i => i.farmer_id === currentUser.id)))
+      );
+      const pendingOffers = farmerOrders.filter(o => o.status === 'pending' || o.status === 'awaiting_confirmation');
+      if (pendingOffers.length === 0) return '';
+      return pendingOffers.map(o => `${o.id}:${o.status}:${o.total_price || ''}`).sort().join('|');
+    }
+
+    function getFarmerTrackingKey() {
+      if (!currentUser || currentUser.role !== 'farmer') return '';
+      const farmerOrders = (store.orders || []).filter(o => 
+        (o.farmer_id === currentUser.id || (o.items && o.items.some(i => i.farmer_id === currentUser.id)))
+      );
+      const inTransitOrders = farmerOrders.filter(o => o.status === 'in_transit');
+      if (inTransitOrders.length === 0) return '';
+      return inTransitOrders.map(o => `${o.id}:${o.status}:${o.delivery_milestone || ''}:${o.aggregator_id || ''}`).sort().join('|');
+    }
+
+    function getFarmerMatchesKey() {
+      if (!currentUser || currentUser.role !== 'farmer') return '';
+      const myListings = (store.listings || []).filter(l => l.farmer_id === currentUser.id && l.status === 'available');
+      if (myListings.length === 0) return '';
+      const reqMatchIds = [];
+      myListings.forEach(l => {
+        (store.requirements || []).forEach(r => {
+          if ((r.status === 'open' || r.status === 'partially_fulfilled') && 
+              (r.material_name || '').toLowerCase().includes(l.material_name.toLowerCase())) {
+            if (!reqMatchIds.includes(r.id)) reqMatchIds.push(r.id);
+          }
+        });
+      });
+      if (reqMatchIds.length === 0) return '';
+      return myListings.map(l => l.id).sort().join(',') + '::' + reqMatchIds.sort().join(',');
+    }
+
+    function getAggregatorAssignedKey() {
+      if (!currentUser || currentUser.role !== 'aggregator') return '';
+      const jobs = (store.transportJobs || []).filter(j => !j.aggregator_id || j.aggregator_id === currentUser.id);
+      const assignedJobs = jobs.filter(j => j.status === 'assigned');
+      if (assignedJobs.length === 0) return '';
+      return assignedJobs.map(j => `${j.id}:${j.status}`).sort().join('|');
+    }
+
+    function getAggregatorActiveKey() {
+      if (!currentUser || currentUser.role !== 'aggregator') return '';
+      const jobs = (store.transportJobs || []).filter(j => !j.aggregator_id || j.aggregator_id === currentUser.id);
+      const activeTrips = jobs.filter(j => j.status === 'in_transit');
+      if (activeTrips.length === 0) return '';
+      return activeTrips.map(j => `${j.id}:${j.status}:${j.milestone || ''}`).sort().join('|');
+    }
+
     function updateNotificationDots() {
       if (!currentUser) return;
+      const seen = getSeenNotifications();
       let hasUnreadAlert = false;
 
       // 1. BUYER ROLE
       if (currentUser.role === 'buyer') {
-        const myReqs = (store.requirements || []).filter(r => r.buyer_id === currentUser.id && (r.status === 'open' || r.status === 'partially_fulfilled' || r.status === 'Active'));
-        let matchCount = 0;
-        myReqs.forEach(r => {
-          const matches = (store.listings || []).filter(l => 
-            l.status === 'available' && 
-            l.available_quantity > 0 && 
-            (l.material_name || '').toLowerCase().includes((r.material_name || '').toLowerCase())
-          );
-          matchCount += matches.length;
-        });
-
-        const buyerOrders = (store.orders || []).filter(o => o.buyer_id === currentUser.id);
-        const activeOrders = buyerOrders.filter(o => o.status === 'confirmed' || o.status === 'in_transit' || o.status === 'delivered');
-
+        const suppliersKey = getBuyerSuppliersKey();
+        if (currentBuyerTab === 'suppliers' && suppliersKey) {
+          setSeenNotification('buyerSuppliers', suppliersKey);
+          seen.buyerSuppliers = suppliersKey;
+        }
+        const isSuppliersUnread = Boolean(suppliersKey && seen.buyerSuppliers !== suppliersKey);
         const dotSuppliers = document.getElementById("buyer-dot-suppliers");
-        if (dotSuppliers) dotSuppliers.classList.toggle("hidden", matchCount === 0);
+        if (dotSuppliers) dotSuppliers.classList.toggle("hidden", !isSuppliersUnread);
 
+        const ordersKey = getBuyerOrdersKey();
+        if (currentBuyerTab === 'orders' && ordersKey) {
+          setSeenNotification('buyerOrders', ordersKey);
+          seen.buyerOrders = ordersKey;
+        }
+        const isOrdersUnread = Boolean(ordersKey && seen.buyerOrders !== ordersKey);
         const dotOrders = document.getElementById("buyer-dot-orders");
-        if (dotOrders) dotOrders.classList.toggle("hidden", activeOrders.length === 0);
+        if (dotOrders) dotOrders.classList.toggle("hidden", !isOrdersUnread);
 
-        if (matchCount > 0 || activeOrders.length > 0) hasUnreadAlert = true;
+        if (isSuppliersUnread || isOrdersUnread) hasUnreadAlert = true;
 
         // Interactive highlight banner in buyer dashboard
         const banner = document.getElementById("buyer-home-matches-banner");
         if (banner) {
-          if (matchCount > 0 && myReqs.length > 0) {
+          if (isSuppliersUnread) {
+            const matchCount = suppliersKey ? suppliersKey.split('::')[1].split(',').length : 0;
             banner.innerHTML = `
               <div onclick="switchBuyerTab('suppliers')" class="p-3.5 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-300 rounded-2xl flex items-center justify-between cursor-pointer hover:shadow-xs transition active:scale-98">
                 <div class="flex items-center gap-2.5">
@@ -2497,48 +2594,57 @@
 
       // 2. FARMER ROLE
       else if (currentUser.role === 'farmer') {
-        const farmerOrders = (store.orders || []).filter(o => 
-          (o.farmer_id === currentUser.id || (o.items && o.items.some(i => i.farmer_id === currentUser.id)))
-        );
-        const pendingOffers = farmerOrders.filter(o => o.status === 'pending' || o.status === 'awaiting_confirmation');
-        const inTransitOrders = farmerOrders.filter(o => o.status === 'in_transit');
-
+        const ordersKey = getFarmerOrdersKey();
+        if (currentFarmerSubTab === 'orders' && ordersKey) {
+          setSeenNotification('farmerOrders', ordersKey);
+          seen.farmerOrders = ordersKey;
+        }
+        const isOrdersUnread = Boolean(ordersKey && seen.farmerOrders !== ordersKey);
         const dotOrders = document.getElementById("farmer-dot-orders");
-        if (dotOrders) dotOrders.classList.toggle("hidden", pendingOffers.length === 0);
+        if (dotOrders) dotOrders.classList.toggle("hidden", !isOrdersUnread);
 
+        const trackingKey = getFarmerTrackingKey();
+        if (currentFarmerSubTab === 'tracking' && trackingKey) {
+          setSeenNotification('farmerTracking', trackingKey);
+          seen.farmerTracking = trackingKey;
+        }
+        const isTrackingUnread = Boolean(trackingKey && seen.farmerTracking !== trackingKey);
         const dotTracking = document.getElementById("farmer-dot-tracking");
-        if (dotTracking) dotTracking.classList.toggle("hidden", inTransitOrders.length === 0);
+        if (dotTracking) dotTracking.classList.toggle("hidden", !isTrackingUnread);
 
-        // Check if buyer requirements match farmer's listings
-        const myListings = (store.listings || []).filter(l => l.farmer_id === currentUser.id && l.status === 'available');
-        let reqMatches = 0;
-        myListings.forEach(l => {
-          const reqs = (store.requirements || []).filter(r => 
-            (r.status === 'open' || r.status === 'partially_fulfilled') && 
-            (r.material_name || '').toLowerCase().includes(l.material_name.toLowerCase())
-          );
-          reqMatches += reqs.length;
-        });
-
+        const matchesKey = getFarmerMatchesKey();
+        if (currentFarmerSubTab === 'matches' && matchesKey) {
+          setSeenNotification('farmerMatches', matchesKey);
+          seen.farmerMatches = matchesKey;
+        }
+        const isMatchesUnread = Boolean(matchesKey && seen.farmerMatches !== matchesKey);
         const dotMatches = document.getElementById("farmer-dot-matches");
-        if (dotMatches) dotMatches.classList.toggle("hidden", reqMatches === 0);
+        if (dotMatches) dotMatches.classList.toggle("hidden", !isMatchesUnread);
 
-        if (pendingOffers.length > 0 || inTransitOrders.length > 0 || reqMatches > 0) hasUnreadAlert = true;
+        if (isOrdersUnread || isTrackingUnread || isMatchesUnread) hasUnreadAlert = true;
       }
 
       // 3. AGGREGATOR ROLE
       else if (currentUser.role === 'aggregator') {
-        const jobs = (store.transportJobs || []).filter(j => !j.aggregator_id || j.aggregator_id === currentUser.id);
-        const assignedJobs = jobs.filter(j => j.status === 'assigned');
-        const activeTrips = jobs.filter(j => j.status === 'in_transit');
-
+        const assignedKey = getAggregatorAssignedKey();
+        if (currentAggregatorTab === 'assigned' && assignedKey) {
+          setSeenNotification('aggregatorAssigned', assignedKey);
+          seen.aggregatorAssigned = assignedKey;
+        }
+        const isAssignedUnread = Boolean(assignedKey && seen.aggregatorAssigned !== assignedKey);
         const dotAssigned = document.getElementById("aggregator-dot-assigned");
-        if (dotAssigned) dotAssigned.classList.toggle("hidden", assignedJobs.length === 0);
+        if (dotAssigned) dotAssigned.classList.toggle("hidden", !isAssignedUnread);
 
+        const activeKey = getAggregatorActiveKey();
+        if (currentAggregatorTab === 'active' && activeKey) {
+          setSeenNotification('aggregatorActive', activeKey);
+          seen.aggregatorActive = activeKey;
+        }
+        const isActiveUnread = Boolean(activeKey && seen.aggregatorActive !== activeKey);
         const dotActive = document.getElementById("aggregator-dot-active");
-        if (dotActive) dotActive.classList.toggle("hidden", activeTrips.length === 0);
+        if (dotActive) dotActive.classList.toggle("hidden", !isActiveUnread);
 
-        if (assignedJobs.length > 0 || activeTrips.length > 0) hasUnreadAlert = true;
+        if (isAssignedUnread || isActiveUnread) hasUnreadAlert = true;
       }
 
       // Top Header Hamburger Badge Dot
@@ -2576,9 +2682,11 @@
 
     function persist() {
       try { localStorage.setItem("agriwaste_store_v16", JSON.stringify(store)); } catch(e){}
+      if (typeof updateNotificationDots === 'function') setTimeout(updateNotificationDots, 30);
     }
     function saveStoreToLocal() {
       try { localStorage.setItem("agriwaste_store_v16", JSON.stringify(store)); } catch(e){}
+      if (typeof updateNotificationDots === 'function') setTimeout(updateNotificationDots, 30);
     }
 
     async function apiRequest(endpoint, method = 'GET', body = null) {
@@ -2970,6 +3078,14 @@
 
       document.getElementById("top-bar").classList.add("hidden");
       document.getElementById("bottom-nav").classList.add("hidden");
+
+      // Hide all notification badge dots on sign out
+      const topDot = document.getElementById("top-drawer-badge-dot");
+      if (topDot) topDot.classList.add("hidden");
+      ['farmer-dot-matches', 'farmer-dot-orders', 'farmer-dot-tracking', 'buyer-dot-suppliers', 'buyer-dot-orders', 'aggregator-dot-assigned', 'aggregator-dot-active'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add("hidden");
+      });
 
       // Thoroughly clear all login and registration inputs on sign out
       const loginForm = document.getElementById("form-login");
@@ -3651,6 +3767,11 @@
       else if (tabName === 'earnings') renderFarmerEarnings();
       else if (tabName === 'profile') renderFarmerProfile();
       else if (tabName === 'help') renderFarmerHelp();
+
+      // Clear notification dot when farmer visits highlighted section
+      if (typeof updateNotificationDots === 'function') {
+        updateNotificationDots();
+      }
     }
 
     async function renderFarmerDashboard() {
@@ -4808,6 +4929,11 @@
       else if (tabName === 'suppliers') renderBuyerSuppliers();
       else if (tabName === 'orders') renderBuyerOrders();
       else if (tabName === 'profile') renderBuyerProfile();
+
+      // Clear notification dot when buyer visits highlighted section
+      if (typeof updateNotificationDots === 'function') {
+        updateNotificationDots();
+      }
     }
     window.switchBuyerTab = switchBuyerTab;
 
@@ -6361,6 +6487,11 @@ Individual dispatch requests sent to farmers.`);
       else if (tabName === 'assigned') renderAggregatorAssignedJobs();
       else if (tabName === 'active') renderAggregatorActiveTrips();
       else if (tabName === 'profile') renderAggregatorProfile();
+
+      // Clear notification dot when aggregator visits highlighted section
+      if (typeof updateNotificationDots === 'function') {
+        updateNotificationDots();
+      }
     }
     window.switchAggregatorTab = switchAggregatorTab;
 
