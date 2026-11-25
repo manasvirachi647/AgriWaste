@@ -83,6 +83,7 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
         agg_prof = AggregatorProfile(
             user_id=new_user.id,
             vehicle_type=data.vehicle_type.strip() if data.vehicle_type else "Medium Commercial Truck",
+            vehicle_number=data.vehicle_number.strip().upper() if data.vehicle_number else None,
             operating_district=data.district.strip() if data.district else "Ahmedabad",
         )
         db.add(agg_prof)

@@ -18,6 +18,10 @@ class RegisterRequest(BaseModel):
     company_name: Optional[str] = None
     industry_type: Optional[str] = None
     vehicle_type: Optional[str] = None
+    vehicle_number: Optional[str] = None
+    state: Optional[str] = None
+    pincode: Optional[str] = None
+    profile_id: Optional[str] = None
 
 
 class LoginRequest(BaseModel):

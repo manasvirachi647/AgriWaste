@@ -38,6 +38,7 @@ class BuyerProfileResponse(BuyerProfileBase):
 
 class AggregatorProfileBase(BaseModel):
     vehicle_type: Optional[str] = None
+    vehicle_number: Optional[str] = None
     capacity_tonnes: Optional[float] = None
     operating_district: Optional[str] = None
     service_radius_km: Optional[float] = 50.0
