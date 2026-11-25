@@ -317,7 +317,7 @@
             </div>
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">District *</label>
-              <select id="reg-district" required class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white font-medium text-slate-800">
+              <select id="reg-district" onchange="updateRegistrationLocations()" required class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white font-medium text-slate-800">
                 <option value="Ahmedabad" selected>Ahmedabad</option>
                 <option value="Surat">Surat</option>
                 <option value="Vadodara">Vadodara</option>
@@ -336,26 +336,86 @@
             </div>
           </div>
 
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">PIN Code (6 digits) *</label>
-            <input type="text" id="reg-pincode" required maxlength="6" inputmode="numeric" placeholder="e.g. 382110" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white" />
+          <div id="reg-pincode-container">
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs font-bold text-slate-700">PIN Code (6 digits) *</label>
+              <span id="reg-pincode-badge" class="text-[10px] text-agri-700 font-bold bg-agri-50 border border-agri-200 px-2 py-0.5 rounded-md">✨ Auto-detected</span>
+            </div>
+            <input type="text" id="reg-pincode" maxlength="6" inputmode="numeric" placeholder="e.g. 382110" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl bg-white font-semibold text-slate-900" />
           </div>
 
           <!-- Dynamic Role Fields -->
+          <!-- 1. FARMER ROLE FIELDS -->
           <div id="role-extra-farmer" class="p-2.5 bg-agri-50 border border-agri-200 rounded-xl space-y-2 text-xs">
-            <span class="font-bold text-agri-900 block">🌾 Farm Location</span>
-            <input type="text" id="reg-village" placeholder="Village / Taluka (e.g. Sanand)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
+            <div class="flex items-center justify-between">
+              <span class="font-black text-agri-900 block text-xs">🌾 Farm Location (Taluka / Village)</span>
+              <span class="text-[10px] text-agri-700 font-bold">Auto-fills PIN Code</span>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">Select Taluka / Area</label>
+              <select id="reg-village-select" onchange="handleFarmSelectChange()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs font-semibold text-slate-800">
+                <!-- Populated dynamically based on district -->
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">Or Specific Village / Farm Address</label>
+              <input type="text" id="reg-village" oninput="handleFarmLocationInput()" placeholder="e.g. Sanand Rural" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs" />
+            </div>
           </div>
 
+          <!-- 2. BUYER ROLE FIELDS -->
           <div id="role-extra-buyer" class="p-2.5 bg-harvest-50 border border-harvest-200 rounded-xl space-y-2 text-xs hidden">
-            <span class="font-bold text-harvest-800 block">🏭 Industry Details</span>
-            <input type="text" id="reg-company" placeholder="Company / Factory Name" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
-            <input type="text" id="reg-industry" placeholder="Industry Type (e.g. Bio-Energy, Paper)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
+            <div class="flex items-center justify-between">
+              <span class="font-black text-harvest-800 block text-xs">🏭 Industry Details</span>
+              <span class="text-[10px] text-harvest-700 font-bold">Auto-fills Industry Type &amp; PIN</span>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">Select Existing Industry / Factory</label>
+              <select id="reg-company-select" onchange="handleIndustrySelectChange()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs font-semibold text-slate-800">
+                <!-- Populated dynamically based on district -->
+              </select>
+            </div>
+            <div id="reg-company-custom-container" class="hidden">
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">Custom Company / Factory Name</label>
+              <input type="text" id="reg-company" placeholder="Enter Company / Plant Name" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">Industry Type</label>
+              <select id="reg-industry" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs font-semibold text-slate-800">
+                <option value="Bio-Energy & Biomass Power">Bio-Energy &amp; Biomass Power</option>
+                <option value="Paper & Pulp Mills">Paper &amp; Pulp Mills</option>
+                <option value="Briquette & Pellet Manufacturing">Briquette &amp; Pellet Manufacturing</option>
+                <option value="Textile & Spinning Mills">Textile &amp; Spinning Mills</option>
+                <option value="Chemical & Petrochemicals">Chemical &amp; Petrochemicals</option>
+                <option value="Cement & Ceramic Manufacturing">Cement &amp; Ceramic Manufacturing</option>
+                <option value="Food Processing & Agro-Industries">Food Processing &amp; Agro-Industries</option>
+                <option value="Pharmaceutical & Life Sciences">Pharmaceutical &amp; Life Sciences</option>
+                <option value="Dairy & Animal Feed Processing">Dairy &amp; Animal Feed Processing</option>
+                <option value="Steel & Heavy Engineering">Steel &amp; Heavy Engineering</option>
+                <option value="Composting & Organic Fertilizers">Composting &amp; Organic Fertilizers</option>
+                <option value="Packaging & Cardboard">Packaging &amp; Cardboard</option>
+              </select>
+            </div>
           </div>
 
+          <!-- 3. TRANSPORTER / AGGREGATOR ROLE FIELDS -->
           <div id="role-extra-transporter" class="p-2.5 bg-blue-50 border border-blue-200 rounded-xl space-y-2 text-xs hidden">
-            <span class="font-bold text-blue-900 block">🚛 Fleet Details</span>
-            <input type="text" id="reg-vehicle" placeholder="Vehicle Fleet (e.g. 10T Truck, Tractor Trolley)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white" />
+            <span class="font-black text-blue-900 block text-xs">🚛 Fleet Details</span>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">Vehicle Type *</label>
+              <select id="reg-vehicle" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs font-semibold text-slate-800">
+                <option value="Tractor Trolley">Tractor Trolley (High Payload Agro Transport)</option>
+                <option value="Mini Tempo (Chhota Hathi)">Mini Tempo / Chhota Hathi (1.5 - 2.5 Tonnes)</option>
+                <option value="Pickup Truck (Bolero Maxi)">Pickup Truck / Bolero Maxi (2.5 - 3.5 Tonnes)</option>
+                <option value="Medium Eicher / Canter (6 Wheeler)">Medium Eicher / Canter (5 - 8 Tonnes)</option>
+                <option value="Heavy Commercial Truck (10 Wheeler)">Heavy Commercial Truck (10 - 16 Tonnes)</option>
+                <option value="Multi-Axle Heavy Hauler">Multi-Axle Heavy Hauler (20 - 25 Tonnes)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">Vehicle Registration / Number Plate *</label>
+              <input type="text" id="reg-plate-number" placeholder="e.g. GJ-01-AB-1234" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white text-xs uppercase font-bold text-slate-900" />
+            </div>
           </div>
 
           <button type="submit" class="w-full py-3 bg-agri-700 hover:bg-agri-800 text-white font-black rounded-xl text-xs shadow-sm transition active:scale-95">
@@ -433,14 +493,7 @@
             <span>+ Add Agricultural Waste Listing</span>
           </button>
 
-          <!-- QUICK SHORTCUTS -->
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <button onclick="switchFarmerSubTab('demands')" class="p-3 bg-harvest-50 hover:bg-harvest-100 border border-harvest-200 rounded-2xl text-left transition flex items-center gap-2.5">
-              <span class="text-2xl">🏭</span>
-              <div>
-                <div class="font-black text-harvest-900 text-xs">Buyer Needs</div>
-                <div class="text-[10px] text-harvest-700">Explore live demand</div>
-              </div>
+          
             </button>
             <button onclick="switchFarmerSubTab('matches')" class="p-3 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-2xl text-left transition flex items-center gap-2.5">
               <span class="text-2xl">🎯</span>
@@ -2475,6 +2528,7 @@ div>
       const selectedState = stateSelect.value;
       const districts = stateDistrictsMap[selectedState] || ["District Hub", "Central", "North", "South"];
       distSelect.innerHTML = districts.map((d, i) => `<option value="${d}" ${i === 0 ? 'selected' : ''}>${d}</option>`).join("");
+      updateRegistrationLocations();
     }
     window.handleStateSelectionChange = handleStateSelectionChange;
 
@@ -2488,7 +2542,7 @@ div>
       const password = document.getElementById("reg-password").value;
       const state = document.getElementById("reg-state") ? document.getElementById("reg-state").value.trim() : "Gujarat";
       const district = document.getElementById("reg-district") ? document.getElementById("reg-district").value.trim() : "Ahmedabad";
-      const pincode = document.getElementById("reg-pincode") ? document.getElementById("reg-pincode").value.trim() : "382110";
+      const pincode = document.getElementById("reg-pincode") ? document.getElementById("reg-pincode").value.trim() : "";
 
       // FORM VALIDATIONS
       if (!name || name.length < 2) {
@@ -2514,10 +2568,13 @@ div>
         alert("⚠️ Password must be at least 6 characters long.");
         return;
       }
-      // PIN code validation (6 digits)
-      if (!/^\d{6}$/.test(pincode)) {
-        alert("⚠️ PIN code must be exactly 6 numeric digits (e.g. 382110).");
-        return;
+
+      // PIN code validation: ONLY REQUIRED FOR FARMER AND BUYER (Aggregator is exempt)
+      if (role !== 'aggregator') {
+        if (!/^\d{6}$/.test(pincode)) {
+          alert("⚠️ PIN code must be exactly 6 numeric digits (e.g. 382110).");
+          return;
+        }
       }
 
       if (role === 'admin') {
@@ -2539,22 +2596,53 @@ div>
         role: role,
         state: state,
         district: district,
-        pincode: pincode
+        pincode: role === 'aggregator' ? "" : pincode
       };
 
+      let userSpecificFields = {};
+
       if (role === 'farmer') {
-        const v = document.getElementById("reg-village");
-        payload.farm_village = v ? v.value.trim() || "Sanand" : "Sanand";
+        const vInput = document.getElementById("reg-village");
+        const vSelect = document.getElementById("reg-village-select");
+        const farmLoc = (vInput && vInput.value.trim()) || (vSelect ? vSelect.value : "Sanand");
+        payload.farm_village = farmLoc;
         payload.district = district;
+        userSpecificFields.village = farmLoc;
       } else if (role === 'buyer') {
-        const c = document.getElementById("reg-company");
-        const i = document.getElementById("reg-industry");
-        payload.company_name = c ? c.value.trim() || `${name} Industries` : `${name} Industries`;
-        payload.industry_type = i ? i.value.trim() || "Biomass Biofuel" : "Biomass Biofuel";
+        const cSelect = document.getElementById("reg-company-select");
+        const cInput = document.getElementById("reg-company");
+        const iSelect = document.getElementById("reg-industry");
+
+        let compName = cSelect ? cSelect.value : "";
+        if (compName === 'Other' && cInput && cInput.value.trim()) {
+          compName = cInput.value.trim();
+        } else if (!compName || compName === 'Other') {
+          compName = `${name} Agro Processing`;
+        }
+
+        const indType = iSelect ? iSelect.value : "Bio-Energy & Biomass Power";
+        payload.company_name = compName;
+        payload.industry_type = indType;
+        userSpecificFields.company = compName;
+        userSpecificFields.industry_type = indType;
       } else if (role === 'aggregator') {
-        const veh = document.getElementById("reg-vehicle");
-        payload.vehicle_type = veh ? veh.value.trim() || "Commercial Truck" : "Commercial Truck";
+        const vehSelect = document.getElementById("reg-vehicle");
+        const plateInput = document.getElementById("reg-plate-number");
+        const vehType = vehSelect ? vehSelect.value : "Heavy Commercial Truck (10 Wheeler)";
+        const plateNo = plateInput ? plateInput.value.trim().toUpperCase() : "GJ-01-AB-1234";
+
+        if (!plateNo || plateNo.length < 5) {
+          alert("⚠️ Please enter a valid vehicle registration / number plate (e.g. GJ-01-AB-1234).");
+          return;
+        }
+
+        payload.vehicle_type = vehType;
+        payload.vehicle_number = plateNo;
         payload.district = district;
+        userSpecificFields.vehicle_type = vehType;
+        userSpecificFields.vehicle_number = plateNo;
+        userSpecificFields.vehicle_no = plateNo;
+        userSpecificFields.fleet = vehType;
       }
 
       try {
@@ -2628,6 +2716,9 @@ div>
       hideAllViews();
       document.getElementById("view-auth").classList.remove("hidden");
       switchAuthTab('login');
+      // Initialize Gujarat locations and auto-pincode dropdowns
+      updateRegistrationLocations();
+      toggleRoleProfileInputs();
     }
 
     function switchAuthTab(tab) {
@@ -2643,15 +2734,427 @@ div>
         document.getElementById("form-register").classList.remove("hidden");
         document.getElementById("btn-tab-register").classList.add("tab-active", "border-b-2");
         document.getElementById("btn-tab-login").classList.remove("tab-active", "border-b-2");
+        updateRegistrationLocations();
+        toggleRoleProfileInputs();
       }
     }
 
+
+    // ========================================================
+    // GUJARAT DISTRICTS, TALUKAS, REAL INDUSTRIES & PIN CODES
+    // ========================================================
+    const GUJARAT_DATA = {
+      "Ahmedabad": {
+        defaultPin: "382110",
+        talukas: [
+          { name: "Sanand (Agro & Biomass Hub)", pincode: "382110" },
+          { name: "Dholka (Rice & Paddy Processing)", pincode: "382225" },
+          { name: "Bavla (Grain & Agro Cluster)", pincode: "382220" },
+          { name: "Viramgam (Cotton & Biomass Belt)", pincode: "382150" },
+          { name: "Daskroi (Rural Farm Plain)", pincode: "382430" },
+          { name: "Mandal (Agricultural Area)", pincode: "382130" },
+          { name: "Dhandhuka (Wheat & Biomass)", pincode: "382460" },
+          { name: "Detroj (Agro Belt)", pincode: "382120" },
+          { name: "Changodar (Industrial Corridor)", pincode: "382213" },
+          { name: "Aslali (Logistics & Farm Market)", pincode: "382427" }
+        ],
+        industries: [
+          { name: "Arvind Limited (Naroda & Santej Mills)", type: "Textile & Spinning Mills", pincode: "382330" },
+          { name: "Torrent Pharmaceuticals Ltd (Bhat Complex)", type: "Pharmaceutical & Life Sciences", pincode: "382428" },
+          { name: "Nirma Chemicals (Vatva & Mandali)", type: "Chemical & Petrochemicals", pincode: "382440" },
+          { name: "Zydus Lifesciences (Moraiya SEZ)", type: "Pharmaceutical & Life Sciences", pincode: "382213" },
+          { name: "Adani Wilmar Ltd (Agro Processing Unit)", type: "Food Processing & Agro-Industries", pincode: "380009" },
+          { name: "Gujarat Ambuja Exports (Biomass Starch Plant)", type: "Food Processing & Agro-Industries", pincode: "380009" },
+          { name: "Cadila Pharmaceuticals (Dholka Formulation)", type: "Pharmaceutical & Life Sciences", pincode: "382225" },
+          { name: "Intas Pharmaceuticals Ltd (Sanand Complex)", type: "Pharmaceutical & Life Sciences", pincode: "382110" },
+          { name: "Sabarmati Gas & Biomass Energy Unit", type: "Bio-Energy & Biomass Power", pincode: "380005" },
+          { name: "Astral Poly Technik Ltd (Santej)", type: "Packaging & Cardboard", pincode: "382721" }
+        ]
+      },
+      "Surat": {
+        defaultPin: "394185",
+        talukas: [
+          { name: "Kamrej (Agro & Biomass Hub)", pincode: "394185" },
+          { name: "Olpad (Sugarcane & Paddy Belt)", pincode: "394540" },
+          { name: "Bardoli (Sugar Factory & Farm Belt)", pincode: "394601" },
+          { name: "Mangrol (Agricultural Plains)", pincode: "394410" },
+          { name: "Mandvi (Agro Forests & Fields)", pincode: "394160" },
+          { name: "Palsana (Industrial & Agro Area)", pincode: "394315" },
+          { name: "Mahuva (Sugarcane & Farm Belt)", pincode: "394248" },
+          { name: "Choryasi (Coastal Agro Farms)", pincode: "394230" }
+        ],
+        industries: [
+          { name: "Reliance Industries Limited (Hazira Manufacturing)", type: "Chemical & Petrochemicals", pincode: "394510" },
+          { name: "ArcelorMittal Nippon Steel (AM/NS Hazira)", type: "Steel & Heavy Engineering", pincode: "394270" },
+          { name: "Larsen & Toubro Heavy Engineering (Hazira)", type: "Steel & Heavy Engineering", pincode: "394510" },
+          { name: "KRIBHCO Fertilizer Complex (Hazira)", type: "Composting & Organic Fertilizers", pincode: "394515" },
+          { name: "Garden Silk Mills Limited (Vareli Complex)", type: "Textile & Spinning Mills", pincode: "394305" },
+          { name: "Colourtex Industries (Palsana Industrial Unit)", type: "Chemical & Petrochemicals", pincode: "394315" },
+          { name: "Sumul Dairy (Surat Milk Union Agro Feed)", type: "Dairy & Animal Feed Processing", pincode: "395008" },
+          { name: "Surat Biomass Green Energy (Kamrej Unit)", type: "Bio-Energy & Biomass Power", pincode: "394185" },
+          { name: "Bardoli Co-operative Sugar Mill (Cogeneration)", type: "Bio-Energy & Biomass Power", pincode: "394601" }
+        ]
+      },
+      "Vadodara": {
+        defaultPin: "391750",
+        talukas: [
+          { name: "Karjan (Cotton & Toor Belt)", pincode: "391240" },
+          { name: "Padra (Vegetable & Agro Belt)", pincode: "391440" },
+          { name: "Waghodia (Industrial & Agro Farms)", pincode: "391760" },
+          { name: "Dabhoi (Paddy & Grain Belt)", pincode: "391110" },
+          { name: "Savli (Industrial Corridor)", pincode: "391770" },
+          { name: "Sinor (Narmada Agro Belt)", pincode: "391115" }
+        ],
+        industries: [
+          { name: "Gujarat State Fertilizers & Chemicals (GSFC)", type: "Composting & Organic Fertilizers", pincode: "391750" },
+          { name: "Gujarat Alkalies and Chemicals (GACL Ranoli)", type: "Chemical & Petrochemicals", pincode: "391350" },
+          { name: "Alembic Pharmaceuticals (Gorwa Industrial Area)", type: "Pharmaceutical & Life Sciences", pincode: "390016" },
+          { name: "Deepak Nitrite Limited (Nandesari GIDC)", type: "Chemical & Petrochemicals", pincode: "391340" },
+          { name: "Indian Oil Corp (Gujarat Refinery Koyali)", type: "Chemical & Petrochemicals", pincode: "391600" },
+          { name: "Baroda Dairy (Sugam Agro Food Processing)", type: "Dairy & Animal Feed Processing", pincode: "390009" },
+          { name: "Alstom Transport India (Savli Rolling Stock Unit)", type: "Steel & Heavy Engineering", pincode: "391775" },
+          { name: "Apollo Tyres Limited (Limda Waghodia Plant)", type: "Chemical & Petrochemicals", pincode: "391760" },
+          { name: "Vadodara Biomass Briquetting Plant (Padra)", type: "Briquette & Pellet Manufacturing", pincode: "391440" }
+        ]
+      },
+      "Rajkot": {
+        defaultPin: "360021",
+        talukas: [
+          { name: "Gondal (Groundnut & Chilli Belt)", pincode: "360311" },
+          { name: "Jasdan (Cotton & Oilseeds)", pincode: "360050" },
+          { name: "Jetpur (Cotton & Textile Belt)", pincode: "360370" },
+          { name: "Dhoraji (Oilseeds & Wheat)", pincode: "360410" },
+          { name: "Kotda Sangani (Agro Belt)", pincode: "360030" },
+          { name: "Lodhika (Metoda Industrial Belt)", pincode: "360035" },
+          { name: "Upleta (Agricultural Plains)", pincode: "360490" }
+        ],
+        industries: [
+          { name: "Balaji Wafers Pvt Ltd (Vajdi Industrial Area)", type: "Food Processing & Agro-Industries", pincode: "360004" },
+          { name: "Gopal Snacks Limited (Metoda GIDC)", type: "Food Processing & Agro-Industries", pincode: "360021" },
+          { name: "Jyoti CNC Automation Limited (Metoda GIDC)", type: "Steel & Heavy Engineering", pincode: "360021" },
+          { name: "Atul Auto Limited (Shapar Industrial Estate)", type: "Steel & Heavy Engineering", pincode: "360024" },
+          { name: "Gopal Dairy (Rajkot District Milk Union)", type: "Dairy & Animal Feed Processing", pincode: "360003" },
+          { name: "Falcon Pumps Pvt Ltd (Vavdi Area)", type: "Steel & Heavy Engineering", pincode: "360004" },
+          { name: "Saurashtra Biofuel Pellets (Gondal Road)", type: "Briquette & Pellet Manufacturing", pincode: "360311" }
+        ]
+      },
+      "Bharuch": {
+        defaultPin: "393001",
+        talukas: [
+          { name: "Ankleshwar (GIDC Industrial Belt)", pincode: "393001" },
+          { name: "Dahej (SEZ & Port Corridor)", pincode: "392130" },
+          { name: "Jambusar (Cotton & Agro Belt)", pincode: "392150" },
+          { name: "Hansot (Sugarcane & Agro Plains)", pincode: "393030" },
+          { name: "Vagra (Dahej PCPIR Belt)", pincode: "392140" },
+          { name: "Amod (Agricultural Belt)", pincode: "392110" }
+        ],
+        industries: [
+          { name: "Gujarat Narmada Valley Fertilizers (GNFC)", type: "Composting & Organic Fertilizers", pincode: "392015" },
+          { name: "UPL Limited (Ankleshwar GIDC Phase II)", type: "Chemical & Petrochemicals", pincode: "393002" },
+          { name: "Aarti Industries Limited (Jhagadia Industrial Zone)", type: "Chemical & Petrochemicals", pincode: "393110" },
+          { name: "Asian Paints Limited (Dahej Industrial Estate)", type: "Chemical & Petrochemicals", pincode: "392130" },
+          { name: "ONGC Petro additions Ltd (OPaL Dahej SEZ)", type: "Chemical & Petrochemicals", pincode: "392130" },
+          { name: "DCM Shriram Bio-Energy Unit (Jhagadia)", type: "Bio-Energy & Biomass Power", pincode: "393110" },
+          { name: "Suntop Paper Mills (Ankleshwar GIDC)", type: "Paper & Pulp Mills", pincode: "393001" }
+        ]
+      },
+      "Morbi": {
+        defaultPin: "363641",
+        talukas: [
+          { name: "Morbi Rural (Ceramic Corridor)", pincode: "363641" },
+          { name: "Wankaner (Tile & Pottery Belt)", pincode: "363621" },
+          { name: "Halvad (Cotton & Salt Plains)", pincode: "363330" },
+          { name: "Tankara (Cotton & Agro Belt)", pincode: "363650" },
+          { name: "Maliya (Agro & Coastal Belt)", pincode: "363660" }
+        ],
+        industries: [
+          { name: "Kajaria Ceramics Limited (Lakhdhirpur Road)", type: "Cement & Ceramic Manufacturing", pincode: "363642" },
+          { name: "Somany Ceramics Limited (Morbi Complex)", type: "Cement & Ceramic Manufacturing", pincode: "363641" },
+          { name: "Cera Sanitaryware Limited (Morbi Unit)", type: "Cement & Ceramic Manufacturing", pincode: "363642" },
+          { name: "Simpolo Vitrified Tiles (Old Ghuntu Road)", type: "Cement & Ceramic Manufacturing", pincode: "363642" },
+          { name: "Sonico Briquettes & Biomass Gasifier (Halvad Road)", type: "Briquette & Pellet Manufacturing", pincode: "363641" },
+          { name: "Morbi Paper & Packaging Mills (Wankaner Dhuva)", type: "Paper & Pulp Mills", pincode: "363621" }
+        ]
+      },
+      "Anand": {
+        defaultPin: "388001",
+        talukas: [
+          { name: "Anand Rural (Tobacco & Dairy Belt)", pincode: "388001" },
+          { name: "Petlad (Tobacco & Agro Belt)", pincode: "388450" },
+          { name: "Khambhat (Coastal Agro Belt)", pincode: "388620" },
+          { name: "Borsad (Tobacco & Banana Belt)", pincode: "388540" },
+          { name: "Umreth (Vegetables & Agro Hub)", pincode: "388220" },
+          { name: "Tarapur (Paddy & Wheat Belt)", pincode: "388180" }
+        ],
+        industries: [
+          { name: "Amul / GCMMF Central Dairy Complex", type: "Dairy & Animal Feed Processing", pincode: "388001" },
+          { name: "Elecon Engineering Co Ltd (Vallabh Vidyanagar)", type: "Steel & Heavy Engineering", pincode: "388120" },
+          { name: "Warmen Biofuel Energy (Petlad Road)", type: "Bio-Energy & Biomass Power", pincode: "388450" },
+          { name: "Vidya Dairy & Cattle Feed Manufacturing", type: "Dairy & Animal Feed Processing", pincode: "388110" },
+          { name: "Charotar Bio-Pellet Manufacturing (Borsad)", type: "Briquette & Pellet Manufacturing", pincode: "388540" }
+        ]
+      },
+      "Gandhinagar": {
+        defaultPin: "382721",
+        talukas: [
+          { name: "Kalol (Industrial & Farm Belt)", pincode: "382721" },
+          { name: "Mansa (Agro & Dairy Belt)", pincode: "382845" },
+          { name: "Dehgam (Agricultural Hub)", pincode: "382305" },
+          { name: "Chiloda (Agro Corridor)", pincode: "382355" }
+        ],
+        industries: [
+          { name: "Torrent Power Thermal Plant (Gandhinagar)", type: "Bio-Energy & Biomass Power", pincode: "382041" },
+          { name: "Sintex Plastics Technology (Kalol Plant)", type: "Packaging & Cardboard", pincode: "382721" },
+          { name: "Bharat Biotech Life Sciences (Biotech Park)", type: "Pharmaceutical & Life Sciences", pincode: "382028" },
+          { name: "Amul Fed Dairy (Bhat Mega Processing Complex)", type: "Dairy & Animal Feed Processing", pincode: "382428" }
+        ]
+      },
+      "Mehsana": {
+        defaultPin: "384002",
+        talukas: [
+          { name: "Kadi (Cotton & Industrial SEZ)", pincode: "382715" },
+          { name: "Visnagar (Brass & Agro Belt)", pincode: "384315" },
+          { name: "Vijapur (Dairy & Potato Belt)", pincode: "382870" },
+          { name: "Unjha (Isabgol & Cumin Spices Market)", pincode: "384170" },
+          { name: "Becharaji (Industrial & Agro Area)", pincode: "384210" }
+        ],
+        industries: [
+          { name: "Dudhsagar Dairy (Mehsana Milk Union)", type: "Dairy & Animal Feed Processing", pincode: "384002" },
+          { name: "Nirma Chemicals Mandali Complex", type: "Chemical & Petrochemicals", pincode: "382732" },
+          { name: "Hitachi Air Conditioning (Kadi GIDC)", type: "Steel & Heavy Engineering", pincode: "382715" },
+          { name: "Gujarat Ambuja Agro Feeds (Kadi Unit)", type: "Dairy & Animal Feed Processing", pincode: "382715" }
+        ]
+      },
+      "Bhavnagar": {
+        defaultPin: "364001",
+        talukas: [
+          { name: "Mahuva (Onion Dehydration & Agro Hub)", pincode: "364290" },
+          { name: "Palitana (Agro & Onion Belt)", pincode: "364270" },
+          { name: "Talaja (Farm Plains)", pincode: "364140" },
+          { name: "Shihor (Steel Re-rolling & Agro)", pincode: "364240" }
+        ],
+        industries: [
+          { name: "Nirma Soda Ash Plant (Alang-Bhavnagar)", type: "Chemical & Petrochemicals", pincode: "364001" },
+          { name: "Alang Green Ship Recycling Mills", type: "Steel & Heavy Engineering", pincode: "364150" },
+          { name: "Mahuva Agro Dehydration & Biomass Unit", type: "Food Processing & Agro-Industries", pincode: "364290" },
+          { name: "Sarvottam Dairy (Shihor-Bhavnagar)", type: "Dairy & Animal Feed Processing", pincode: "364240" }
+        ]
+      },
+      "Kutch": {
+        defaultPin: "370421",
+        talukas: [
+          { name: "Anjar (Mega Industrial Area)", pincode: "370110" },
+          { name: "Bhuj Rural (Castor & Cotton Belt)", pincode: "370001" },
+          { name: "Mundra (Port & SEZ Corridor)", pincode: "370421" },
+          { name: "Gandhidham (Logistics & Agro Hub)", pincode: "370201" },
+          { name: "Nakhatrana (Agro & Renewable Energy)", pincode: "370615" }
+        ],
+        industries: [
+          { name: "Adani Ports and SEZ (Mundra Complex)", type: "Steel & Heavy Engineering", pincode: "370421" },
+          { name: "Welspun Corp Limited (Anjar Mega Facility)", type: "Textile & Spinning Mills", pincode: "370110" },
+          { name: "Jindal SAW Limited (Mundra SAMAGHOGHA)", type: "Steel & Heavy Engineering", pincode: "370415" },
+          { name: "Adani Biomass & Coal Power Plant (Mundra)", type: "Bio-Energy & Biomass Power", pincode: "370421" }
+        ]
+      },
+      "Kheda": {
+        defaultPin: "387001",
+        talukas: [
+          { name: "Nadiad (Tobacco & Food Belt)", pincode: "387001" },
+          { name: "Kapadvanj (Oilseeds & Agro)", pincode: "387620" },
+          { name: "Mehmedabad (Paddy & Agro Plains)", pincode: "387130" },
+          { name: "Matar (Paddy Farming Belt)", pincode: "387530" }
+        ],
+        industries: [
+          { name: "Amul Chocolate & Food Plant (Moghar)", type: "Food Processing & Agro-Industries", pincode: "388340" },
+          { name: "Kheda Biomass Briquetting Plant (Nadiad)", type: "Briquette & Pellet Manufacturing", pincode: "387001" },
+          { name: "Uttam Galva Steels (Kheda)", type: "Steel & Heavy Engineering", pincode: "387550" }
+        ]
+      },
+      "Surendranagar": {
+        defaultPin: "363030",
+        talukas: [
+          { name: "Wadhwan (Cotton Gidding & Biomass)", pincode: "363030" },
+          { name: "Limbdi (Cotton & Cereal Belt)", pincode: "363421" },
+          { name: "Chotila (Mineral & Agro Plains)", pincode: "363520" },
+          { name: "Dhrangadhra (Salt & Chemical Agro Belt)", pincode: "363310" }
+        ],
+        industries: [
+          { name: "Saurashtra Paper & Board Mills Ltd", type: "Paper & Pulp Mills", pincode: "363030" },
+          { name: "Zalawad Bio-Coal Manufacturers (Wadhwan)", type: "Briquette & Pellet Manufacturing", pincode: "363030" },
+          { name: "Makson Confectionery & Food Processing", type: "Food Processing & Agro-Industries", pincode: "363001" }
+        ]
+      },
+      "Patan": {
+        defaultPin: "384265",
+        talukas: [
+          { name: "Patan Rural (Castor & Mustard Belt)", pincode: "384265" },
+          { name: "Sidhpur (Isabgol & Wheat)", pincode: "384151" },
+          { name: "Radhanpur (Cereal & Agro)", pincode: "385340" },
+          { name: "Chanasma (Cotton & Agro Belt)", pincode: "384220" }
+        ],
+        industries: [
+          { name: "Patan Solar & Biomass Park (Charanka)", type: "Bio-Energy & Biomass Power", pincode: "385350" },
+          { name: "Patan District Milk Producers Union", type: "Dairy & Animal Feed Processing", pincode: "384265" },
+          { name: "Sidhpur Spices & Agro Processing Mills", type: "Food Processing & Agro-Industries", pincode: "384151" }
+        ]
+      }
+    };
+
+    function updateRegistrationLocations() {
+      const distSelect = document.getElementById("reg-district");
+      const dist = distSelect ? distSelect.value : "Ahmedabad";
+      const data = GUJARAT_DATA[dist] || GUJARAT_DATA["Ahmedabad"];
+
+      // 1. Update Farmer Taluka Select
+      const vSelect = document.getElementById("reg-village-select");
+      if (vSelect) {
+        vSelect.innerHTML = data.talukas.map((t, i) => 
+          `<option value="${t.name}" data-pin="${t.pincode}" ${i === 0 ? 'selected' : ''}>${t.name} (PIN: ${t.pincode})</option>`
+        ).join("") + `<option value="Other">Other Village / Area...</option>`;
+        
+        const vInput = document.getElementById("reg-village");
+        if (vInput && data.talukas.length > 0) {
+          vInput.value = data.talukas[0].name;
+        }
+      }
+
+      // 2. Update Buyer Industry Select
+      const cSelect = document.getElementById("reg-company-select");
+      if (cSelect) {
+        cSelect.innerHTML = data.industries.map((ind, i) =>
+          `<option value="${ind.name}" data-type="${ind.type}" data-pin="${ind.pincode}" ${i === 0 ? 'selected' : ''}>${ind.name}</option>`
+        ).join("") + `<option value="Other">Other / Enter Custom Factory Name...</option>`;
+
+        const cCustom = document.getElementById("reg-company-custom-container");
+        if (cCustom) cCustom.classList.add("hidden");
+      }
+
+      // 3. Update Pincode and Industry Type based on current selected role
+      applyAutoPincodeForCurrentRole();
+    }
+    window.updateRegistrationLocations = updateRegistrationLocations;
+
+    function applyAutoPincodeForCurrentRole() {
+      const role = document.getElementById("reg-role") ? document.getElementById("reg-role").value : "farmer";
+      const distSelect = document.getElementById("reg-district");
+      const dist = distSelect ? distSelect.value : "Ahmedabad";
+      const data = GUJARAT_DATA[dist] || GUJARAT_DATA["Ahmedabad"];
+      const pinInput = document.getElementById("reg-pincode");
+
+      if (role === 'aggregator') {
+        const pinContainer = document.getElementById("reg-pincode-container");
+        if (pinContainer) pinContainer.classList.add("hidden");
+        return;
+      } else {
+        const pinContainer = document.getElementById("reg-pincode-container");
+        if (pinContainer) pinContainer.classList.remove("hidden");
+      }
+
+      if (role === 'farmer') {
+        const vSelect = document.getElementById("reg-village-select");
+        if (vSelect && vSelect.selectedOptions && vSelect.selectedOptions[0]) {
+          const pin = vSelect.selectedOptions[0].getAttribute("data-pin");
+          if (pin && pinInput) pinInput.value = pin;
+        } else if (pinInput) {
+          pinInput.value = data.defaultPin;
+        }
+      } else if (role === 'buyer') {
+        const cSelect = document.getElementById("reg-company-select");
+        if (cSelect && cSelect.selectedOptions && cSelect.selectedOptions[0]) {
+          const pin = cSelect.selectedOptions[0].getAttribute("data-pin");
+          const type = cSelect.selectedOptions[0].getAttribute("data-type");
+          if (pin && pinInput) pinInput.value = pin;
+          const iSelect = document.getElementById("reg-industry");
+          if (type && iSelect) iSelect.value = type;
+        } else if (pinInput) {
+          pinInput.value = data.defaultPin;
+        }
+      }
+    }
+    window.applyAutoPincodeForCurrentRole = applyAutoPincodeForCurrentRole;
+
+    function handleFarmSelectChange() {
+      const vSelect = document.getElementById("reg-village-select");
+      const vInput = document.getElementById("reg-village");
+      const pinInput = document.getElementById("reg-pincode");
+      if (!vSelect) return;
+
+      if (vSelect.value === 'Other') {
+        if (vInput) {
+          vInput.value = "";
+          vInput.focus();
+        }
+      } else {
+        if (vInput) vInput.value = vSelect.value;
+        const pin = vSelect.selectedOptions[0] ? vSelect.selectedOptions[0].getAttribute("data-pin") : null;
+        if (pin && pinInput) pinInput.value = pin;
+      }
+    }
+    window.handleFarmSelectChange = handleFarmSelectChange;
+
+    function handleFarmLocationInput() {
+      const vInput = document.getElementById("reg-village");
+      const pinInput = document.getElementById("reg-pincode");
+      const distSelect = document.getElementById("reg-district");
+      if (!vInput || !pinInput) return;
+      const text = vInput.value.trim().toLowerCase();
+      const dist = distSelect ? distSelect.value : "Ahmedabad";
+      const data = GUJARAT_DATA[dist] || GUJARAT_DATA["Ahmedabad"];
+
+      const match = data.talukas.find(t => t.name.toLowerCase().includes(text));
+      if (match) {
+        pinInput.value = match.pincode;
+      }
+    }
+    window.handleFarmLocationInput = handleFarmLocationInput;
+
+    function handleIndustrySelectChange() {
+      const cSelect = document.getElementById("reg-company-select");
+      const cCustom = document.getElementById("reg-company-custom-container");
+      const cInput = document.getElementById("reg-company");
+      const iSelect = document.getElementById("reg-industry");
+      const pinInput = document.getElementById("reg-pincode");
+      if (!cSelect) return;
+
+      if (cSelect.value === 'Other') {
+        if (cCustom) cCustom.classList.remove("hidden");
+        if (cInput) {
+          cInput.value = "";
+          cInput.focus();
+        }
+      } else {
+        if (cCustom) cCustom.classList.add("hidden");
+        const opt = cSelect.selectedOptions[0];
+        if (opt) {
+          const type = opt.getAttribute("data-type");
+          const pin = opt.getAttribute("data-pin");
+          if (type && iSelect) iSelect.value = type;
+          if (pin && pinInput) pinInput.value = pin;
+        }
+      }
+    }
+    window.handleIndustrySelectChange = handleIndustrySelectChange;
+
     function toggleRoleProfileInputs() {
       const r = document.getElementById("reg-role").value;
-      document.getElementById("role-extra-farmer").classList.toggle("hidden", r !== 'farmer');
-      document.getElementById("role-extra-buyer").classList.toggle("hidden", r !== 'buyer');
-      document.getElementById("role-extra-transporter").classList.toggle("hidden", r !== 'aggregator');
+      const fDiv = document.getElementById("role-extra-farmer");
+      const bDiv = document.getElementById("role-extra-buyer");
+      const tDiv = document.getElementById("role-extra-transporter");
+      const pDiv = document.getElementById("reg-pincode-container");
+
+      if (fDiv) fDiv.classList.toggle("hidden", r !== 'farmer');
+      if (bDiv) bDiv.classList.toggle("hidden", r !== 'buyer');
+      if (tDiv) tDiv.classList.toggle("hidden", r !== 'aggregator');
+
+      // Hide pincode completely for aggregator
+      if (pDiv) {
+        pDiv.classList.toggle("hidden", r === 'aggregator');
+      }
+
+      applyAutoPincodeForCurrentRole();
     }
+    window.toggleRoleProfileInputs = toggleRoleProfileInputs;
+
 
     function hideAllViews() {
       ['view-auth', 'view-farmer', 'view-buyer', 'view-aggregator', 'view-admin', 'view-market', 'view-orders', 'view-profile'].forEach(id => {
@@ -2723,21 +3226,7 @@ div>
         if (dLoc) dLoc.textContent = "📍 " + (currentUser.location || "Ahmedabad District Fleet Hub");
 
         if (botNav) {
-          botNav.innerHTML = `
-            <button id="anav-home" onclick="switchAggregatorTab('home')" class="flex flex-col items-center text-blue-700 transition">
-              <span class="text-base">🏠</span>
-              <span class="text-[9px] mt-0.5 font-bold">Home</span>
-            </button>
-            <button id="anav-assigned" onclick="switchAggregatorTab('assigned')" class="flex flex-col items-center text-slate-400 hover:text-blue-700 transition">
-              <span class="text-base">📋</span>
-              <span class="text-[9px] mt-0.5 font-bold">Assigned Jobs</span>
-            </button>
-            <button id="anav-active" onclick="switchAggregatorTab('active')" class="flex flex-col items-center text-slate-400 hover:text-blue-700 transition">
-              <span class="text-base">🚛</span>
-              <span class="text-[9px] mt-0.5 font-bold">Active Trips</span>
-            </button>
-          `;
-          botNav.classList.remove("hidden");
+          botNav.classList.add("hidden");
         }
         switchAggregatorTab('home');
       } else if (currentUser.role === 'admin') {
@@ -5916,7 +6405,7 @@ Individual dispatch requests sent to farmers.`);
     async function renderAggregatorProfile() {
       if (!currentUser) return;
       document.getElementById("aprof-name").textContent = currentUser.name;
-      document.getElementById("aprof-badge-id").textContent = "AGY-TRN-3001";
+      document.getElementById("aprof-badge-id").textContent = currentUser.profile_id || "AGY-TRN-3001";
       document.getElementById("aprof-location-tag").textContent = "📍 " + (currentUser.location || "Ahmedabad District Fleet Hub");
 
       document.getElementById("aprof-disp-name").textContent = currentUser.name;
@@ -5924,8 +6413,8 @@ Individual dispatch requests sent to farmers.`);
       document.getElementById("aprof-disp-phone").textContent = currentUser.phone || "+91 98765 43212";
       document.getElementById("aprof-disp-email").textContent = currentUser.email || "trans@kisanfleet.com";
       document.getElementById("aprof-disp-location").textContent = currentUser.location || "Ahmedabad District Fleet Hub";
-      document.getElementById("aprof-disp-vehicle-type").textContent = currentUser.vehicle_type || currentUser.fleet || "10T Commercial Truck";
-      document.getElementById("aprof-disp-vehicle-no").textContent = currentUser.vehicle_no || "GJ-01-AX-4821";
+      document.getElementById("aprof-disp-vehicle-type").textContent = currentUser.vehicle_type || currentUser.fleet || "Heavy Commercial Truck";
+      document.getElementById("aprof-disp-vehicle-no").textContent = currentUser.vehicle_number || currentUser.vehicle_no || "GJ-01-AB-1234";
 
       // Completed Trips History (FEATURE 7)
       const container = document.getElementById("aggregator-completed-trips-container");
