@@ -493,17 +493,6 @@
             <span>+ Add Agricultural Waste Listing</span>
           </button>
 
-          
-            </button>
-            <button onclick="switchFarmerSubTab('matches')" class="p-3 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-2xl text-left transition flex items-center gap-2.5">
-              <span class="text-2xl">🎯</span>
-              <div>
-                <div class="font-black text-emerald-900 text-xs">Best Matches</div>
-                <div class="text-[10px] text-emerald-700">Best matching buyers</div>
-              </div>
-            </button>
-          </div>
-
           <!-- RECENT ORDERS SNAPSHOT -->
           <div class="space-y-2">
             <div class="flex justify-between items-center px-1">
@@ -3175,14 +3164,18 @@ div>
       const hamBtn = document.getElementById("farmer-hamburger-btn");
       const botNav = document.getElementById("bottom-nav");
       
+      // Hide all role drawer menus initially to prevent cross-role leakage
+      ['farmer-drawer-menu', 'buyer-drawer-menu', 'aggregator-drawer-menu', 'admin-drawer-menu'].forEach(mId => {
+        const el = document.getElementById(mId);
+        if (el) el.classList.add("hidden");
+      });
+
       if (currentUser.role === 'farmer') {
         if (hamBtn) hamBtn.classList.remove("hidden");
         if (botNav) botNav.classList.add("hidden");
         
         const fMenu = document.getElementById("farmer-drawer-menu");
-        const bMenu = document.getElementById("buyer-drawer-menu");
         if (fMenu) fMenu.classList.remove("hidden");
-        if (bMenu) bMenu.classList.add("hidden");
 
         const dAvatar = document.getElementById("drawer-user-avatar");
         if (dAvatar) dAvatar.textContent = "👨‍🌾";
@@ -3195,9 +3188,7 @@ div>
         if (hamBtn) hamBtn.classList.remove("hidden");
         if (botNav) botNav.classList.add("hidden");
 
-        const fMenu = document.getElementById("farmer-drawer-menu");
         const bMenu = document.getElementById("buyer-drawer-menu");
-        if (fMenu) fMenu.classList.add("hidden");
         if (bMenu) bMenu.classList.remove("hidden");
 
         const dAvatar = document.getElementById("drawer-user-avatar");
@@ -3210,12 +3201,9 @@ div>
         switchBuyerTab('home');
       } else if (currentUser.role === 'aggregator') {
         if (hamBtn) hamBtn.classList.remove("hidden");
+        if (botNav) botNav.classList.add("hidden");
 
-        const fMenu = document.getElementById("farmer-drawer-menu");
-        const bMenu = document.getElementById("buyer-drawer-menu");
         const aMenu = document.getElementById("aggregator-drawer-menu");
-        if (fMenu) fMenu.classList.add("hidden");
-        if (bMenu) bMenu.classList.add("hidden");
         if (aMenu) aMenu.classList.remove("hidden");
 
         const dAvatar = document.getElementById("drawer-user-avatar");
@@ -3225,9 +3213,6 @@ div>
         const dLoc = document.getElementById("drawer-farmer-location");
         if (dLoc) dLoc.textContent = "📍 " + (currentUser.location || "Ahmedabad District Fleet Hub");
 
-        if (botNav) {
-          botNav.classList.add("hidden");
-        }
         switchAggregatorTab('home');
       } else if (currentUser.role === 'admin') {
         if (hamBtn) hamBtn.classList.remove("hidden");
