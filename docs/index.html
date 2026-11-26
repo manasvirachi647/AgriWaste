@@ -2676,25 +2676,25 @@
     };
 
     // Purge any old demonstration localStorage records on fresh app launch
-    const FRESH_STORAGE_KEY = "agriwaste_fresh_launch_v16";
+    const FRESH_STORAGE_KEY = "agriwaste_fresh_launch_v20";
     if (localStorage.getItem("agriwaste_version") !== FRESH_STORAGE_KEY) {
       localStorage.clear();
       localStorage.setItem("agriwaste_version", FRESH_STORAGE_KEY);
     }
 
     try {
-      const saved = localStorage.getItem("agriwaste_store_v16");
+      const saved = localStorage.getItem("agriwaste_store_v20");
       if (saved) {
         store = { ...store, ...JSON.parse(saved) };
       }
     } catch(e) {}
 
     function persist() {
-      try { localStorage.setItem("agriwaste_store_v16", JSON.stringify(store)); } catch(e){}
+      try { localStorage.setItem("agriwaste_store_v20", JSON.stringify(store)); } catch(e){}
       if (typeof updateNotificationDots === 'function') setTimeout(updateNotificationDots, 30);
     }
     function saveStoreToLocal() {
-      try { localStorage.setItem("agriwaste_store_v16", JSON.stringify(store)); } catch(e){}
+      try { localStorage.setItem("agriwaste_store_v20", JSON.stringify(store)); } catch(e){}
       if (typeof updateNotificationDots === 'function') setTimeout(updateNotificationDots, 30);
     }
 
